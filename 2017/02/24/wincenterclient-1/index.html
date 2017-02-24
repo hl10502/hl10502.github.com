@@ -73,7 +73,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="C#,WinCenterClient,虚拟机导入工具,XenServer," />
+  <meta name="keywords" content="C#,WinCenterClient,XenServer,VM,虚拟机导入工具," />
 
 
 
@@ -90,42 +90,39 @@
 
 
 <meta name="description" content="WinCenterClient是WinCenter-Appliance虚拟化管理系统安装程序，使用C# WinForm 框架Wizard方式来实现导入WinCenter虚拟机的功能。
-向导式的操作，主要由以下步骤组成：  
-
-导入来源：虚拟机模板的文件路径  
-配置主机：虚拟机导入的目标主机  
-配置存储：虚拟机磁盘数据导入的目标存储  
-配置网络：配置虚拟机的IP、子网掩码、网关信息  
-安装虚">
+实现过程
+使用HHTP/HHTPS方式导入xva模板文件到主机上，并生成虚拟机；
+根据元数据文件信息给虚拟机配置相应资源；
+配置虚拟机； 
+删除原有的VIF；
+创建新的VIF，生成新的MAC地址，并设置网络为目标主机">
 <meta property="og:type" content="article">
-<meta property="og:title" content="WinCenterClient源码分析（一）">
+<meta property="og:title" content="WinCenterClient分析（一）">
 <meta property="og:url" content="https://hl10502.github.io/2017/02/24/wincenterclient-1/index.html">
 <meta property="og:site_name" content="hl10502的博客">
 <meta property="og:description" content="WinCenterClient是WinCenter-Appliance虚拟化管理系统安装程序，使用C# WinForm 框架Wizard方式来实现导入WinCenter虚拟机的功能。
-向导式的操作，主要由以下步骤组成：  
-
-导入来源：虚拟机模板的文件路径  
-配置主机：虚拟机导入的目标主机  
-配置存储：虚拟机磁盘数据导入的目标存储  
-配置网络：配置虚拟机的IP、子网掩码、网关信息  
-安装虚">
+实现过程
+使用HHTP/HHTPS方式导入xva模板文件到主机上，并生成虚拟机；
+根据元数据文件信息给虚拟机配置相应资源；
+配置虚拟机； 
+删除原有的VIF；
+创建新的VIF，生成新的MAC地址，并设置网络为目标主机">
 <meta property="og:image" content="https://hl10502.github.io/2017/02/24/wincenterclient-1/wincenterclient-1-import.png">
 <meta property="og:image" content="https://hl10502.github.io/2017/02/24/wincenterclient-1/wincenterclient-1-host.png">
 <meta property="og:image" content="https://hl10502.github.io/2017/02/24/wincenterclient-1/wincenterclient-1-storege.png">
 <meta property="og:image" content="https://hl10502.github.io/2017/02/24/wincenterclient-1/wincenterclient-1-network.png">
 <meta property="og:image" content="https://hl10502.github.io/2017/02/24/wincenterclient-1/wincenterclient-1-installvm1.png">
 <meta property="og:image" content="https://hl10502.github.io/2017/02/24/wincenterclient-1/wincenterclient-1-installvm2.png">
-<meta property="og:updated_time" content="2017-02-24T03:32:12.839Z">
+<meta property="og:updated_time" content="2017-02-24T08:39:06.087Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="WinCenterClient源码分析（一）">
+<meta name="twitter:title" content="WinCenterClient分析（一）">
 <meta name="twitter:description" content="WinCenterClient是WinCenter-Appliance虚拟化管理系统安装程序，使用C# WinForm 框架Wizard方式来实现导入WinCenter虚拟机的功能。
-向导式的操作，主要由以下步骤组成：  
-
-导入来源：虚拟机模板的文件路径  
-配置主机：虚拟机导入的目标主机  
-配置存储：虚拟机磁盘数据导入的目标存储  
-配置网络：配置虚拟机的IP、子网掩码、网关信息  
-安装虚">
+实现过程
+使用HHTP/HHTPS方式导入xva模板文件到主机上，并生成虚拟机；
+根据元数据文件信息给虚拟机配置相应资源；
+配置虚拟机； 
+删除原有的VIF；
+创建新的VIF，生成新的MAC地址，并设置网络为目标主机">
 <meta name="twitter:image" content="https://hl10502.github.io/2017/02/24/wincenterclient-1/wincenterclient-1-import.png">
 
 
@@ -160,7 +157,7 @@
 
 
 
-  <title> WinCenterClient源码分析（一） | hl10502的博客 </title>
+  <title> WinCenterClient分析（一） | hl10502的博客 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -334,7 +331,7 @@
             
             
               
-                WinCenterClient源码分析（一）
+                WinCenterClient分析（一）
               
             
           </h1>
@@ -383,8 +380,8 @@
                 
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C/WinCenterClient/" itemprop="url" rel="index">
-                    <span itemprop="name">WinCenterClient</span>
+                  <a href="/categories/C/虚拟机导入工具/" itemprop="url" rel="index">
+                    <span itemprop="name">虚拟机导入工具</span>
                   </a>
                 </span>
 
@@ -410,7 +407,7 @@
 
           
           
-             <span id="/2017/02/24/wincenterclient-1/" class="leancloud_visitors" data-flag-title="WinCenterClient源码分析（一）">
+             <span id="/2017/02/24/wincenterclient-1/" class="leancloud_visitors" data-flag-title="WinCenterClient分析（一）">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -440,7 +437,21 @@
 
       
         <p>WinCenterClient是WinCenter-Appliance虚拟化管理系统安装程序，使用C# WinForm 框架Wizard方式来实现导入WinCenter虚拟机的功能。</p>
-<p>向导式的操作，主要由以下步骤组成：  </p>
+<h2 id="实现过程"><a href="#实现过程" class="headerlink" title="实现过程"></a>实现过程</h2><ol>
+<li>使用HHTP/HHTPS方式导入xva模板文件到主机上，并生成虚拟机；</li>
+<li>根据元数据文件信息给虚拟机配置相应资源；</li>
+<li>配置虚拟机； <ul>
+<li>删除原有的VIF；</li>
+<li>创建新的VIF，生成新的MAC地址，并设置网络为目标主机的管理网络；</li>
+<li>设置虚拟机的名称；</li>
+<li>设置虚拟机所属的物理主机；</li>
+</ul>
+</li>
+<li>启动虚拟机</li>
+<li>动态配置虚拟机的网络信息（IP、网关、子网掩码）</li>
+</ol>
+<a id="more"></a>
+<h2 id="向导式操作步骤"><a href="#向导式操作步骤" class="headerlink" title="向导式操作步骤"></a>向导式操作步骤</h2><p>向导式的操作，主要由以下步骤组成：  </p>
 <ul>
 <li>导入来源：虚拟机模板的文件路径  </li>
 <li>配置主机：虚拟机导入的目标主机  </li>
@@ -448,16 +459,15 @@
 <li>配置网络：配置虚拟机的IP、子网掩码、网关信息  </li>
 <li>安装虚拟机：导入、配置并启动虚拟机</li>
 </ul>
-<a id="more"></a>
-<h2 id="导入来源"><a href="#导入来源" class="headerlink" title="导入来源"></a>导入来源</h2><p>选择提前制作好的xva模板文件作为导入来源。在这个步骤中校验模板文件并获取模板文件的元数据信息，包括虚拟磁盘大小、虚拟CPU数量、内存大小、VIF数量、虚拟化版本信息等</p>
+<h3 id="导入来源"><a href="#导入来源" class="headerlink" title="导入来源"></a>导入来源</h3><p>选择提前制作好的xva模板文件作为导入来源。在这个步骤中校验模板文件并获取模板文件的元数据信息，包括虚拟磁盘大小、虚拟CPU数量、内存大小、VIF数量、虚拟化版本信息等</p>
 <p><img src="/2017/02/24/wincenterclient-1/wincenterclient-1-import.png" alt="&quot;导入来源&quot;"></p>
-<h2 id="配置主机"><a href="#配置主机" class="headerlink" title="配置主机"></a>配置主机</h2><p>配置虚拟机导入的目标主机</p>
+<h3 id="配置主机"><a href="#配置主机" class="headerlink" title="配置主机"></a>配置主机</h3><p>配置虚拟机导入的目标主机</p>
 <p><img src="/2017/02/24/wincenterclient-1/wincenterclient-1-host.png" alt="&quot;配置主机&quot;"></p>
-<h2 id="配置存储"><a href="#配置存储" class="headerlink" title="配置存储"></a>配置存储</h2><p>配置虚拟机导入的目标存储，目标存储可以是目标主机上的本地存储，也可以是资源池内的共享存储</p>
+<h3 id="配置存储"><a href="#配置存储" class="headerlink" title="配置存储"></a>配置存储</h3><p>配置虚拟机导入的目标存储，目标存储可以是目标主机上的本地存储，也可以是资源池内的共享存储</p>
 <p><img src="/2017/02/24/wincenterclient-1/wincenterclient-1-storege.png" alt="&quot;配置存储&quot;"></p>
-<h2 id="配置网络"><a href="#配置网络" class="headerlink" title="配置网络"></a>配置网络</h2><p>配置虚拟机可用的IP、子网掩码、网关信息</p>
+<h3 id="配置网络"><a href="#配置网络" class="headerlink" title="配置网络"></a>配置网络</h3><p>配置虚拟机可用的IP、子网掩码、网关信息</p>
 <p><img src="/2017/02/24/wincenterclient-1/wincenterclient-1-network.png" alt="&quot;配置网络&quot;"></p>
-<h2 id="安装虚拟机"><a href="#安装虚拟机" class="headerlink" title="安装虚拟机"></a>安装虚拟机</h2><p>导入、配置并启动虚拟机，这个步骤是整个安装过程的最重要的步骤。</p>
+<h3 id="安装虚拟机"><a href="#安装虚拟机" class="headerlink" title="安装虚拟机"></a>安装虚拟机</h3><p>导入、配置并启动虚拟机，这个步骤是整个安装过程的最重要的步骤。</p>
 <p><img src="/2017/02/24/wincenterclient-1/wincenterclient-1-installvm1.png" alt="&quot;安装虚拟机&quot;"></p>
 <p><img src="/2017/02/24/wincenterclient-1/wincenterclient-1-installvm2.png" alt="&quot;安装虚拟机&quot;"></p>
 
@@ -487,9 +497,11 @@
           
             <a href="/tags/WinCenterClient/" rel="tag"># WinCenterClient</a>
           
-            <a href="/tags/虚拟机导入工具/" rel="tag"># 虚拟机导入工具</a>
-          
             <a href="/tags/XenServer/" rel="tag"># XenServer</a>
+          
+            <a href="/tags/VM/" rel="tag"># VM</a>
+          
+            <a href="/tags/虚拟机导入工具/" rel="tag"># 虚拟机导入工具</a>
           
         </div>
       
@@ -512,6 +524,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2017/02/24/wincenterclient-2/" rel="prev" title="WinCenterClient分析（二）">
+                WinCenterClient分析（二） <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -526,7 +542,7 @@
     <div class="post-spread">
       
         <div class="ds-share flat" data-thread-key="2017/02/24/wincenterclient-1/"
-     data-title="WinCenterClient源码分析（一）"
+     data-title="WinCenterClient分析（一）"
      data-content=""
      data-url="https://hl10502.github.io/2017/02/24/wincenterclient-1/">
   <div class="ds-share-inline">
@@ -556,7 +572,7 @@
   <div class="comments" id="comments">
     
       <div class="ds-thread" data-thread-key="2017/02/24/wincenterclient-1/"
-           data-title="WinCenterClient源码分析（一）" data-url="https://hl10502.github.io/2017/02/24/wincenterclient-1/">
+           data-title="WinCenterClient分析（一）" data-url="https://hl10502.github.io/2017/02/24/wincenterclient-1/">
       </div>
     
   </div>
@@ -603,7 +619,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -621,7 +637,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-count">16</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -667,7 +683,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#导入来源"><span class="nav-number">1.</span> <span class="nav-text">导入来源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置主机"><span class="nav-number">2.</span> <span class="nav-text">配置主机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置存储"><span class="nav-number">3.</span> <span class="nav-text">配置存储</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置网络"><span class="nav-number">4.</span> <span class="nav-text">配置网络</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装虚拟机"><span class="nav-number">5.</span> <span class="nav-text">安装虚拟机</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#实现过程"><span class="nav-number">1.</span> <span class="nav-text">实现过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#向导式操作步骤"><span class="nav-number">2.</span> <span class="nav-text">向导式操作步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#导入来源"><span class="nav-number">2.1.</span> <span class="nav-text">导入来源</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置主机"><span class="nav-number">2.2.</span> <span class="nav-text">配置主机</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置存储"><span class="nav-number">2.3.</span> <span class="nav-text">配置存储</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置网络"><span class="nav-number">2.4.</span> <span class="nav-text">配置网络</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装虚拟机"><span class="nav-number">2.5.</span> <span class="nav-text">安装虚拟机</span></a></li></ol></li></ol></div>
             
 
           </div>

@@ -3,9 +3,16 @@
   
     
     <entry>
-      <title><![CDATA[WinCenterClient源码分析（一）]]></title>
+      <title><![CDATA[WinCenterClient分析（二）]]></title>
+      <url>%2F2017%2F02%2F24%2Fwincenterclient-2%2F</url>
+      <content type="text"><![CDATA[WinCenterClient是WinCenter-Appliance虚拟化管理系统安装程序，使用C# WinForm 框架Wizard方式来实现导入WinCenter虚拟机的功能。 包含以下项目 SharpSSH：C#版本的连接SSH类库，版本比较旧，一直未更新，在WinCenterClient5.5及以后的版本不再使用 Renci.SshNet：C#版本的连接SSH类库，在WinCenterClient5.4及以后的版本使用 WinCenter：WinForm界面 WinServer：修改版的C# XAPI Winzardlib：向导式框架类库 SharpSSHSharpSSH是一个C#开发的实现了SSH2协议的开源组件，支持SSH/SCP/SFTP等协议。 SharpSSH执行sh命令的输入输出都是定向到console。因此不容易从其中取出它的结果。因此需要对源码进行一定的修改，从而得到我们想要的结果。 SSH操作： SharpSSH中修改 SshStream.cs，增加一个方法，把输出定向到流中public void set_OutputStream(Stream stream) WinCenter中定义ShellHelp.cs工具类来连接SSH，执行Linux命令，获取输出结果字符串 由于SharpSSH版本比较旧，一直未更新，而且不支持一些加密算法，在WinCenterClient5.4以后的版本中使用Renci.SshNet来代替 Renci.SshNetRenci.SshNet支持多种加密算法，且不需要处理输入输出流，可以代替SharpSSH。 WinServerWinServer是C#版本的XAPI，兼容XenServer。 WizardLibWizardLib是Wizard向导式WinForm 界面的lib类库。 主要的类： WizardFormWizardForm派生自Form，它负责管理WizardPage集合。另外，它提供了缺省的Wizard界面。创建你自己的向导类的第一件事就是扩展这个类，通常从该类继承，编辑属性或者添加额外的按钮。 WizardPageWizardPage派生自UserControl。提供了向导相关的方法，如 OnSetActive, OnWizardNext等。 WizardLib类图 WizardLib通用组件提供复用的组件给WinCenter界面使用。 IP地址及网关输入控件IPBox IPBox继承UserControl，在组件中放置四个textBox，通过重写OnPaint 、OnResize方法绘制边框等。 Button控件MyButton 默认的Button控件在设置透明背景图片时，鼠标点下会出现黑色的边框。MyButton控件继承Button，MyButton重写ShowFocusCues方法，去掉黑色的边框。 Loading效果控件MyOpaqueLayer 在加载数据时间比较长的情况下，需要使用loading效果提示用户正在加载数据或者操作。 MyOpaqueLayer继承Control，重写OnPaint方法绘制窗体，设置透明的屏蔽层。 OpaqueCommand类用来显示与隐藏屏蔽层。 DataGridView单选框控件 要达到单选效果，需要在业务处理中监听单元格点击事件，触发时，选择当前行，并取消其他所有行的选中，同时更改数据状态。 DataGridView组件默认是不支持单选，要实现单选的功能必须重写DataGridViewCell DataGridViewDisableCheckBoxCell继承DataGridViewCheckBoxCell，重写Paint方法来绘制单选框RadioButton DataGridViewDisableCheckBoxColumn 继承DataGridViewCheckBoxColumn]]></content>
+    </entry>
+
+    
+    <entry>
+      <title><![CDATA[WinCenterClient分析（一）]]></title>
       <url>%2F2017%2F02%2F24%2Fwincenterclient-1%2F</url>
-      <content type="text"><![CDATA[WinCenterClient是WinCenter-Appliance虚拟化管理系统安装程序，使用C# WinForm 框架Wizard方式来实现导入WinCenter虚拟机的功能。 向导式的操作，主要由以下步骤组成： 导入来源：虚拟机模板的文件路径 配置主机：虚拟机导入的目标主机 配置存储：虚拟机磁盘数据导入的目标存储 配置网络：配置虚拟机的IP、子网掩码、网关信息 安装虚拟机：导入、配置并启动虚拟机 导入来源选择提前制作好的xva模板文件作为导入来源。在这个步骤中校验模板文件并获取模板文件的元数据信息，包括虚拟磁盘大小、虚拟CPU数量、内存大小、VIF数量、虚拟化版本信息等 配置主机配置虚拟机导入的目标主机 配置存储配置虚拟机导入的目标存储，目标存储可以是目标主机上的本地存储，也可以是资源池内的共享存储 配置网络配置虚拟机可用的IP、子网掩码、网关信息 安装虚拟机导入、配置并启动虚拟机，这个步骤是整个安装过程的最重要的步骤。]]></content>
+      <content type="text"><![CDATA[WinCenterClient是WinCenter-Appliance虚拟化管理系统安装程序，使用C# WinForm 框架Wizard方式来实现导入WinCenter虚拟机的功能。 实现过程 使用HHTP/HHTPS方式导入xva模板文件到主机上，并生成虚拟机； 根据元数据文件信息给虚拟机配置相应资源； 配置虚拟机； 删除原有的VIF； 创建新的VIF，生成新的MAC地址，并设置网络为目标主机的管理网络； 设置虚拟机的名称； 设置虚拟机所属的物理主机； 启动虚拟机 动态配置虚拟机的网络信息（IP、网关、子网掩码） 向导式操作步骤向导式的操作，主要由以下步骤组成： 导入来源：虚拟机模板的文件路径 配置主机：虚拟机导入的目标主机 配置存储：虚拟机磁盘数据导入的目标存储 配置网络：配置虚拟机的IP、子网掩码、网关信息 安装虚拟机：导入、配置并启动虚拟机 导入来源选择提前制作好的xva模板文件作为导入来源。在这个步骤中校验模板文件并获取模板文件的元数据信息，包括虚拟磁盘大小、虚拟CPU数量、内存大小、VIF数量、虚拟化版本信息等 配置主机配置虚拟机导入的目标主机 配置存储配置虚拟机导入的目标存储，目标存储可以是目标主机上的本地存储，也可以是资源池内的共享存储 配置网络配置虚拟机可用的IP、子网掩码、网关信息 安装虚拟机导入、配置并启动虚拟机，这个步骤是整个安装过程的最重要的步骤。]]></content>
     </entry>
 
     
