@@ -91,38 +91,38 @@
 
 <meta name="description" content="WinCenterClient是WinCenter-Appliance虚拟化管理系统安装程序，使用C# WinForm 框架Wizard方式来实现导入WinCenter虚拟机的功能。
 实现过程
-使用HHTP/HHTPS方式导入xva模板文件到主机上，并生成虚拟机；
-根据元数据文件信息给虚拟机配置相应资源；
-配置虚拟机； 
-删除原有的VIF；
-创建新的VIF，生成新的MAC地址，并设置网络为目标主机">
+使用HHTP/HHTPS方式导入xva模板文件到主机上，并生成虚拟机
+根据元数据文件信息给虚拟机配置相应资源
+配置虚拟机
+删除原有的VIF
+创建新的VIF，生成新的MAC地址，并设置网络为目标主机的管理网络">
 <meta property="og:type" content="article">
 <meta property="og:title" content="WinCenterClient分析（一）">
 <meta property="og:url" content="https://hl10502.github.io/2017/02/24/wincenterclient-1/index.html">
 <meta property="og:site_name" content="hl10502的博客">
 <meta property="og:description" content="WinCenterClient是WinCenter-Appliance虚拟化管理系统安装程序，使用C# WinForm 框架Wizard方式来实现导入WinCenter虚拟机的功能。
 实现过程
-使用HHTP/HHTPS方式导入xva模板文件到主机上，并生成虚拟机；
-根据元数据文件信息给虚拟机配置相应资源；
-配置虚拟机； 
-删除原有的VIF；
-创建新的VIF，生成新的MAC地址，并设置网络为目标主机">
+使用HHTP/HHTPS方式导入xva模板文件到主机上，并生成虚拟机
+根据元数据文件信息给虚拟机配置相应资源
+配置虚拟机
+删除原有的VIF
+创建新的VIF，生成新的MAC地址，并设置网络为目标主机的管理网络">
 <meta property="og:image" content="https://hl10502.github.io/2017/02/24/wincenterclient-1/wincenterclient-1-import.png">
 <meta property="og:image" content="https://hl10502.github.io/2017/02/24/wincenterclient-1/wincenterclient-1-host.png">
 <meta property="og:image" content="https://hl10502.github.io/2017/02/24/wincenterclient-1/wincenterclient-1-storege.png">
 <meta property="og:image" content="https://hl10502.github.io/2017/02/24/wincenterclient-1/wincenterclient-1-network.png">
 <meta property="og:image" content="https://hl10502.github.io/2017/02/24/wincenterclient-1/wincenterclient-1-installvm1.png">
 <meta property="og:image" content="https://hl10502.github.io/2017/02/24/wincenterclient-1/wincenterclient-1-installvm2.png">
-<meta property="og:updated_time" content="2017-02-24T08:39:06.087Z">
+<meta property="og:updated_time" content="2017-02-24T08:43:53.129Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="WinCenterClient分析（一）">
 <meta name="twitter:description" content="WinCenterClient是WinCenter-Appliance虚拟化管理系统安装程序，使用C# WinForm 框架Wizard方式来实现导入WinCenter虚拟机的功能。
 实现过程
-使用HHTP/HHTPS方式导入xva模板文件到主机上，并生成虚拟机；
-根据元数据文件信息给虚拟机配置相应资源；
-配置虚拟机； 
-删除原有的VIF；
-创建新的VIF，生成新的MAC地址，并设置网络为目标主机">
+使用HHTP/HHTPS方式导入xva模板文件到主机上，并生成虚拟机
+根据元数据文件信息给虚拟机配置相应资源
+配置虚拟机
+删除原有的VIF
+创建新的VIF，生成新的MAC地址，并设置网络为目标主机的管理网络">
 <meta name="twitter:image" content="https://hl10502.github.io/2017/02/24/wincenterclient-1/wincenterclient-1-import.png">
 
 
@@ -438,13 +438,13 @@
       
         <p>WinCenterClient是WinCenter-Appliance虚拟化管理系统安装程序，使用C# WinForm 框架Wizard方式来实现导入WinCenter虚拟机的功能。</p>
 <h2 id="实现过程"><a href="#实现过程" class="headerlink" title="实现过程"></a>实现过程</h2><ol>
-<li>使用HHTP/HHTPS方式导入xva模板文件到主机上，并生成虚拟机；</li>
-<li>根据元数据文件信息给虚拟机配置相应资源；</li>
-<li>配置虚拟机； <ul>
-<li>删除原有的VIF；</li>
-<li>创建新的VIF，生成新的MAC地址，并设置网络为目标主机的管理网络；</li>
-<li>设置虚拟机的名称；</li>
-<li>设置虚拟机所属的物理主机；</li>
+<li>使用HHTP/HHTPS方式导入xva模板文件到主机上，并生成虚拟机</li>
+<li>根据元数据文件信息给虚拟机配置相应资源</li>
+<li>配置虚拟机<ul>
+<li>删除原有的VIF</li>
+<li>创建新的VIF，生成新的MAC地址，并设置网络为目标主机的管理网络</li>
+<li>设置虚拟机的名称</li>
+<li>设置虚拟机所属的物理主机</li>
 </ul>
 </li>
 <li>启动虚拟机</li>
@@ -619,7 +619,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">8</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -628,7 +628,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-count">4</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -637,7 +637,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-count">19</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
