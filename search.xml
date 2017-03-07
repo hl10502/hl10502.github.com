@@ -3,6 +3,13 @@
   
     
     <entry>
+      <title><![CDATA[使用Git GUI提交代码到GitHub]]></title>
+      <url>%2F2017%2F03%2F07%2Fgit-gui-1%2F</url>
+      <content type="text"><![CDATA[使用Git GUI提交代码到GitHub，主要有以下步骤： GitHub创建仓库 clone远程仓库 复制代码 Git GUI操作 下面以XenCenter为例，环境： Windows 7 x64 Git for Windows(Git-2.11.0-64-bit.exe) GitHub创建仓库先在github上新建一个仓库XenCenter，仓库的地址为：https://github.com/hl10502/XenCenter.git clone远程仓库在Git GUI上clone远程仓库到本地 复制代码复制XenCenter代码到Target Directory。比如XenCenter的代码目录为E:\visual studio 2010\Projects\xenadmin-master7.0\xenadmin Git GUI操作Git GUI操作提交代码。 Rescan:重新扫描，显示本地有新增、修改的代码文件 Stage Changed：阶段提交，显示需要提交的文件 Commit：提交到本地 Push：上传到GitHub]]></content>
+    </entry>
+
+    
+    <entry>
       <title><![CDATA[V2V转换器（六）——Unable to Boot VMware SCSI Disk]]></title>
       <url>%2F2017%2F03%2F07%2Fv2v-6%2F</url>
       <content type="text"><![CDATA[Unable to Boot VMware SCSI Disk如果VMware VM从SCSI磁盘引导，但还包含一个或多个IDE硬盘，当做V2V转换成功到XenServer上之后，则VM可能无法启动。 这是因为迁移过程IDE硬盘分配的设备号比SCSI磁盘小，但是XenServer从分配给设备0的硬盘启动VM，导致VM启动失败。要解决此问题，需要修改VM的虚拟磁盘位置，以便正确引导系统盘启动VM。 有两种方法： 使用CLI命令行 使用XenCenter界面 使用CLI根据vmUuid找到VBD 1xe vbd-list vm-uuid=5be02646-d70e-ed83-f68b-286bad3890ba 设置系统盘的VBD为device 0 与可引导 12xe vbd-param-set userdevice=0 uuid=873f1c20-212e-913a-50fd-5352f81478dbxe vbd-param-set bootable=true uuid=873f1c20-212e-913a-50fd-5352f81478db XenCenter操作选中一个存储池，在该存储池的“存储”选项，选择虚拟磁盘，查看属性，修改虚拟磁盘的“设备位置”为0]]></content>
