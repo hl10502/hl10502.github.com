@@ -73,7 +73,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="开发者,程序猿,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,云计算,虚拟化,分布式存储,OpenStack,XenServer,Vmware,PowerVM,Ceph,Java,JVM,C#,Python" />
+  <meta name="keywords" content="V2V,XenServer,VMware,XenServer Conversion Manager,XCM,虚拟机转换工具,虚拟机转换器,VMware2XenServer," />
 
 
 
@@ -89,15 +89,40 @@
 
 
 
-<meta name="description" content="目前关注云计算/虚拟化/分布式存储等。">
-<meta property="og:type" content="website">
-<meta property="og:title" content="hl10502的博客">
-<meta property="og:url" content="https://hl10502.github.io/categories/hexo/index.html">
+<meta name="description" content="V2V转换器服务端是运行在XenServer Conversion Manager Virtual Appliance上，主要有以下组件：
+
+convsvc：主服务，Windows服务程序
+Converter：转换的核心组件
+Citrix.ExportImport.CommonTypes：公共类库
+VimService：VMware API
+Quartz：调度组件
+XenServer：XAPI">
+<meta property="og:type" content="article">
+<meta property="og:title" content="V2V转换器（七）——V2V服务端分析之convsvc">
+<meta property="og:url" content="https://hl10502.github.io/2017/03/07/v2v-7/index.html">
 <meta property="og:site_name" content="hl10502的博客">
-<meta property="og:description" content="目前关注云计算/虚拟化/分布式存储等。">
+<meta property="og:description" content="V2V转换器服务端是运行在XenServer Conversion Manager Virtual Appliance上，主要有以下组件：
+
+convsvc：主服务，Windows服务程序
+Converter：转换的核心组件
+Citrix.ExportImport.CommonTypes：公共类库
+VimService：VMware API
+Quartz：调度组件
+XenServer：XAPI">
+<meta property="og:image" content="https://hl10502.github.io/2017/03/07/v2v-7/v2v-7-class1.png">
+<meta property="og:image" content="https://hl10502.github.io/2017/03/07/v2v-7/v2v-7-class2.png">
+<meta property="og:updated_time" content="2017-03-07T11:50:55.550Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="hl10502的博客">
-<meta name="twitter:description" content="目前关注云计算/虚拟化/分布式存储等。">
+<meta name="twitter:title" content="V2V转换器（七）——V2V服务端分析之convsvc">
+<meta name="twitter:description" content="V2V转换器服务端是运行在XenServer Conversion Manager Virtual Appliance上，主要有以下组件：
+
+convsvc：主服务，Windows服务程序
+Converter：转换的核心组件
+Citrix.ExportImport.CommonTypes：公共类库
+VimService：VMware API
+Quartz：调度组件
+XenServer：XAPI">
+<meta name="twitter:image" content="https://hl10502.github.io/2017/03/07/v2v-7/v2v-7-class1.png">
 
 
 
@@ -125,13 +150,13 @@
 
 
 
-  <link rel="canonical" href="https://hl10502.github.io/categories/hexo/"/>
+  <link rel="canonical" href="https://hl10502.github.io/2017/03/07/v2v-7/"/>
 
 
 
 
 
-  <title> 分类: hexo | hl10502的博客 </title>
+  <title> V2V转换器（七）——V2V服务端分析之convsvc | hl10502的博客 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -156,7 +181,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left  ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -271,131 +296,250 @@
           <div id="content" class="content">
             
 
-  <section id="posts" class="posts-collapse">
-    <div class="collection-title">
-      <h2 >
-        hexo
-        <small>分类</small>
-      </h2>
-    </div>
-
+  <div id="posts" class="posts-expand">
     
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/02/24/hexo-local-pic/" itemprop="url">
-              
-                <span itemprop="name">hexo使用本地图片</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-02-24T19:12:55+08:00"
-              content="2017-02-24" >
-          02-24
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-    
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/02/15/hexo-config-more/" itemprop="url">
-              
-                <span itemprop="name">hexo博客中的next主题配置</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-02-15T20:56:49+08:00"
-              content="2017-02-15" >
-          02-15
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-    
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/02/14/hexo-config-tags/" itemprop="url">
-              
-                <span itemprop="name">hexo配置标签</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-02-14T20:36:50+08:00"
-              content="2017-02-14" >
-          02-14
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-    
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/02/13/hexo-github-setup-blog/" itemprop="url">
-              
-                <span itemprop="name">使用hexo+github搭建个人博客</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-02-13T19:05:12+08:00"
-              content="2017-02-13" >
-          02-13
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-    
-  </section>
 
   
 
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="https://hl10502.github.io/2017/03/07/v2v-7/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="hl10502">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="hl10502的博客">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="hl10502的博客" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                V2V转换器（七）——V2V服务端分析之convsvc
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-07T19:35:36+08:00">
+                2017-03-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/V2V/" itemprop="url" rel="index">
+                    <span itemprop="name">V2V</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/07/v2v-7/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/07/v2v-7/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2017/03/07/v2v-7/" class="leancloud_visitors" data-flag-title="V2V转换器（七）——V2V服务端分析之convsvc">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>V2V转换器服务端是运行在XenServer Conversion Manager Virtual Appliance上，主要有以下组件：</p>
+<ul>
+<li>convsvc：主服务，Windows服务程序</li>
+<li>Converter：转换的核心组件</li>
+<li>Citrix.ExportImport.CommonTypes：公共类库</li>
+<li>VimService：VMware API</li>
+<li>Quartz：调度组件</li>
+<li>XenServer：XAPI</li>
+</ul>
+<a id="more"></a>
+<h2 id="convsvc服务"><a href="#convsvc服务" class="headerlink" title="convsvc服务"></a>convsvc服务</h2><p>convsvc服务是运行在V2V转换器的服务端XenServer Conversion Manager Virtual Appliance上，作为Windows Service在mono中运行。</p>
+<p>主要有两个类：</p>
+<ul>
+<li>ConversionSvc</li>
+<li>ConversionSvcWrapper</li>
+</ul>
+<h3 id="ConversionSvcWrapper"><a href="#ConversionSvcWrapper" class="headerlink" title="ConversionSvcWrapper"></a>ConversionSvcWrapper</h3><p>ConversionSvcWrapper类继承ServiceBase，重写了OnStart、OnStop、OnShutdown方法，是ConversionSvc服务的包装类，可以把ConversionSvc作为一个Windows服务程序来运行。</p>
+<p><img src="/2017/03/07/v2v-7/v2v-7-class1.png" alt="ConversionSvcWrapper类"></p>
+<h3 id="ConversionSvc"><a href="#ConversionSvc" class="headerlink" title="ConversionSvc"></a>ConversionSvc</h3><p>ConversionSvc类定义了获取VMware虚拟机、网络、磁盘空间，以及job、log等操作的一些方法。实际上是对外开放了这些接口。<br><img src="/2017/03/07/v2v-7/v2v-7-class2.png" alt="ConversionSvc类"></p>
+<h3 id="代码分析"><a href="#代码分析" class="headerlink" title="代码分析"></a>代码分析</h3><p>ConversionSvcWrapper的Main方法作为Windows服务程序的入口。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Console.WriteLine(&quot;Starting conversion service in interactive mode&quot;);</div><div class="line">//调用OnStart方法</div><div class="line">wrapper.OnStart(args);</div><div class="line">Console.WriteLine(&quot;Prese any key and &lt;Enter&gt; to exit&quot;);</div><div class="line">Console.ReadLine();</div><div class="line">wrapper.OnStop();</div><div class="line">Console.ReadLine();</div><div class="line">Console.WriteLine(&quot;Exiting...&quot;);</div></pre></td></tr></table></figure></p>
+<p>重写的OnStart方法。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">protected override void OnStart(string[] args)</div><div class="line">&#123;</div><div class="line">    LOG.Info(&quot;Starting service...&quot;);</div><div class="line">    try</div><div class="line">    &#123;</div><div class="line">        //调用ConversionSvc的Start方法</div><div class="line">	this.m_service.Start();</div><div class="line">    &#125;</div><div class="line">    catch (Exception exception)</div><div class="line">    &#123;</div><div class="line">        throw new Exception(&quot;Failed to start service.&quot;, exception);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>ConversionSvc的Start方法。ConversionMgr是Converter组件的类。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public void Start()</div><div class="line">&#123;</div><div class="line">    LOG.Info(&quot;Starting the conversion service...&quot;);</div><div class="line">    //获取配置文件中的配置信息</div><div class="line">    this.ReadConfigurations();</div><div class="line">    //初始化ConversionMgr</div><div class="line">    ConversionMgr.Instance.Initialize();</div><div class="line">    //HTTP监听线程启动</div><div class="line">    this.m_listener.Start();</div><div class="line">    this.m_listenerThread.Start();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/V2V/" rel="tag"># V2V</a>
+          
+            <a href="/tags/XenServer/" rel="tag"># XenServer</a>
+          
+            <a href="/tags/VMware/" rel="tag"># VMware</a>
+          
+            <a href="/tags/XenServer-Conversion-Manager/" rel="tag"># XenServer Conversion Manager</a>
+          
+            <a href="/tags/XCM/" rel="tag"># XCM</a>
+          
+            <a href="/tags/虚拟机转换工具/" rel="tag"># 虚拟机转换工具</a>
+          
+            <a href="/tags/虚拟机转换器/" rel="tag"># 虚拟机转换器</a>
+          
+            <a href="/tags/VMware2XenServer/" rel="tag"># VMware2XenServer</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/07/git-gui-1/" rel="next" title="使用Git GUI提交代码到GitHub">
+                <i class="fa fa-chevron-left"></i> 使用Git GUI提交代码到GitHub
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2017/03/07/v2v-7/"
+     data-title="V2V转换器（七）——V2V服务端分析之convsvc"
+     data-content=""
+     data-url="https://hl10502.github.io/2017/03/07/v2v-7/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
 
           
           </div>
@@ -403,6 +547,14 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/03/07/v2v-7/"
+           data-title="V2V转换器（七）——V2V服务端分析之convsvc" data-url="https://hl10502.github.io/2017/03/07/v2v-7/">
+      </div>
+    
+  </div>
+
 
         </div>
         
@@ -422,8 +574,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.png"
@@ -490,6 +651,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#convsvc服务"><span class="nav-number">1.</span> <span class="nav-text">convsvc服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ConversionSvcWrapper"><span class="nav-number">1.1.</span> <span class="nav-text">ConversionSvcWrapper</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ConversionSvc"><span class="nav-number">1.2.</span> <span class="nav-text">ConversionSvc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析"><span class="nav-number">1.3.</span> <span class="nav-text">代码分析</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
     </div>
@@ -596,6 +773,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
 
   
 
