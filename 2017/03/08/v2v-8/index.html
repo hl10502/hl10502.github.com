@@ -1,0 +1,1090 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="2xIA6kyEisqneyrcTltYHTS8lapHWNhDBX_qkWzL2FY" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="V2V,XenServer,VMware,XenServer Conversion Manager,XCM,虚拟机转换工具,虚拟机转换器,VMware2XenServer," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="Converter组件在客户端界面操作转换虚拟机时，每个需要转换的VMware虚拟机都会创建一条job数据存储到job文件中。
+Converter是转换服务的核心组件。转换过程是：
+
+获取配置文件信息
+加载job文件数据
+Quartz调度获取job信息，立即执行调度
+获取VMware信息，创建XenServer虚拟机，创建VBD、VDI
+将之前创建的VDI卸载
+VDI挂载给服务器端VM
+下载VMw">
+<meta property="og:type" content="article">
+<meta property="og:title" content="V2V转换器（八）——V2V服务端分析之Converter">
+<meta property="og:url" content="https://hl10502.github.io/2017/03/08/v2v-8/index.html">
+<meta property="og:site_name" content="hl10502的博客">
+<meta property="og:description" content="Converter组件在客户端界面操作转换虚拟机时，每个需要转换的VMware虚拟机都会创建一条job数据存储到job文件中。
+Converter是转换服务的核心组件。转换过程是：
+
+获取配置文件信息
+加载job文件数据
+Quartz调度获取job信息，立即执行调度
+获取VMware信息，创建XenServer虚拟机，创建VBD、VDI
+将之前创建的VDI卸载
+VDI挂载给服务器端VM
+下载VMw">
+<meta property="og:updated_time" content="2017-03-08T07:33:43.195Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="V2V转换器（八）——V2V服务端分析之Converter">
+<meta name="twitter:description" content="Converter组件在客户端界面操作转换虚拟机时，每个需要转换的VMware虚拟机都会创建一条job数据存储到job文件中。
+Converter是转换服务的核心组件。转换过程是：
+
+获取配置文件信息
+加载job文件数据
+Quartz调度获取job信息，立即执行调度
+获取VMware信息，创建XenServer虚拟机，创建VBD、VDI
+将之前创建的VDI卸载
+VDI挂载给服务器端VM
+下载VMw">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://hl10502.github.io/2017/03/08/v2v-8/"/>
+
+
+
+
+
+  <title> V2V转换器（八）——V2V服务端分析之Converter | hl10502的博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">hl10502的博客</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">IT技术人</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            所有文章
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="https://hl10502.github.io/2017/03/08/v2v-8/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="hl10502">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="hl10502的博客">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="hl10502的博客" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                V2V转换器（八）——V2V服务端分析之Converter
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-08T14:02:14+08:00">
+                2017-03-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/V2V/" itemprop="url" rel="index">
+                    <span itemprop="name">V2V</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/08/v2v-8/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/08/v2v-8/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2017/03/08/v2v-8/" class="leancloud_visitors" data-flag-title="V2V转换器（八）——V2V服务端分析之Converter">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Converter组件"><a href="#Converter组件" class="headerlink" title="Converter组件"></a>Converter组件</h2><p>在客户端界面操作转换虚拟机时，每个需要转换的VMware虚拟机都会创建一条job数据存储到job文件中。</p>
+<p>Converter是转换服务的核心组件。转换过程是：</p>
+<ul>
+<li>获取配置文件信息</li>
+<li>加载job文件数据</li>
+<li>Quartz调度获取job信息，立即执行调度</li>
+<li>获取VMware信息，创建XenServer虚拟机，创建VBD、VDI</li>
+<li>将之前创建的VDI卸载</li>
+<li>VDI挂载给服务器端VM</li>
+<li>下载VMware虚拟机磁盘数据</li>
+<li>将VDI从服务端VM上卸载</li>
+<li>将VDI挂载给导入的虚拟机</li>
+</ul>
+<p>整个过程会实时更新job状态与进度，所有的VDI数据下载完成并挂载给导入的XenServer虚拟机之后，转换操作才结束。</p>
+<a id="more"></a>
+<h3 id="ConversionMgr"><a href="#ConversionMgr" class="headerlink" title="ConversionMgr"></a>ConversionMgr</h3><p>ConversionMgr初始化Initialize方法，调用JobManager的Initialize方法。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">public void Initialize()</div><div class="line">&#123;</div><div class="line">    LOG.Info(&quot;Conversion mgr initializing...&quot;);</div><div class="line">    //读取配置信息</div><div class="line">    this.ReadConfigurations();</div><div class="line">    //JobManager初始化</div><div class="line">    this.m_jobMgr.Initialize();</div><div class="line">    this.m_bInitialize = true;</div><div class="line">    LOG.Info(&quot;Initialization complete.&quot;);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="JobManager"><a href="#JobManager" class="headerlink" title="JobManager"></a>JobManager</h3><p>JobManager初始化方法，使用了Quartz框架来调度任务。客户端转换VM会生成job数据，保存到JobStore文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">  public void Initialize()</div><div class="line">&#123;</div><div class="line">    LOG.Info(&quot;Bringing up job manager...&quot;);</div><div class="line">    if (this.m_jobScheduler != null)</div><div class="line">    &#123;</div><div class="line">        throw new InvalidOperationException(Messages.EXCEPTION_ALREADY_INITIALIZED);</div><div class="line">    &#125;</div><div class="line">    //读取配置信息</div><div class="line">    this.ReadConfigurations();</div><div class="line">    //加载Job数据文件</div><div class="line">    this.m_jobStore = JobStore.Load(this.m_dbFile);</div><div class="line">    //Quartz调度框架</div><div class="line">     /** </div><div class="line">      QUARTZ.NET 是一个定时任务框架    概念： 计划者：IScheduler;  工作 IJob;   触发器：Trigger;  </div><div class="line">      我们先得到一个计划者(IScheduler) 然后创建一个任务工作(IJob)，把这个任务扔给计划者，并且告诉它在什么条件下（触发器Trigger）做这件事 </div><div class="line">      将要定时执行的任务的代码写到IJob接口的Execute方法中即可，时间到来的时候Execute方法会被调用 </div><div class="line">      CrondTrigger是通过Crond表达式设置的触发器，还有SimpleTrigger等简单的触发器，</div><div class="line">      可以通过TriggerUtils的MakeDailyTrigger（每天执行一次），MakeHourlyTrigger（每小时执行一次） 等方法简化调用。 </div><div class="line">    */</div><div class="line">    ISchedulerFactory factory = new StdSchedulerFactory();</div><div class="line">    //获取计划者</div><div class="line">    this.m_jobScheduler = factory.GetScheduler(); </div><div class="line">    //添加调度任务监听</div><div class="line">    this.m_jobListener.JobCompletedEvent += new EventHandler&lt;JobCompletedEventArgs&gt;(this.JobCompletedEvent);</div><div class="line">    this.m_jobScheduler.AddGlobalJobListener(this.m_jobListener);</div><div class="line">    this.m_autoShutdownTimer = new Timer((double) (this.m_autoShutdownDelay * 0x3e8));</div><div class="line">    this.m_autoShutdownTimer.Elapsed += new ElapsedEventHandler(JobManager.OnShutdownTimer);</div><div class="line">    //启动调度</div><div class="line">    this.m_jobScheduler.Start();</div><div class="line">    LOG.Info(&quot;Job scheduler started.&quot;);</div><div class="line">    //job调度</div><div class="line">    this.ResubmitJobsAtStartup();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>ResubmitJobsAtStartup方法调用RunJob方法。在RunJob方法中，触发ConversionJob类型的job。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">JobDetail jobDetail = new JobDetail(obj3.Id, &quot;g1&quot;, typeof(ConversionJob));</div><div class="line">jobDetail.JobDataMap[&quot;JobObject&quot;] = obj3;</div><div class="line">Interlocked.Increment(ref this.m_concurrentJobs);</div><div class="line">//立即执行</div><div class="line">Trigger trigger = TriggerUtils.MakeImmediateTrigger(0, TimeSpan.Zero);</div><div class="line">trigger.Name = obj3.Id;</div><div class="line">this.m_jobScheduler.ScheduleJob(jobDetail, trigger);</div></pre></td></tr></table></figure></p>
+<h3 id="ConversionJob"><a href="#ConversionJob" class="headerlink" title="ConversionJob"></a>ConversionJob</h3><p>ConversionJob继承抽象类JobBase。JobBase实现接口IJob，实现了Execute方法。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">public void Execute(JobExecutionContext context)</div><div class="line">&#123;</div><div class="line">    LOG.Debug(&quot;Execute()&quot;);</div><div class="line">    this.m_job = (JobObject) context.JobDetail.JobDataMap[&quot;JobObject&quot;];</div><div class="line">    if (this.m_job == null)</div><div class="line">    &#123;</div><div class="line">        LOG.Error(&quot;NULL job object!!&quot;);</div><div class="line">    &#125;</div><div class="line">    else</div><div class="line">    &#123;</div><div class="line">        m_jobContext = this.m_job;</div><div class="line">        try</div><div class="line">        &#123;</div><div class="line">            //Run抽象方法，由子类重写实现</div><div class="line">	    this.Run(context);</div><div class="line">        &#125;</div><div class="line">        finally</div><div class="line">        &#123;</div><div class="line">            m_jobContext = null;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>ConversionJob类重写Run方法。调用ConvertVM方法。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">public override void Run(JobExecutionContext context)</div><div class="line">&#123;</div><div class="line">    Thread.CurrentThread.Priority = ThreadPriority.Lowest;</div><div class="line">    if (!base.m_job.IsRemoved)</div><div class="line">    &#123;</div><div class="line">        this.m_vmImportInfo = new VmImportInfo();</div><div class="line">        this.m_vmImportInfo.SRuuidToUse = base.m_job.SRUuid;</div><div class="line">        JobInstance jobInstanceData = base.m_job.GetJobInstanceData();</div><div class="line">        try</div><div class="line">        &#123;</div><div class="line">            //更新Job状态为执行中</div><div class="line">	    base.m_job.UpdateJobState(JobState.Running);</div><div class="line">	    //开始转换虚拟机</div><div class="line">            this.ConvertVM(base.m_job);</div><div class="line">	    //更新job状态为完成</div><div class="line">            base.m_job.UpdateJobState(JobState.Completed);</div><div class="line">        &#125;</div></pre></td></tr></table></figure></p>
+<p>ConvertVM方法开始虚拟机转换。导出VMware虚拟机信息，导入XenServer虚拟机。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div></pre></td><td class="code"><pre><div class="line">private void ConvertVM(JobObject job)</div><div class="line">&#123;</div><div class="line">    &lt;ConvertVM&gt;c__AnonStorey0 storey = new &lt;ConvertVM&gt;c__AnonStorey0();</div><div class="line">    DateTime now = DateTime.Now;</div><div class="line">    storey.instance = job.GetJobInstanceData();</div><div class="line">    object[] args = new object[] &#123; JobBase.JobId, storey.instance.JobInfo.SourceVmName, storey.instance.JobInfo.Source.Hostname, base.m_job.XenHost, DateTime.Now.ToString(&quot;r&quot;) &#125;;</div><div class="line">    JobBase.LOG.InfoFormat(&quot;&lt;&#123;0&#125;&gt;: Converting VM &#123;1&#125; from source &#123;2&#125; to dest &#123;3&#125; started at &#123;4&#125; ...&quot;, args);</div><div class="line">    ViVmService service = new ViVmService();</div><div class="line">    XenVmService service2 = new XenVmService();</div><div class="line">    //导入状态事件监听</div><div class="line">    service2.ImportStatusUpdateEvent += new EventHandler&lt;ImportStatusEventArgs&gt;(this.OnImportStatusUpdateEvent);</div><div class="line">    VMExportInfo exportedInfo = null;</div><div class="line">    ViVm vM = null;</div><div class="line">    try</div><div class="line">    &#123;</div><div class="line">        JobBase.LOG.InfoFormat(&quot;&lt;&#123;0&#125;&gt;: Connecting to XenServer at &#123;1&#125; ...&quot;, JobBase.JobId, job.XenHost);</div><div class="line">	//更新job状态为连接XenServer主机</div><div class="line">        job.UpdateJobStatus(string.Format(Messages.JOB_STATUS_CONNECTING_TO_XS, &quot;XenServer&quot;, job.XenHost), 0L, 0L);</div><div class="line">	//连接XenServer主机</div><div class="line">        service2.Connect(new Uri(job.XenHost), job.XenUser, job.XenPwd);</div><div class="line">	//更新job进度为5%</div><div class="line">        job.UpdateJobPercentageComplete(5L);</div><div class="line">        JobBase.LOG.InfoFormat(&quot;&lt;&#123;0&#125;&gt;: Connecting to ESX/VirtualCenter at &#123;1&#125;...&quot;, JobBase.JobId, storey.instance.JobInfo.Source.Hostname);</div><div class="line">	//更新job状态为连接VMware主机</div><div class="line">        job.UpdateJobStatus(string.Format(Messages.JOB_STATUS_CONNECTING_TO_VCENTER, storey.instance.JobInfo.Source.Hostname), 0L, 0L);</div><div class="line">	//连接VMware</div><div class="line">        service.Connect(storey.instance.JobInfo.Source.Hostname, storey.instance.JobInfo.Source.Username, storey.instance.JobInfo.Source.Password);</div><div class="line">	//更新job进度为10%</div><div class="line">        job.UpdateJobPercentageComplete(10L);</div><div class="line">        JobBase.LOG.InfoFormat(&quot;START: find VM object...&quot;, new object[0]);</div><div class="line">	//根据job中的虚拟机uuid获取VMware虚拟机，返回ViVm对象</div><div class="line">        vM = service.GetVM(storey.instance.JobInfo.SourceVmUUID);</div><div class="line">        if (vM == null)</div><div class="line">        &#123;</div><div class="line">            vM = service.GetVMs().Find(new Predicate&lt;ViVm&gt;(storey.&lt;&gt;m__0));</div><div class="line">            if (vM == null)</div><div class="line">            &#123;</div><div class="line">                throw new Exception(string.Format(Messages.EXCEPTION_FAILED_TO_FIND_SOURCE_VM, storey.instance.JobInfo.SourceVmName));</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        JobBase.LOG.InfoFormat(&quot;DONE: finding VM object&quot;, new object[0]);</div><div class="line">	//更新job进度为15%</div><div class="line">        job.UpdateJobPercentageComplete(15L);</div><div class="line">        this.m_vmImportInfo.IsTemplate = vM.IsTemplate;</div><div class="line">	//判断是否保留MAC地址</div><div class="line">        if (job.GetJobInstanceData().JobInfo.PreserveMAC.HasValue)</div><div class="line">        &#123;</div><div class="line">            this.m_vmImportInfo.preserveMAC = job.GetJobInstanceData().JobInfo.PreserveMAC.Value;</div><div class="line">        &#125;</div><div class="line">        else</div><div class="line">        &#123;</div><div class="line">            this.m_vmImportInfo.preserveMAC = false;</div><div class="line">        &#125;</div><div class="line">        this.m_vmImportInfo.networkMappings = job.GetJobInstanceData().JobInfo.NetworkMappings;</div><div class="line">        job.VMTotalBytes = vM.CommitedStorage;</div><div class="line">        if (this.m_vmImportInfo.IsTemplate)</div><div class="line">        &#123;</div><div class="line">            object[] objArray2 = new object[] &#123; JobBase.JobId, storey.instance.JobInfo.SourceVmName, job.VMTotalBytes, now.ToShortTimeString() &#125;;</div><div class="line">            JobBase.LOG.InfoFormat(&quot;&lt;&#123;0&#125;&gt;: Exporting VM Template&apos;&#123;1&#125;&apos; with &#123;2&#125; bytes at &#123;3&#125;&quot;, objArray2);</div><div class="line">        &#125;</div><div class="line">        else</div><div class="line">        &#123;</div><div class="line">            object[] objArray3 = new object[] &#123; JobBase.JobId, storey.instance.JobInfo.SourceVmName, job.VMTotalBytes, now.ToShortTimeString() &#125;;</div><div class="line">            JobBase.LOG.InfoFormat(&quot;&lt;&#123;0&#125;&gt;: Exporting VM &apos;&#123;1&#125;&apos; with &#123;2&#125; bytes at &#123;3&#125;&quot;, objArray3);</div><div class="line">        &#125;</div><div class="line">	//更新job状态为开始导出VMware虚拟机</div><div class="line">        job.UpdateJobStatus(Messages.JOB_STATUS_EXPORTING_VM, 0L, 0L);</div><div class="line">	//调用ViVm的BeginExport方法，返回导出数据信息（包括虚拟机名称、网络信息、MAC地址、导出设备信息、OVF信息等）</div><div class="line">        exportedInfo = vM.BeginExport();</div><div class="line">	//XenServer导入虚拟机</div><div class="line">        service2.ImportVM(exportedInfo, this.m_vmImportInfo);</div><div class="line">    &#125;</div><div class="line">    finally</div><div class="line">    &#123;</div><div class="line">        if ((vM != null) &amp;&amp; (exportedInfo != null))</div><div class="line">        &#123;</div><div class="line">            vM.EndExport(exportedInfo);</div><div class="line">        &#125;</div><div class="line">        service.Disconnect();</div><div class="line">        service2.Disconnect();</div><div class="line">        DateTime time3 = DateTime.Now;</div><div class="line">        object[] objArray4 = new object[] &#123; JobBase.JobId, storey.instance.JobInfo.SourceVmName, time3.ToShortTimeString(), (TimeSpan) (time3 - now) &#125;;</div><div class="line">        JobBase.LOG.InfoFormat(&quot;&lt;&#123;0&#125;&gt;: Converting VM &apos;&#123;1&#125;&apos; stopped at &#123;2&#125; after a duration of &#123;3&#125;&quot;, objArray4);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="XenVmService"><a href="#XenVmService" class="headerlink" title="XenVmService"></a>XenVmService</h3><p>XenVmService的ImportVM方法。</p>
+<ul>
+<li>调用Importer的Process方法， 根据VMware虚拟机OVF等信息创建XenServer虚拟机</li>
+<li>执行Process方法之后，调用ImportVMDisks方法，导入虚拟磁盘。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">Importer import = new Importer();</div><div class="line">   XenVm importedVm = null;</div><div class="line">   try</div><div class="line">   &#123;</div><div class="line">       import.Process(this.m_session, ovfEnvelope, vmImportInfo.SRuuidToUse, vmImportInfo.preserveMAC, exportedInfo.vmNetworkMACInfo, vmImportInfo.networkMappings, vmImportInfo.IsTemplate);</div><div class="line">       if (JobBase.IsRemoved)</div><div class="line">       &#123;</div><div class="line">           e.currentTaskDesc = Messages.TASK_DESC_JOB_CANCEL_PROCESSED;</div><div class="line">           this.ImportStatusUpdateEvent(this, e);</div><div class="line">           LOG.WarnFormat(&quot;&lt;&#123;0&#125;&gt;: Cancelling running job during meta import for VM &#123;1&#125;&quot;, JobBase.JobId, exportedInfo.VmName);</div><div class="line">           throw new UserAbortException(string.Format(Messages.USER_ABORT_EXCEPTION_CANCEL_JOB3, exportedInfo.VmName));</div><div class="line">       &#125;</div><div class="line">   &#125;</div><div class="line"></div><div class="line">....</div><div class="line">....</div><div class="line">//导入虚拟磁盘</div><div class="line">this.ImportVMDisks(importedVm, import, exportedInfo, vmImportInfo);</div><div class="line">....</div><div class="line">....</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="Importer"><a href="#Importer" class="headerlink" title="Importer"></a>Importer</h3><p>Process方法，调用AddResourceSettingData方法添加VBD与VDI。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line">public void Process(Session xenSession, EnvelopeType ovfEnvelope, string srUuid, bool preserveMAC, List&lt;VMNetworkMACInfo&gt; vmNetworkMACInfo, Hashtable networkMappings, bool isTemplate)</div><div class="line">&#123;</div><div class="line">    if (xenSession == null)</div><div class="line">    &#123;</div><div class="line">        throw new InvalidOperationException(string.Format(Messages.ERROR_NOT_CONNECTED, &quot;XenServer&quot;));</div><div class="line">    &#125;</div><div class="line">    this.m_ovfEnv = ovfEnvelope;</div><div class="line">    this.m_importedVMInfo = new ImportedVMInfo();</div><div class="line">    this.m_importedVMInfo.disksInfo = new List&lt;ImportedDiskInfo&gt;();</div><div class="line">    this.vifDeviceIndex = 0;</div><div class="line">    if (ovfEnvelope.Item is VirtualSystem_Type)</div><div class="line">    &#123;</div><div class="line">        VirtualSystem_Type item = (VirtualSystem_Type) ovfEnvelope.Item;</div><div class="line">        ovfEnvelope.Item = new VirtualSystemCollection_Type();</div><div class="line">        ((VirtualSystemCollection_Type) ovfEnvelope.Item).Content = new Content_Type[] &#123; item &#125;;</div><div class="line">    &#125;</div><div class="line">    VirtualHardwareSection_Type system = null;</div><div class="line">    foreach (VirtualSystem_Type type3 in ((VirtualSystemCollection_Type) ovfEnvelope.Item).Content)</div><div class="line">    &#123;</div><div class="line">        system = this.ovfImport.FindVirtualHardwareSectionByAffinity(ovfEnvelope, type3.id, &quot;xen&quot;);</div><div class="line">        string ovfName = this.ovfImport.FindSystemName(ovfEnvelope, type3.id);</div><div class="line">	//创建虚拟机</div><div class="line">        XenRef&lt;VM&gt; vmRef = this.DefineSystem(xenSession, system, ovfName);</div><div class="line">        if (vmRef == null)</div><div class="line">        &#123;</div><div class="line">            throw new ImportException(Messages.ERROR_DEFINE_SYSTEM);</div><div class="line">        &#125;</div><div class="line">        this.m_importedVMInfo.vmInfo = VM.get_record(xenSession, (string) vmRef);</div><div class="line">        this.SetDeviceConnections(ovfEnvelope, system);</div><div class="line">        if (isTemplate)</div><div class="line">        &#123;</div><div class="line">            VM.set_is_a_template(xenSession, (string) vmRef, true);</div><div class="line">        &#125;</div><div class="line">        try</div><div class="line">        &#123;</div><div class="line">            foreach (RASD_Type type4 in system.Item)</div><div class="line">            &#123;</div><div class="line">                if (((type4.ResourceType.Value == 0x11) || (type4.ResourceType.Value == 0x13)) || (type4.ResourceType.Value == 0x15))</div><div class="line">                &#123;</div><div class="line">                    if (OVF.ValidateProperty(&quot;Caption&quot;, type4) &amp;&amp; ((type4.Caption.Value.ToUpper().Contains(&quot;COM&quot;) || type4.Caption.Value.ToUpper().Contains(&quot;FLOPPY&quot;)) || type4.Caption.Value.ToUpper().Contains(&quot;ISO&quot;)))</div><div class="line">                    &#123;</div><div class="line">                        continue;</div><div class="line">                    &#125;</div><div class="line">                    this.SetIfDeviceIsBootable(ovfEnvelope, type4);</div><div class="line">                &#125;</div><div class="line">                string compressed = &quot;None&quot;;</div><div class="line">		//添加资源，VBD与VDI</div><div class="line">                this.AddResourceSettingData(xenSession, vmRef, type4, this.ovfImport.FindRasdFileName(ovfEnvelope, type4, out compressed), srUuid, preserveMAC, vmNetworkMACInfo, networkMappings);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        catch (Exception exception)</div><div class="line">        &#123;</div><div class="line">            LOG.ErrorFormat(&quot;Importer: Failed processing device types in OVF file: Error &apos;&#123;0&#125;&apos;.&quot;, exception.Message);</div><div class="line">            throw exception;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>调用ImportVMDisks方法</p>
+<ul>
+<li>将之前创建的VDI卸载</li>
+<li>VDI挂载给服务器端VM</li>
+<li>下载VMware虚拟机磁盘数据</li>
+<li>将VDI从服务端VM上卸载</li>
+<li>将VDI挂载给导入的虚拟机</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">  private void ImportVMDisks(XenVm importedVm, Importer import, VMExportInfo exportedInfo, VmImportInfo importInfo)</div><div class="line">&#123;</div><div class="line">    ImportStatusEventArgs e = new ImportStatusEventArgs(Messages.IMPORTING_VM_DISKS_STATUS, string.Empty, 0L, 0L, 0L);</div><div class="line">    this.ImportStatusUpdateEvent(this, e);</div><div class="line">    foreach (ImportedDiskInfo info in import.ImportedVMInfo.disksInfo)</div><div class="line">    &#123;</div><div class="line">        VBD vbdInfo = null;</div><div class="line">        try</div><div class="line">        &#123;</div><div class="line">            if (JobBase.IsRemoved)</div><div class="line">            &#123;</div><div class="line">                e.currentTaskDesc = Messages.TASK_DESC_JOB_CANCEL_PROCESSED;</div><div class="line">                this.ImportStatusUpdateEvent(this, e);</div><div class="line">                LOG.WarnFormat(&quot;&lt;&#123;0&#125;&gt;: Cancelling running job during disk import for VM &#123;1&#125;&quot;, JobBase.JobId, importedVm.Name);</div><div class="line">                throw new UserAbortException(string.Format(Messages.USER_ABORT_EXCEPTION_CANCEL_JOB2, importedVm.Name));</div><div class="line">            &#125;</div><div class="line">            LOG.InfoFormat(&quot;&lt;&#123;0&#125;&gt;: Detaching VDI &#123;1&#125; from imported VM &#123;2&#125;.&quot;, JobBase.JobId, info.vdiInfo.uuid, importedVm.Name);</div><div class="line">	    //VBD unplug（之前创建的VDI是没有plug给VM的，这里做一下unplug操作，以防万一被plug）</div><div class="line">            importedVm.DetachDisk(info.vbdInfo);</div><div class="line">            LOG.InfoFormat(&quot;&lt;&#123;0&#125;&gt;: Attaching VDI &#123;1&#125; to this appliance.&quot;, JobBase.JobId, info.vdiInfo.uuid);</div><div class="line">	    //将VDI plug给服务端VM</div><div class="line">            vbdInfo = this.m_conversionVM.AttachDisk(info.vdiInfo);</div><div class="line">            LOG.InfoFormat(&quot;&lt;&#123;0&#125;&gt;: Newly-attached VBD disk on this appliance &#123;1&#125;.&quot;, JobBase.JobId, vbdInfo.device);</div><div class="line">            File_Type type = import.Ovf.FindFileReference(import.Envelope, info.OvfDiskInfo.fileRef);</div><div class="line">            LOG.InfoFormat(&quot;&lt;&#123;0&#125;&gt;: Searching for disk key &#123;1&#125;.&quot;, JobBase.JobId, type.href);</div><div class="line">            VMExportDeviceInfo devInfo = this.FindExportDeviceInfo(exportedInfo, type.href);</div><div class="line">            if (devInfo != null)</div><div class="line">            &#123;</div><div class="line">                LOG.InfoFormat(&quot;&lt;&#123;0&#125;&gt;: Imported disk key=&#123;1&#125; match to exported key=&#123;2&#125; &quot;, JobBase.JobId, type.href, devInfo.Key);</div><div class="line">                LOG.InfoFormat(&quot;&lt;&#123;0&#125;&gt;: Streaming from url=&#123;1&#125; to device=&#123;2&#125;...&quot;, JobBase.JobId, devInfo.Url, vbdInfo.device);</div><div class="line">		//下载VMware磁盘数据</div><div class="line">                this.DownloadDisk(exportedInfo, devInfo, vbdInfo, JobBase.JobId);</div><div class="line">                LOG.InfoFormat(&quot;&lt;&#123;0&#125;&gt;: Streaming done for device=&#123;1&#125;.&quot;, JobBase.JobId, vbdInfo.device);</div><div class="line">            &#125;</div><div class="line">            else</div><div class="line">            &#123;</div><div class="line">                LOG.ErrorFormat(&quot;&lt;&#123;0&#125;&gt;: No match key found for imported disk key=&#123;1&#125;!!&quot;, JobBase.JobId, type.href);</div><div class="line">                throw new InvalidOperationException(string.Format(Messages.EXCEPTION_NO_MATCH_KEY_FOUND, type.href));</div><div class="line">            &#125;</div><div class="line">            LOG.InfoFormat(&quot;&lt;&#123;0&#125;&gt;: Detaching device=&#123;1&#125; from appliance.&quot;, JobBase.JobId, vbdInfo.device);</div><div class="line">	    //将VDI从服务端VM上unlpug</div><div class="line">            this.m_conversionVM.DetachDisk(vbdInfo);</div><div class="line">            LOG.InfoFormat(&quot;&lt;&#123;0&#125;&gt;: Reattaching device=&#123;1&#125; to imported VM.&quot;, JobBase.JobId, info.vbdInfo.userdevice);</div><div class="line">	    //将VDI挂载给导入的虚拟机</div><div class="line">            importedVm.ReattachDisk(info.vbdInfo);</div><div class="line">        &#125;</div><div class="line">        catch</div><div class="line">        &#123;</div><div class="line">            if (vbdInfo != null)</div><div class="line">            &#123;</div><div class="line">                this.m_conversionVM.DestroyDisk(vbdInfo);</div><div class="line">            &#125;</div><div class="line">            throw;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>DownloadDisk方法下载VMware磁盘数据，使用/opt/vpxxcm/conversion/vdiskget来执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">private void DownloadDisk(VMExportInfo exportedInfo, VMExportDeviceInfo devInfo, VBD vbdInfo, string jobId)</div><div class="line">&#123;</div><div class="line">    string str = XenVmDiskPath.FixupDiskPath(vbdInfo.device);</div><div class="line">    string str2 = string.Format(&quot;/dev/&#123;0&#125;&quot;, str);</div><div class="line">    int num = -1;</div><div class="line">    for (int i = 0; i &lt; Settings.Default.DownloadRetryCount; i++)</div><div class="line">    &#123;</div><div class="line">        string[] arguments = new string[] &#123; Settings.Default.DownloadOptions, devInfo.Url, str2, jobId, this.Uri.ToString() &#125;;</div><div class="line">        num = this.RunCancelableJobProcess(&quot;/opt/vpxxcm/conversion/vdiskget&quot;, Settings.Default.DownloadTimeoutMs, Settings.Default.DownloadPeriodMs, arguments);</div><div class="line">        if (num == 0)</div><div class="line">        &#123;</div><div class="line">            return;</div><div class="line">        &#125;</div><div class="line">        Thread.Sleep(Settings.Default.DownloadRetryDelayMs);</div><div class="line">    &#125;</div><div class="line">    throw new Exception(string.Format(&quot;Failed to download disk from &#123;0&#125; to &#123;1&#125;. (vdiskget result = &#123;2&#125;)&quot;, devInfo.Url, str2, num));</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/V2V/" rel="tag"># V2V</a>
+          
+            <a href="/tags/XenServer/" rel="tag"># XenServer</a>
+          
+            <a href="/tags/VMware/" rel="tag"># VMware</a>
+          
+            <a href="/tags/XenServer-Conversion-Manager/" rel="tag"># XenServer Conversion Manager</a>
+          
+            <a href="/tags/XCM/" rel="tag"># XCM</a>
+          
+            <a href="/tags/虚拟机转换工具/" rel="tag"># 虚拟机转换工具</a>
+          
+            <a href="/tags/虚拟机转换器/" rel="tag"># 虚拟机转换器</a>
+          
+            <a href="/tags/VMware2XenServer/" rel="tag"># VMware2XenServer</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/07/v2v-7/" rel="next" title="V2V转换器（七）——V2V服务端分析之convsvc">
+                <i class="fa fa-chevron-left"></i> V2V转换器（七）——V2V服务端分析之convsvc
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2017/03/08/v2v-8/"
+     data-title="V2V转换器（八）——V2V服务端分析之Converter"
+     data-content=""
+     data-url="https://hl10502.github.io/2017/03/08/v2v-8/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/03/08/v2v-8/"
+           data-title="V2V转换器（八）——V2V服务端分析之Converter" data-url="https://hl10502.github.io/2017/03/08/v2v-8/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="hl10502" />
+          <p class="site-author-name" itemprop="name">hl10502</p>
+          <p class="site-description motion-element" itemprop="description">目前关注云计算/虚拟化/分布式存储等。</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/hl10502" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Converter组件"><span class="nav-number">1.</span> <span class="nav-text">Converter组件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ConversionMgr"><span class="nav-number">1.1.</span> <span class="nav-text">ConversionMgr</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JobManager"><span class="nav-number">1.2.</span> <span class="nav-text">JobManager</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ConversionJob"><span class="nav-number">1.3.</span> <span class="nav-text">ConversionJob</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#XenVmService"><span class="nav-number">1.4.</span> <span class="nav-text">XenVmService</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Importer"><span class="nav-number">1.5.</span> <span class="nav-text">Importer</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">hl10502</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"hl10502"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("LE6b1aXtXOedOvsqgG7uXyrn-gzGzoHsz", "WHQseHdLj7t7hyj5EXO7pveG");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>
