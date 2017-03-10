@@ -3,6 +3,13 @@
   
     
     <entry>
+      <title><![CDATA[XenServer主机执行xe命令出错：Lost connection to the server]]></title>
+      <url>%2F2017%2F03%2F10%2Fxenserver-host-1%2F</url>
+      <content type="text"><![CDATA[在三台主机组成的资源池中，没有了master节点，执行xe命令出错：Lost connection to the server 三台主机IP： 192.168.222.181 192.168.222.182 192.168.222.183 查看pool配置文件查看pool配置文件，183为主节点123456[root@macro-222-181 ~]# cat /etc/xensource/pool.confslave:192.168.222.183[root@macro-222-182 ~]# cat /etc/xensource/pool.confslave:192.168.222.183[root@macro-222-183 ~]# cat /etc/xensource/pool.confslave:192.168.222.183 解决方法在183上禁用HA1[root@macro-222-183 ~]# xe host-emergency-ha-disable --force 设置183为主节点12[root@macro-222-183 ~]# xe pool-emergency-transition-to-masterHost agent will restart and transition to master in 10.000 seconds... 通知其他从节点123[root@macro-222-183 ~]# xe pool-recover-slavesb8deaa20-cfe9-4a54-86c8-f18aecdc48d4bf2faa7f-6f50-46d9-8043-f24b41a69464 禁用HA1[root@macro-222-183 ~]# xe pool-ha-disable]]></content>
+    </entry>
+
+    
+    <entry>
       <title><![CDATA[hexo博客绑定域名]]></title>
       <url>%2F2017%2F03%2F09%2Fhexo-domain%2F</url>
       <content type="text"><![CDATA[注册域名并绑定GitHub博客。 域名注册在腾讯云注册hl10502.com域名并认证 DNS解析添加CNAME类型的DNS记录: CNAME: @ hl10502.github.io. CNAME: www hl10502.github.io. 主机记录@： 主机记录www： 添加CNAME文件hexo源码source目录下增加CNAME文件，不带后缀。 文件内容为 www.hl10502.com]]></content>
