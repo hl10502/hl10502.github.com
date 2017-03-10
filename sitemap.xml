@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://hl10502.github.io/2017/03/09/hexo-domain/</loc>
+    
+    <lastmod>2017-03-10T03:51:29.135Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://hl10502.github.io/about/index.html</loc>
+    
+    <lastmod>2017-03-10T03:19:41.277Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://hl10502.github.io/2017/03/09/xenserver-ha-1/</loc>
     
     <lastmod>2017-03-09T09:46:10.368Z</lastmod>
