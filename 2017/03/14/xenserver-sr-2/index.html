@@ -91,32 +91,32 @@
 
 <meta name="description" content="存储池有4种状态：活动、未挂载、挂载异常、异常。
 
-活动：存储池正常挂载在物理主机上面。共享存储池同时挂载给资源池里所有的物理主机。活动状态下可以执行：卸载操作。
+活动：存储池正常挂载在物理主机上面。共享存储池同时挂载给资源池里所有的物理主机。活动状态下可以执行卸载操作。
 
-挂载异常：存储池与物理主机有PBD连接信息，但是未挂载到物理主机上，或者未同时挂载给资源池里所有物理主机。挂载异常状态下可以执行：挂载、移除、删除操作。
+挂载异常：存储池与物理主机有PBD连接信息，但是未挂载到物理主机上，或者未同时挂载给资源池里所有物理主机。挂载异常状态下可以执行挂载、移除、删除操作。
 
-未挂载：存储池与物理主机没有PBD连接信息。活动状态下的存储池进行了分离操作后">
+未挂载：存储池与物理主机没有PBD连接信息。活动状态下的存储池进行了分离操作后出现">
 <meta property="og:type" content="article">
 <meta property="og:title" content="XenServer存储池操作">
 <meta property="og:url" content="https://hl10502.github.io/2017/03/14/xenserver-sr-2/index.html">
 <meta property="og:site_name" content="hl10502的博客">
 <meta property="og:description" content="存储池有4种状态：活动、未挂载、挂载异常、异常。
 
-活动：存储池正常挂载在物理主机上面。共享存储池同时挂载给资源池里所有的物理主机。活动状态下可以执行：卸载操作。
+活动：存储池正常挂载在物理主机上面。共享存储池同时挂载给资源池里所有的物理主机。活动状态下可以执行卸载操作。
 
-挂载异常：存储池与物理主机有PBD连接信息，但是未挂载到物理主机上，或者未同时挂载给资源池里所有物理主机。挂载异常状态下可以执行：挂载、移除、删除操作。
+挂载异常：存储池与物理主机有PBD连接信息，但是未挂载到物理主机上，或者未同时挂载给资源池里所有物理主机。挂载异常状态下可以执行挂载、移除、删除操作。
 
-未挂载：存储池与物理主机没有PBD连接信息。活动状态下的存储池进行了分离操作后">
-<meta property="og:updated_time" content="2017-03-14T08:52:33.464Z">
+未挂载：存储池与物理主机没有PBD连接信息。活动状态下的存储池进行了分离操作后出现">
+<meta property="og:updated_time" content="2017-03-14T08:54:59.503Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="XenServer存储池操作">
 <meta name="twitter:description" content="存储池有4种状态：活动、未挂载、挂载异常、异常。
 
-活动：存储池正常挂载在物理主机上面。共享存储池同时挂载给资源池里所有的物理主机。活动状态下可以执行：卸载操作。
+活动：存储池正常挂载在物理主机上面。共享存储池同时挂载给资源池里所有的物理主机。活动状态下可以执行卸载操作。
 
-挂载异常：存储池与物理主机有PBD连接信息，但是未挂载到物理主机上，或者未同时挂载给资源池里所有物理主机。挂载异常状态下可以执行：挂载、移除、删除操作。
+挂载异常：存储池与物理主机有PBD连接信息，但是未挂载到物理主机上，或者未同时挂载给资源池里所有物理主机。挂载异常状态下可以执行挂载、移除、删除操作。
 
-未挂载：存储池与物理主机没有PBD连接信息。活动状态下的存储池进行了分离操作后">
+未挂载：存储池与物理主机没有PBD连接信息。活动状态下的存储池进行了分离操作后出现">
 
 
 
@@ -441,11 +441,11 @@
       
         <p>存储池有4种状态：活动、未挂载、挂载异常、异常。</p>
 <ul>
-<li><p>活动：存储池正常挂载在物理主机上面。共享存储池同时挂载给资源池里所有的物理主机。活动状态下可以执行：卸载操作。</p>
+<li><p>活动：存储池正常挂载在物理主机上面。共享存储池同时挂载给资源池里所有的物理主机。活动状态下可以执行卸载操作。</p>
 </li>
-<li><p>挂载异常：存储池与物理主机有PBD连接信息，但是未挂载到物理主机上，或者未同时挂载给资源池里所有物理主机。挂载异常状态下可以执行：挂载、移除、删除操作。</p>
+<li><p>挂载异常：存储池与物理主机有PBD连接信息，但是未挂载到物理主机上，或者未同时挂载给资源池里所有物理主机。挂载异常状态下可以执行挂载、移除、删除操作。</p>
 </li>
-<li><p>未挂载：存储池与物理主机没有PBD连接信息。活动状态下的存储池进行了分离操作后出现该状态。未挂载状态下可以执行：重新连接、移除、删除操作。</p>
+<li><p>未挂载：存储池与物理主机没有PBD连接信息。活动状态下的存储池进行了分离操作后出现该状态。未挂载状态下可以执行重新连接、移除、删除操作。</p>
 </li>
 <li><p>异常：存储池与主机有连接信息，并且挂载到主机上，但是存储池本身出现异常（后端存储LUN不存在、网络异常等）。可以通过xe sr-scan超时来判断。</p>
 </li>
@@ -461,7 +461,6 @@
 <p>存储池当前状态为“挂载异常”、“未挂载”或者“异常”，可以进行移除操作。有挂载了PBD的，先卸载PBD。</p>
 <p>有挂载了PBD的，先卸载PBD<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">xe pbd-unplug uuid=[PBD_UUID]</div></pre></td></tr></table></figure></p>
 <p>移除存储池<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">xe sr-forget uuid=[SR_UUID]</div></pre></td></tr></table></figure></p>
-<p>   状态为未挂载、挂载异常的存储池才可以进行移除操作。<br>   移除操作之后，我们系统将完全删除该存储池信息。</p>
 <h3 id="分离操作"><a href="#分离操作" class="headerlink" title="分离操作"></a>分离操作</h3><p>删除存储池与物理主机的PBD连接信息，使存储池无法访问。需要恢复，使用”重新连接”重新输入连接信息，才可以访问。<br>存储池当前状态为“活动”、“挂载异常”，可以进行分离操作。<br>存储池里面的虚拟磁盘如果有挂载给正在使用的虚拟机，则不可以进行分离操作。</p>
 <p>卸载PBD<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">xe pbd-unplug uuid=[PBD_UUID]</div></pre></td></tr></table></figure></p>
 <p>删除PBD<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">xe pbd-destroy uuid=[PBD_UUID]</div></pre></td></tr></table></figure></p>
