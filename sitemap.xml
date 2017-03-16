@@ -2,6 +2,41 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://hl10502.github.io/2017/02/24/wincenterclient-2/</loc>
+    
+    <lastmod>2017-03-16T08:34:35.105Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://hl10502.github.io/2017/02/28/v2v-2/</loc>
+    
+    <lastmod>2017-03-16T08:33:28.530Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://hl10502.github.io/2017/03/16/xenserver-vm-3/</loc>
+    
+    <lastmod>2017-03-16T08:31:45.483Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://hl10502.github.io/2017/02/27/xencenter-2/</loc>
+    
+    <lastmod>2017-03-16T08:31:02.451Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://hl10502.github.io/2017/02/27/xencenter-1/</loc>
+    
+    <lastmod>2017-03-16T08:30:49.538Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://hl10502.github.io/2017/03/16/xenserver-vm-6/</loc>
     
     <lastmod>2017-03-16T08:08:44.133Z</lastmod>
@@ -19,13 +54,6 @@
     <loc>https://hl10502.github.io/2017/03/16/xenserver-vm-4/</loc>
     
     <lastmod>2017-03-16T07:32:35.317Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://hl10502.github.io/2017/03/16/xenserver-vm-3/</loc>
-    
-    <lastmod>2017-03-16T06:59:20.948Z</lastmod>
     
   </url>
   
@@ -233,13 +261,6 @@
   </url>
   
   <url>
-    <loc>https://hl10502.github.io/2017/02/28/v2v-2/</loc>
-    
-    <lastmod>2017-03-07T01:08:02.303Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://hl10502.github.io/2017/02/28/v2v-1/</loc>
     
     <lastmod>2017-03-07T01:07:53.430Z</lastmod>
@@ -261,20 +282,6 @@
   </url>
   
   <url>
-    <loc>https://hl10502.github.io/2017/02/27/xencenter-2/</loc>
-    
-    <lastmod>2017-02-28T10:18:18.826Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://hl10502.github.io/2017/02/27/xencenter-1/</loc>
-    
-    <lastmod>2017-02-28T10:18:10.554Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://hl10502.github.io/2017/02/24/wincenterclient-1/</loc>
     
     <lastmod>2017-02-28T07:31:01.898Z</lastmod>
@@ -292,13 +299,6 @@
     <loc>https://hl10502.github.io/2017/02/15/hexo-config-more/</loc>
     
     <lastmod>2017-02-28T07:28:04.794Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://hl10502.github.io/2017/02/24/wincenterclient-2/</loc>
-    
-    <lastmod>2017-02-28T07:26:56.619Z</lastmod>
     
   </url>
   
