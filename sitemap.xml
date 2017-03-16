@@ -2,9 +2,65 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://hl10502.github.io/2017/02/24/hexo-local-pic/</loc>
+    
+    <lastmod>2017-03-16T03:23:12.353Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://hl10502.github.io/2017/02/13/hexo-github-setup-blog/</loc>
+    
+    <lastmod>2017-03-16T03:21:45.930Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://hl10502.github.io/2017/03/09/hexo-domain/</loc>
+    
+    <lastmod>2017-03-16T03:20:15.216Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://hl10502.github.io/2017/03/13/xenserver-host-2/</loc>
+    
+    <lastmod>2017-03-16T03:19:37.448Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://hl10502.github.io/2017/03/13/xenserver-host-5/</loc>
+    
+    <lastmod>2017-03-16T03:19:00.744Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://hl10502.github.io/2017/03/14/xenserver-sr-1/</loc>
+    
+    <lastmod>2017-03-16T03:18:11.865Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://hl10502.github.io/2017/03/15/xenserver-sr-4/</loc>
     
-    <lastmod>2017-03-15T03:36:29.779Z</lastmod>
+    <lastmod>2017-03-16T03:17:08.337Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://hl10502.github.io/2017/03/16/xenserver-vdi-1/</loc>
+    
+    <lastmod>2017-03-16T03:14:43.699Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://hl10502.github.io/2017/03/16/xenserver-vdi-2/</loc>
+    
+    <lastmod>2017-03-16T03:11:58.363Z</lastmod>
     
   </url>
   
@@ -37,13 +93,6 @@
   </url>
   
   <url>
-    <loc>https://hl10502.github.io/2017/03/14/xenserver-sr-1/</loc>
-    
-    <lastmod>2017-03-14T06:49:30.484Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://hl10502.github.io/2017/03/14/xenserver-pool-2/</loc>
     
     <lastmod>2017-03-14T03:06:03.071Z</lastmod>
@@ -54,13 +103,6 @@
     <loc>https://hl10502.github.io/2017/03/13/xenserver-pool-1/</loc>
     
     <lastmod>2017-03-13T08:37:33.066Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://hl10502.github.io/2017/03/13/xenserver-host-5/</loc>
-    
-    <lastmod>2017-03-13T07:43:05.981Z</lastmod>
     
   </url>
   
@@ -79,23 +121,9 @@
   </url>
   
   <url>
-    <loc>https://hl10502.github.io/2017/03/13/xenserver-host-2/</loc>
-    
-    <lastmod>2017-03-13T03:03:33.520Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://hl10502.github.io/2017/03/10/xenserver-host-1/</loc>
     
     <lastmod>2017-03-10T06:14:30.483Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://hl10502.github.io/2017/03/09/hexo-domain/</loc>
-    
-    <lastmod>2017-03-10T03:51:29.135Z</lastmod>
     
   </url>
   
@@ -208,20 +236,6 @@
     <loc>https://hl10502.github.io/2017/02/24/wincenterclient-1/</loc>
     
     <lastmod>2017-02-28T07:31:01.898Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://hl10502.github.io/2017/02/13/hexo-github-setup-blog/</loc>
-    
-    <lastmod>2017-02-28T07:28:54.665Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://hl10502.github.io/2017/02/24/hexo-local-pic/</loc>
-    
-    <lastmod>2017-02-28T07:28:48.722Z</lastmod>
     
   </url>
   

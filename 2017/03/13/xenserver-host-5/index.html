@@ -89,16 +89,19 @@
 
 
 
-<meta name="description" content="XenServer切换master主机。">
+<meta name="description" content="XenServer切换master主机。
+禁用HA如果资源池启用了HA，先禁用HA，否则跳过此步骤。1[root@xenserver ~]# xe pool-ha-disable">
 <meta property="og:type" content="article">
 <meta property="og:title" content="XenServer切换master主机">
 <meta property="og:url" content="https://hl10502.github.io/2017/03/13/xenserver-host-5/index.html">
 <meta property="og:site_name" content="hl10502的博客">
-<meta property="og:description" content="XenServer切换master主机。">
-<meta property="og:updated_time" content="2017-03-13T07:43:05.981Z">
+<meta property="og:description" content="XenServer切换master主机。
+禁用HA如果资源池启用了HA，先禁用HA，否则跳过此步骤。1[root@xenserver ~]# xe pool-ha-disable">
+<meta property="og:updated_time" content="2017-03-16T03:19:00.744Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="XenServer切换master主机">
-<meta name="twitter:description" content="XenServer切换master主机。">
+<meta name="twitter:description" content="XenServer切换master主机。
+禁用HA如果资源池启用了HA，先禁用HA，否则跳过此步骤。1[root@xenserver ~]# xe pool-ha-disable">
 
 
 
@@ -422,8 +425,8 @@
 
       
         <p>XenServer切换master主机。</p>
-<a id="more"></a>
 <h2 id="禁用HA"><a href="#禁用HA" class="headerlink" title="禁用HA"></a>禁用HA</h2><p>如果资源池启用了HA，先禁用HA，否则跳过此步骤。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@xenserver ~]<span class="comment"># xe pool-ha-disable</span></div></pre></td></tr></table></figure></p>
+<a id="more"></a>
 <h2 id="显示主机"><a href="#显示主机" class="headerlink" title="显示主机"></a>显示主机</h2><p>列出资源池内的物理主机<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">[root@xenserver ~]<span class="comment"># xe host-list</span></div><div class="line">uuid ( RO)                : 29fb4d42-258f-4ce1<span class="_">-a</span>81b-519479eb1f3e</div><div class="line">          name-label ( RW): xenserver155</div><div class="line">    name-description ( RW): Default install of xenserver</div><div class="line"></div><div class="line"></div><div class="line">uuid ( RO)                : ba2fcb36-6788-4cc4-90bc-dceb7d3dd2d0</div><div class="line">          name-label ( RW): xenserver-119</div><div class="line">    name-description ( RW): Default install of xenserver</div><div class="line"></div><div class="line"></div><div class="line">uuid ( RO)                : cc6f3970-ddb3-4c87-8487-efc034ce3b6b</div><div class="line">          name-label ( RW): xenserver153</div><div class="line">    name-description ( RW): Default install of xenserver</div></pre></td></tr></table></figure></p>
 <h2 id="切换新的master"><a href="#切换新的master" class="headerlink" title="切换新的master"></a>切换新的master</h2><p>使用 xe pool-designate-new-master host-uuid=[host-uuid]，切换新的master为xenserver155主机。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@xenserver ~]<span class="comment"># xe pool-designate-new-master host-uuid=29fb4d42-258f-4ce1-a81b-519479eb1f3e</span></div></pre></td></tr></table></figure></p>
 
@@ -573,7 +576,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-count">36</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -582,7 +585,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-count">12</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -591,7 +594,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">64</span>
+                <span class="site-state-item-count">69</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

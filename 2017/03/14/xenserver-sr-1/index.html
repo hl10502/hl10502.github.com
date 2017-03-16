@@ -89,16 +89,22 @@
 
 
 
-<meta name="description" content="ISCSI操作总结。">
+<meta name="description" content="ISCSI操作总结。
+增加ISCSI存储发现iscsi存储1iscsiadm -m discovery -t st -p &amp;lt;ISCSI_IP&amp;gt;
+或者1iscsiadm -m discovery -t sendtargets -p &amp;lt;ISCSI_IP&amp;gt;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ISCSI操作总结">
 <meta property="og:url" content="https://hl10502.github.io/2017/03/14/xenserver-sr-1/index.html">
 <meta property="og:site_name" content="hl10502的博客">
-<meta property="og:description" content="ISCSI操作总结。">
-<meta property="og:updated_time" content="2017-03-14T06:49:30.484Z">
+<meta property="og:description" content="ISCSI操作总结。
+增加ISCSI存储发现iscsi存储1iscsiadm -m discovery -t st -p &amp;lt;ISCSI_IP&amp;gt;
+或者1iscsiadm -m discovery -t sendtargets -p &amp;lt;ISCSI_IP&amp;gt;">
+<meta property="og:updated_time" content="2017-03-16T03:18:11.865Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ISCSI操作总结">
-<meta name="twitter:description" content="ISCSI操作总结。">
+<meta name="twitter:description" content="ISCSI操作总结。
+增加ISCSI存储发现iscsi存储1iscsiadm -m discovery -t st -p &amp;lt;ISCSI_IP&amp;gt;
+或者1iscsiadm -m discovery -t sendtargets -p &amp;lt;ISCSI_IP&amp;gt;">
 
 
 
@@ -422,9 +428,9 @@
 
       
         <p>ISCSI操作总结。</p>
-<a id="more"></a>
 <h2 id="增加ISCSI存储"><a href="#增加ISCSI存储" class="headerlink" title="增加ISCSI存储"></a>增加ISCSI存储</h2><p>发现iscsi存储<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">iscsiadm -m discovery -t st -p &lt;ISCSI_IP&gt;</div></pre></td></tr></table></figure></p>
 <p>或者<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">iscsiadm -m discovery -t sendtargets -p &lt;ISCSI_IP&gt;</div></pre></td></tr></table></figure></p>
+<a id="more"></a>
 <p>查看iscsi发现记录<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">iscsiadm -m node</div></pre></td></tr></table></figure></p>
 <p>登录iscsi存储<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">iscsiadm -m node -T &lt;TARGET_NAME&gt; -p &lt;ISCSI_IP&gt; <span class="_">-l</span></div></pre></td></tr></table></figure></p>
 <p>开机自动<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">iscsiadm -m node –T &lt;TARGET_NAME&gt; -p &lt;ISCSI_IP&gt; --op update -n node.startup -v automatic</div></pre></td></tr></table></figure></p>
@@ -585,7 +591,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-count">36</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -594,7 +600,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-count">12</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -603,7 +609,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">64</span>
+                <span class="site-state-item-count">69</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

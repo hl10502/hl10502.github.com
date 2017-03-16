@@ -89,16 +89,25 @@
 
 
 
-<meta name="description" content="查看SR与VDI在物理主机上的文件路径。">
+<meta name="description" content="查看SR与VDI在物理主机上的文件路径。SR类型：
+
+NFS与ISO
+LVM与HBA">
 <meta property="og:type" content="article">
 <meta property="og:title" content="查看SR与VDI路径">
 <meta property="og:url" content="https://hl10502.github.io/2017/03/15/xenserver-sr-4/index.html">
 <meta property="og:site_name" content="hl10502的博客">
-<meta property="og:description" content="查看SR与VDI在物理主机上的文件路径。">
-<meta property="og:updated_time" content="2017-03-15T03:36:29.779Z">
+<meta property="og:description" content="查看SR与VDI在物理主机上的文件路径。SR类型：
+
+NFS与ISO
+LVM与HBA">
+<meta property="og:updated_time" content="2017-03-16T03:17:08.337Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="查看SR与VDI路径">
-<meta name="twitter:description" content="查看SR与VDI在物理主机上的文件路径。">
+<meta name="twitter:description" content="查看SR与VDI在物理主机上的文件路径。SR类型：
+
+NFS与ISO
+LVM与HBA">
 
 
 
@@ -421,7 +430,11 @@
       
 
       
-        <p>查看SR与VDI在物理主机上的文件路径。</p>
+        <p>查看SR与VDI在物理主机上的文件路径。SR类型：</p>
+<ul>
+<li>NFS与ISO</li>
+<li>LVM与HBA</li>
+</ul>
 <a id="more"></a>
 <h2 id="NFS与ISO"><a href="#NFS与ISO" class="headerlink" title="NFS与ISO"></a>NFS与ISO</h2><p>查看NFS与ISO类型的SR，使用 df -h 命令，SR目录文件放在/var/run/sr-mount/[sr-uuid]下，子目录放置的是VDI文件<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">[root@xenserver153 sr-mount]<span class="comment"># df -h</span></div><div class="line">Filesystem            Size  Used Avail Use% Mounted on</div><div class="line">/dev/sda1             3.9G  1.9G  1.9G  51% /</div><div class="line">tmpfs                 1.6G   64K  1.6G   1% /dev/shm</div><div class="line">192.168.217.129:/WYY-NFS/07bec9d7-aa21-ddea-0bbd-517559759cf3</div><div class="line">                       50G  7.1G   40G  16% /var/run/sr-mount/07bec9d7-aa21-ddea-0bbd-517559759cf3</div><div class="line">10.10.152.1:/os_iso   372G  314G   40G  89% /var/run/sr-mount/f11c03b3-13b5-93b0-b2df-0f8c156336a2</div><div class="line">10.0.0.25:/nfs/6225306e-bdc1<span class="_">-f</span>6ab-8dbc-1e8bcf42d39b</div><div class="line">                      197G  185G  2.3G  99% /var/run/sr-mount/6225306e-bdc1<span class="_">-f</span>6ab-8dbc-1e8bcf42d39b</div></pre></td></tr></table></figure></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[root@xenserver153 sr-mount]<span class="comment"># ls /var/run/sr-mount/6225306e-bdc1-f6ab-8dbc-1e8bcf42d39b/</span></div><div class="line">387d5bcf-26ac-4316-9600-7bdeacd67e46.vhd</div><div class="line">536<span class="built_in">fc</span>728-05e7-4afa-80d6-cde8401dd5c2.vhd</div><div class="line">f168399e-86b7-47e3-b344-655446ccefd3.vhd</div><div class="line"><span class="built_in">fc</span>457d9e-2ef4-4111-bcc4-6b3ab446e464.vhd</div></pre></td></tr></table></figure>
@@ -476,6 +489,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/16/xenserver-vdi-1/" rel="prev" title="虚拟机VDI扩容">
+                虚拟机VDI扩容 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -568,7 +585,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-count">36</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -577,7 +594,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-count">12</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -586,7 +603,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">64</span>
+                <span class="site-state-item-count">69</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
