@@ -3,6 +3,13 @@
   
     
     <entry>
+      <title><![CDATA[Linux虚拟机安装、卸载XenServer Tools]]></title>
+      <url>%2F2017%2F03%2F16%2Fxenserver-vm-1%2F</url>
+      <content type="text"><![CDATA[XenServer下Linux虚拟机安装、卸载XenServer Tools。 安装先选择要安装Tools的虚拟机，在XenCenter上挂载xs-tools.iso进入要安装的虚拟机Console，先后执行下面命令： 123# mkdir /mnt/xs-tools# mount /dev/xvdd /mnt/xs-tools# /mnt/xs-tools/Linux/install.sh 如果是自定义模板安装的虚拟机，则如下：123# mkdir /mnt/xs-tools# mount /dev/cdrom /mnt/xs-tools# /mnt/xs-tools/Linux/install.sh reboot重启虚拟机，生效OK。 卸载12345[root@hvm ~]# rpm -qa | grep xe-guestxe-guest-utilities-6.2.0-1120.x86_64xe-guest-utilities-xenstore-6.2.0-1120.x86_64[root@hvm ~]# rpm -e xe-guest-utilities-6.2.0-1120.x86_64[root@hvm ~]# rpm -e xe-guest-utilities-xenstore-6.2.0-1120.x86_64]]></content>
+    </entry>
+
+    
+    <entry>
       <title><![CDATA[虚拟机挂载磁盘个数]]></title>
       <url>%2F2017%2F03%2F16%2Fxenserver-vdi-2%2F</url>
       <content type="text"><![CDATA[原来的计算方式虚拟机可以挂载磁盘设备为allowed-VBD-devices中的值，值的个数为还可以挂载的VDI个数（在XenCenter上虚拟机挂载VDI时也是通过这种方式来计算校验） 虚拟机挂载磁盘个数默认最大值为16（除去CD光驱就是15个） 如果虚拟机系统异常，获取不到操作系统、未安装tools等，则挂载磁盘个数最大值为4（除去CD光驱就是3个） 查看allowed-VBD-devices的值，虚拟机还可以挂载的VDI为4个，可用的vbd的userdevice分别为1,3,4,15123456789101112[root@xenserver-155 ~]# xe vm-param-list uuid=85db576d-d694-af0a-6430-267532168458uuid ( RO) : 85db576d-d694-af0a-6430-267532168458 name-label ( RW): lh-src name-description ( RW): user-version ( RW): 1 is-a-template ( RW): false is-a-snapshot ( RO): false snapshot-of ( RO): &lt;not in database&gt; snapshots ( RO): snapshot-time ( RO): 19700101T00:00:00Z allowed-VBD-devices (SRO): 1,3,4,15 现在的挂载不以allowed-VBD-devices来创建，查找VM的VBD的userdevice，设置一个未被使用的值就可以了。这样就没有数量的限制。 使用CLI方式设置userdevice（对应命令行中的device）为7，给虚拟机与VDI创建vbd12[root@node200 ~]# xe vbd-create bootable=false device=7 mode=RW type=Disk unpluggable=true vdi-uuid=456a16a1-51e3-4cee-9eb4-a3b246078cc0 vm-uuid=107aa1fd-12ad-55b3-6a9e-3db624c45bf68a656533-c3f8-3ba2-6aa8-278eab6ac338 C#代码挂载VDI给虚拟机，只要userdevice未被虚拟机上的其他VBD使用，就可以挂载。12345678910VBD vbd = new VBD ();vbd.bootable = false;vbd.userdevice = &quot;6&quot;; //查找VM的VBD的userdevice，设置一个未被使用的值vbd.mode = vbd_mode.RW;vbd.type = vbd_type.Disk;vbd.unpluggable = true;vbd.VDI = VDI.get_by_uuid(session, &quot;8cc20e68-62eb-40bd-9af4-492f4e8c2ca9&quot; );vbd.VM = VM.get_by_uuid(session, &quot;dc600733-932d-0e77-e9bf-9deb2e4e5813&quot; );VBD.create(session, vbd);]]></content>
