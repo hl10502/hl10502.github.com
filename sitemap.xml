@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://hl10502.github.io/2017/03/16/xenserver-vm-6/</loc>
+    
+    <lastmod>2017-03-17T01:37:20.537Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://hl10502.github.io/2017/02/24/wincenterclient-2/</loc>
     
     <lastmod>2017-03-16T08:34:35.105Z</lastmod>
@@ -33,13 +40,6 @@
     <loc>https://hl10502.github.io/2017/02/27/xencenter-1/</loc>
     
     <lastmod>2017-03-16T08:30:49.538Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://hl10502.github.io/2017/03/16/xenserver-vm-6/</loc>
-    
-    <lastmod>2017-03-16T08:08:44.133Z</lastmod>
     
   </url>
   
