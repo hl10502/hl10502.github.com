@@ -98,7 +98,7 @@
 <meta property="og:description" content="招标网站爬虫项目采用Scrapy框架，每天定时自动爬取当天通过检索关键字的招标信息。
 需求由于市场与销售部门需要及时获知运营商、政府采购等相关行业的招标信息，参与招投标。故提出通过关键字检索，每天以Email的形式发送相关网站的招投标网页链接信息的需求。">
 <meta property="og:image" content="https://hl10502.github.io/2017/03/23/scrapy-site-1/scrapy-site-1.png">
-<meta property="og:updated_time" content="2017-03-23T09:30:53.630Z">
+<meta property="og:updated_time" content="2017-03-23T09:42:37.249Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="招标网站爬虫项目分析">
 <meta name="twitter:description" content="招标网站爬虫项目采用Scrapy框架，每天定时自动爬取当天通过检索关键字的招标信息。
@@ -509,16 +509,16 @@ scrapy_site/spiders/: 放置spider代码的目录
 <h3 id="定义spider"><a href="#定义spider" class="headerlink" title="定义spider"></a>定义spider</h3><p>前面是基础的框架，不涉及具体的网站的爬取。</p>
 <p>定义10个spider分别爬取：</p>
 <ul>
-<li>b2b10086_spider</li>
-<li>bidding_spider</li>
-<li>chinabidding_spider</li>
-<li>chinaunicombidding_spider</li>
-<li>csbidding_spider</li>
-<li>gdgpogov_spider</li>
-<li>gzsggzyjyzx_spider</li>
-<li>mssportal_spider</li>
-<li>telewiki_spider</li>
-<li>zycggov_spider</li>
+<li>b2b10086_spider.py</li>
+<li>bidding_spider.py</li>
+<li>chinabidding_spider.py</li>
+<li>chinaunicombidding_spider.py</li>
+<li>csbidding_spider.py</li>
+<li>gdgpogov_spider.py</li>
+<li>gzsggzyjyzx_spider.py</li>
+<li>mssportal_spider.py</li>
+<li>telewiki_spider.py</li>
+<li>zycggov_spider.py</li>
 </ul>
 <p>后续如果需要增加爬取网站，只需增加爬取网站的spider，修改email.conf与keyword.conf配置文件。</p>
 <h3 id="定时启动scrapy"><a href="#定时启动scrapy" class="headerlink" title="定时启动scrapy"></a>定时启动scrapy</h3><p>使用crontab定时启动scrapy_site<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">0 23 * * * /opt/scrapy_site/scrapy_start.sh</div></pre></td></tr></table></figure></p>
