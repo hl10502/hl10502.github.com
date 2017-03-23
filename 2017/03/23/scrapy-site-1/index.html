@@ -1,0 +1,1137 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="2xIA6kyEisqneyrcTltYHTS8lapHWNhDBX_qkWzL2FY" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Python,Scrapy,招标爬虫项目," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="招标网站爬虫项目采用Scrapy框架，每天定时自动爬取当天通过检索关键字的招标信息。
+需求由于市场与销售部门需要及时获知运营商、政府采购等相关行业的招标信息，参与招投标。故提出通过关键字检索，每天以Email的形式发送相关网站的招投标网页链接信息的需求。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="招标网站爬虫项目">
+<meta property="og:url" content="https://hl10502.github.io/2017/03/23/scrapy-site-1/index.html">
+<meta property="og:site_name" content="hl10502的博客">
+<meta property="og:description" content="招标网站爬虫项目采用Scrapy框架，每天定时自动爬取当天通过检索关键字的招标信息。
+需求由于市场与销售部门需要及时获知运营商、政府采购等相关行业的招标信息，参与招投标。故提出通过关键字检索，每天以Email的形式发送相关网站的招投标网页链接信息的需求。">
+<meta property="og:image" content="https://hl10502.github.io/2017/03/23/scrapy-site-1/scrapy-site-1.png">
+<meta property="og:updated_time" content="2017-03-23T09:01:12.972Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="招标网站爬虫项目">
+<meta name="twitter:description" content="招标网站爬虫项目采用Scrapy框架，每天定时自动爬取当天通过检索关键字的招标信息。
+需求由于市场与销售部门需要及时获知运营商、政府采购等相关行业的招标信息，参与招投标。故提出通过关键字检索，每天以Email的形式发送相关网站的招投标网页链接信息的需求。">
+<meta name="twitter:image" content="https://hl10502.github.io/2017/03/23/scrapy-site-1/scrapy-site-1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://hl10502.github.io/2017/03/23/scrapy-site-1/"/>
+
+
+
+
+
+  <title> 招标网站爬虫项目 | hl10502的博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">hl10502的博客</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">IT技术人</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            所有文章
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于我
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="https://hl10502.github.io/2017/03/23/scrapy-site-1/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="hl10502">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="hl10502的博客">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="hl10502的博客" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                招标网站爬虫项目
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-23T15:57:35+08:00">
+                2017-03-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/招标爬虫项目/" itemprop="url" rel="index">
+                    <span itemprop="name">招标爬虫项目</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/23/scrapy-site-1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/23/scrapy-site-1/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2017/03/23/scrapy-site-1/" class="leancloud_visitors" data-flag-title="招标网站爬虫项目">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>招标网站爬虫项目采用Scrapy框架，每天定时自动爬取当天通过检索关键字的招标信息。</p>
+<h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>由于市场与销售部门需要及时获知运营商、政府采购等相关行业的招标信息，参与招投标。故提出通过关键字检索，每天以Email的形式发送相关网站的招投标网页链接信息的需求。</p>
+<a id="more"></a>
+<h2 id="Scrapy介绍"><a href="#Scrapy介绍" class="headerlink" title="Scrapy介绍"></a>Scrapy介绍</h2><p>Scrapy是Python语言开发的一个快速、高层次的屏幕抓取和web抓取框架，用于抓取web站点并从页面中提取结构化的数据。</p>
+<p>使用Scrapy可以满足招标网站爬取的需求。</p>
+<p><img src="/2017/03/23/scrapy-site-1/scrapy-site-1.png" alt="scrapy框架图"></p>
+<p>Scrapy主要包括了以下组件：</p>
+<ul>
+<li><p>引擎(Scrapy Engine)<br>用来处理整个系统的数据流处理, 触发事务(框架核心)。</p>
+</li>
+<li><p>调度器(Scheduler)<br>用来接受引擎发过来的请求, 压入队列中, 并在引擎再次请求的时候返回. 可以想像成一个URL（抓取网页的网址或者说是链接）的优先队列, 由它来决定下一个要抓取的网址是什么, 同时去除重复的网址。</p>
+</li>
+<li><p>下载器(Downloader)<br>用于下载网页内容, 并将网页内容返回给Spiders(Scrapy下载器是建立在twisted这个高效的异步模型上的)。</p>
+</li>
+<li><p>爬虫(Spiders)<br>爬虫是主要干活的, 用于从特定的网页中提取自己需要的信息, 即所谓的实体(Item)。用户也可以从中提取出链接,让Scrapy继续抓取下一个页面。</p>
+</li>
+<li><p>项目管道(Item Pipeline)<br>负责处理爬虫从网页中抽取的实体，主要的功能是持久化实体、验证实体的有效性、清除不需要的信息。当页面被爬虫解析后，将被发送到项目管道，并经过几个特定的次序处理数据。</p>
+</li>
+<li><p>下载器中间件(Downloader Middlewares)<br>位于Scrapy引擎和下载器之间的框架，主要是处理Scrapy引擎与下载器之间的请求及响应。</p>
+</li>
+<li><p>爬虫中间件(Spider Middlewares)<br>介于Scrapy引擎和爬虫之间的框架，主要工作是处理爬虫的响应输入和请求输出。</p>
+</li>
+<li><p>调度中间件(Scheduler Middewares)<br>介于Scrapy引擎和调度之间的中间件，从Scrapy引擎发送到调度的请求和响应。</p>
+</li>
+</ul>
+<h2 id="Scrapy爬取流程"><a href="#Scrapy爬取流程" class="headerlink" title="Scrapy爬取流程"></a>Scrapy爬取流程</h2><p>Scrapy运行流程大概如下：</p>
+<ul>
+<li>引擎从调度器中取出一个链接(URL)用于接下来的抓取</li>
+<li>引擎把URL封装成一个请求(Request)传给下载器</li>
+<li>下载器把资源下载下来，并封装成应答包(Response)</li>
+<li>爬虫解析Response</li>
+<li>解析出实体（Item）,则交给实体管道进行进一步的处理</li>
+<li>解析出的是链接（URL）,则把URL交给调度器等待抓取</li>
+</ul>
+<h2 id="招标网站爬虫实现"><a href="#招标网站爬虫实现" class="headerlink" title="招标网站爬虫实现"></a>招标网站爬虫实现</h2><p>招标网站爬虫实现过程如下：</p>
+<ul>
+<li>crontab每天23:00定时执行启动Scrapy</li>
+<li>定义10个Spider，分别爬取各个网站当天发布的信息</li>
+<li>在Pipeline中通过关键字过滤处理数据，并将数据分别写入到Spider的文本文件中存储</li>
+<li>所有Spider爬取完成之后，读取所有的文本文件信息作为Email的内容，发送Email</li>
+</ul>
+<h3 id="创建scrapy项目"><a href="#创建scrapy项目" class="headerlink" title="创建scrapy项目"></a>创建scrapy项目</h3><p>在/opt目录下，创建scrapy_site项目<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[root@node155 opt]<span class="comment"># scrapy startproject scrapy_site</span></div><div class="line">New Scrapy project <span class="string">'scrapy_site'</span>, using template directory <span class="string">'/usr/lib64/python2.7/site-packages/scrapy/templates/project'</span>, created <span class="keyword">in</span>:</div><div class="line">    /opt/scrapy_site</div><div class="line"></div><div class="line">You can start your first spider with:</div><div class="line">    <span class="built_in">cd</span> scrapy_site</div><div class="line">    scrapy genspider example example.com</div></pre></td></tr></table></figure></p>
+<p>创建scrapy_site项目，自动生成以下目录文件  </p>
+<pre><code>scrapy_site/
+    scrapy.cfg
+    scrapy_site/
+        __init__.py
+        items.py
+        pipelines.py
+        settings.py
+        spiders/
+            __init__.py
+            ...
+</code></pre><p>这些文件分别是：  </p>
+<pre><code>scrapy.cfg: 项目的配置文件  
+scrapy_site/: 该项目的python模块  
+scrapy_site/items.py: 项目中的item文件  
+scrapy_site/pipelines.py: 项目中的pipelines文件  
+scrapy_site/settings.py: 项目的设置文件  
+scrapy_site/spiders/: 放置spider代码的目录
+</code></pre><h3 id="定义配置文件"><a href="#定义配置文件" class="headerlink" title="定义配置文件"></a>定义配置文件</h3><ul>
+<li>email.conf:配置Email地址信息  <ul>
+<li>格式为spidername1,spidername2,…===reciveremail1,reciveremail2,…===creciveremail1,creciveremail2,…</li>
+<li>例如：b2b10086,bidding===xxx@126.com,yyy@126.com===zzz@qq.com</li>
+<li>有10个spider，最多可配置将10个spider的信息发送email</li>
+</ul>
+</li>
+<li>keyword.conf：配置检索的关键字信息<ul>
+<li>格式为spidernamexxx===关键字1,关键字2,…</li>
+<li>例如：b2b10086===云数据,云计算</li>
+</ul>
+</li>
+</ul>
+<h3 id="定义Item"><a href="#定义Item" class="headerlink" title="定义Item"></a>定义Item</h3><p>定义Item的字段：文章标题、链接、描述、发布时间<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">SiteItem</span><span class="params">(scrapy.Item)</span>:</span></div><div class="line">    title = scrapy.Field()</div><div class="line">    link = scrapy.Field()</div><div class="line">    desc = scrapy.Field()</div><div class="line">    pubtime = scrapy.Field()</div></pre></td></tr></table></figure></p>
+<h3 id="定义pipelines"><a href="#定义pipelines" class="headerlink" title="定义pipelines"></a>定义pipelines</h3><p>定义事件，初始化获取关键字、数据存储文件等，<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></div><div class="line">        dispatcher.connect(self.spider_opended, signals.spider_opened)</div><div class="line">        dispatcher.connect(self.spider_closed, signals.spider_closed)</div><div class="line">        dispatcher.connect(self.engine_stopped, signals.engine_stopped)</div><div class="line">        dispatcher.connect(self.engine_started, signals.engine_started)</div><div class="line"></div><div class="line">        <span class="comment"># 获取当前目录，当前目录为scrapy_site项目的根目录</span></div><div class="line">        self.curpath = os.getcwd()</div><div class="line">        <span class="comment">#爬虫爬取的数据存储文件目录</span></div><div class="line">        self.spidername_filepath = self.curpath + <span class="string">"/scrapy_site/msg/"</span></div><div class="line"></div><div class="line">        <span class="comment"># 从配置文件keyword.conf获取关键字字典值</span></div><div class="line">        self.keywordsDict = dict()</div><div class="line">        self.getKeywords()</div><div class="line"></div><div class="line">        <span class="comment"># 爬取信息</span></div><div class="line">        self.msgDict = dict()</div></pre></td></tr></table></figure></p>
+<p>处理Item数据，将爬取到的数据过滤，放到msgDict字典中存储<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">process_item</span><span class="params">(self, item, spider)</span>:</span></div><div class="line">        <span class="keyword">if</span> <span class="keyword">not</span> item[<span class="string">'pubtime'</span>] <span class="keyword">or</span> <span class="keyword">not</span> item[<span class="string">'title'</span>] :</div><div class="line">            <span class="keyword">return</span> item</div><div class="line">        <span class="comment"># 去除换行与空格及[]</span></div><div class="line">        pubtime = item[<span class="string">'pubtime'</span>].encode(const.ENCODE)</div><div class="line">        title = item[<span class="string">'title'</span>].encode(const.ENCODE)</div><div class="line"></div><div class="line">        <span class="keyword">if</span> self.checkTilte(self.keywordsDict.get(spider.name), title) <span class="keyword">and</span> date.get_curdate() == pubtime:</div><div class="line">            msgArr = self.msgDict.get(spider.name)</div><div class="line">            <span class="keyword">if</span> msgArr <span class="keyword">is</span> <span class="keyword">None</span>:</div><div class="line">                msgArr = &#123;&#125;</div><div class="line">                msgArr[<span class="string">'id'</span>] = <span class="number">0</span></div><div class="line">                msgArr[<span class="string">'msg'</span>] = <span class="string">""</span></div><div class="line">            msgArr[<span class="string">'id'</span>] += <span class="number">1</span></div><div class="line">            msgArr[<span class="string">'msg'</span>] += str(msgArr[<span class="string">'id'</span>])</div><div class="line">            msgArr[<span class="string">'msg'</span>] += <span class="string">'---'</span></div><div class="line">            msgArr[<span class="string">'msg'</span>] += item[<span class="string">'title'</span>].encode(const.ENCODE)</div><div class="line">            msgArr[<span class="string">'msg'</span>] += <span class="string">'---'</span></div><div class="line">            msgArr[<span class="string">'msg'</span>] += item[<span class="string">'link'</span>].encode(const.ENCODE)</div><div class="line">            msgArr[<span class="string">'msg'</span>] += <span class="string">'\n'</span></div><div class="line"></div><div class="line">            print(<span class="string">"msgArr['msg']="</span> + msgArr[<span class="string">'msg'</span>])</div><div class="line">            self.msgDict.setdefault(spider.name, msgArr)</div><div class="line"></div><div class="line">        <span class="keyword">return</span> item</div></pre></td></tr></table></figure></p>
+<p>爬取完成之后，将数据存储到该spider文件中<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">spider_closed</span><span class="params">(self, spider)</span>:</span></div><div class="line">        file = open(self.spidername_filepath + spider.name, <span class="string">'w'</span>)</div><div class="line">        <span class="comment">#将爬取信息写入爬虫文件中</span></div><div class="line">        <span class="keyword">if</span> self.msgDict :</div><div class="line">            msg = self.msgDict.get(spider.name)</div><div class="line">            <span class="keyword">if</span> msg :</div><div class="line">                message = msg[<span class="string">'msg'</span>]                </div><div class="line">                file.write(message)</div><div class="line">        file.close()</div></pre></td></tr></table></figure></p>
+<h3 id="主程序run-py"><a href="#主程序run-py" class="headerlink" title="主程序run.py"></a>主程序run.py</h3><p>定义run.py文件作为scrapy_site项目的入口。</p>
+<p>通过CrawlerRunner来运行所有的spider<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">...</div><div class="line">...</div><div class="line">settings = get_project_settings()</div><div class="line">configure_logging(settings)</div><div class="line">runner = CrawlerRunner(settings)</div><div class="line"></div><div class="line"><span class="comment"># 运行所有的spider</span></div><div class="line"><span class="keyword">for</span> spider_name <span class="keyword">in</span> runner.spider_loader.list():</div><div class="line">    runner.crawl(spider_name)</div><div class="line"></div><div class="line">d = runner.join()</div><div class="line">d.addBoth(<span class="keyword">lambda</span> _: reactor.stop())</div><div class="line"></div><div class="line"><span class="comment"># 阻塞直到所有的spider完成</span></div><div class="line">reactor.run() </div><div class="line"></div><div class="line"><span class="comment"># 发送Email</span></div><div class="line">...</div><div class="line">...</div></pre></td></tr></table></figure></p>
+<h3 id="发送Email"><a href="#发送Email" class="headerlink" title="发送Email"></a>发送Email</h3><p>使用smtplib发送Email<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">sendMail</span><span class="params">(receiver, creceiver)</span>:</span></div><div class="line">    receivers = (receiver + <span class="string">','</span> + creceiver).split(<span class="string">','</span>)</div><div class="line"></div><div class="line">    loginfo = <span class="string">"收件人："</span> + receiver + <span class="string">",Cc："</span> +  creceiver</div><div class="line">    <span class="keyword">print</span> loginfo</div><div class="line">    _log.info(loginfo)</div><div class="line"></div><div class="line">    temp = getMsgByEmail(receiver)</div><div class="line">    mail_msg = temp[<span class="number">0</span>]</div><div class="line">    isHasHref = temp[<span class="number">1</span>]</div><div class="line">    message = MIMEText(mail_msg, <span class="string">'html'</span>, <span class="string">'utf-8'</span>)</div><div class="line">    message[<span class="string">'From'</span>] = const.SENDER</div><div class="line">    message[<span class="string">'To'</span>] = receiver</div><div class="line">    <span class="comment"># 如果邮件中含有链接信息则发送给收件人</span></div><div class="line">    <span class="keyword">if</span> isHasHref:</div><div class="line">        message.add_header(<span class="string">'Cc'</span>, creceiver)</div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        message.add_header(<span class="string">'Cc'</span>, const.SENDER)</div><div class="line"></div><div class="line">    <span class="comment"># 邮箱主题</span></div><div class="line">    subject = <span class="string">'招标网站最新信息'</span> + time.strftime(<span class="string">'%Y-%m-%d %H:%M:%S'</span>, time.localtime(time.time()))</div><div class="line">    message[<span class="string">'Subject'</span>] = Header(subject, <span class="string">'utf-8'</span>)</div><div class="line"></div><div class="line">    <span class="keyword">try</span>:</div><div class="line">        smtpObj = smtplib.SMTP()</div><div class="line">        smtpObj.connect(const.MAIL_HOST, <span class="number">25</span>)  <span class="comment"># 25 为 SMTP 端口号</span></div><div class="line">        smtpObj.login(const.MAIL_USER, const.MAIL_PASS)</div><div class="line">        <span class="keyword">if</span> isHasHref:</div><div class="line">            smtpObj.sendmail(const.SENDER, receivers, message.as_string())  <span class="comment"># 发送邮箱、接收邮箱、邮件内容</span></div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            smtpObj.sendmail(const.SENDER, const.SENDER, message.as_string())  <span class="comment"># 发送邮箱、接收邮箱、邮件内容</span></div><div class="line">        <span class="keyword">print</span> <span class="string">"邮件发送成功"</span></div><div class="line">    <span class="keyword">except</span> smtplib.SMTPException, e:</div><div class="line">        _log.error(<span class="string">'无法发送邮件:'</span> + str(e))</div><div class="line">        <span class="keyword">print</span> e</div><div class="line">        <span class="keyword">print</span> <span class="string">"Error: 无法发送邮件"</span></div></pre></td></tr></table></figure></p>
+<h3 id="定义spider"><a href="#定义spider" class="headerlink" title="定义spider"></a>定义spider</h3><p>前面是基础的框架，不涉及具体的网站的爬取。</p>
+<p>定义10个spider分别爬取：</p>
+<ul>
+<li>b2b10086_spider</li>
+<li>bidding_spider</li>
+<li>chinabidding_spider</li>
+<li>chinaunicombidding_spider</li>
+<li>csbidding_spider</li>
+<li>gdgpogov_spider</li>
+<li>gzsggzyjyzx_spider</li>
+<li>mssportal_spider</li>
+<li>telewiki_spider</li>
+<li>zycggov_spider</li>
+</ul>
+<p>后续如果需要增加爬取网站，只需增加爬取网站的spider，修改email.conf与keyword.conf配置文件。</p>
+<h3 id="定时启动scrapy"><a href="#定时启动scrapy" class="headerlink" title="定时启动scrapy"></a>定时启动scrapy</h3><p>使用crontab定时启动scrapy_site<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">0 23 * * * /opt/scrapy_site/scrapy_start.sh</div></pre></td></tr></table></figure></p>
+<p>scrapy_start.sh文件内容<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@node155 scrapy_site]<span class="comment"># cat scrapy_start.sh</span></div><div class="line"><span class="built_in">cd</span> /opt/scrapy_site/</div><div class="line">python scrapy_site/run.py</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python/" rel="tag"># Python</a>
+          
+            <a href="/tags/Scrapy/" rel="tag"># Scrapy</a>
+          
+            <a href="/tags/招标爬虫项目/" rel="tag"># 招标爬虫项目</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/16/xenserver-vm-6/" rel="next" title="修改dom0的内存">
+                <i class="fa fa-chevron-left"></i> 修改dom0的内存
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2017/03/23/scrapy-site-1/"
+     data-title="招标网站爬虫项目"
+     data-content=""
+     data-url="https://hl10502.github.io/2017/03/23/scrapy-site-1/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/03/23/scrapy-site-1/"
+           data-title="招标网站爬虫项目" data-url="https://hl10502.github.io/2017/03/23/scrapy-site-1/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="hl10502" />
+          <p class="site-author-name" itemprop="name">hl10502</p>
+          <p class="site-description motion-element" itemprop="description">关注云计算/虚拟化/分布式存储等</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">43</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">84</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/hl10502" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#需求"><span class="nav-number">1.</span> <span class="nav-text">需求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Scrapy介绍"><span class="nav-number">2.</span> <span class="nav-text">Scrapy介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Scrapy爬取流程"><span class="nav-number">3.</span> <span class="nav-text">Scrapy爬取流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#招标网站爬虫实现"><span class="nav-number">4.</span> <span class="nav-text">招标网站爬虫实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建scrapy项目"><span class="nav-number">4.1.</span> <span class="nav-text">创建scrapy项目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定义配置文件"><span class="nav-number">4.2.</span> <span class="nav-text">定义配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定义Item"><span class="nav-number">4.3.</span> <span class="nav-text">定义Item</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定义pipelines"><span class="nav-number">4.4.</span> <span class="nav-text">定义pipelines</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#主程序run-py"><span class="nav-number">4.5.</span> <span class="nav-text">主程序run.py</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#发送Email"><span class="nav-number">4.6.</span> <span class="nav-text">发送Email</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定义spider"><span class="nav-number">4.7.</span> <span class="nav-text">定义spider</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定时启动scrapy"><span class="nav-number">4.8.</span> <span class="nav-text">定时启动scrapy</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">hl10502</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"hl10502"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("LE6b1aXtXOedOvsqgG7uXyrn-gzGzoHsz", "WHQseHdLj7t7hyj5EXO7pveG");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>
