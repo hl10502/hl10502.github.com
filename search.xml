@@ -5,7 +5,7 @@
     <entry>
       <title><![CDATA[hexo添加LiveRe评论支持]]></title>
       <url>%2F2017%2F03%2F24%2Fhexo-config-livere%2F</url>
-      <content type="text"><![CDATA[多说将于2017年6月1日正式关停服务，不能使用了。所以评论换成LiveRe（来必力）。 注册 LiveRe进入LiveRe，注册账号。 安装City版本LiveRe 有两个版本： City 版：是一款适合所有人使用的免费版本； Premium 版：是一款能够帮助企业实现自动化管理的多功能收费版本。 个人技术博客使用City版就可以了，输入网站地址、名称、类型，申请获取代码。 填写完成后，进入到 管理页面 -&gt; 代码管理 -&gt; 一般网站 代码中，data-uid即为next主题所需要的livere_uid。 next主题配置LiveRe在next主题配置_config.yml文件中修改livere_uid的配置值为上一步获取到的data-uid。123# Support for LiveRe comments system.# You can get your uid from https://livere.com/insight/myCode (General web site)livere_uid: your uid 部署1hexo g -d]]></content>
+      <content type="text"><![CDATA[多说将于2017年6月1日正式关停服务，不能使用了。所以评论换成LiveRe（来必力）。 注册 LiveRe进入LiveRe，注册账号。 安装City版本获取data-uidLiveRe 有两个版本： City 版：是一款适合所有人使用的免费版本 Premium 版：是一款能够帮助企业实现自动化管理的多功能收费版本 个人技术博客使用City版就可以了，输入网站地址、名称、类型，申请获取代码。 填写完成后，进入到 管理页面 -&gt; 代码管理 -&gt; 一般网站 代码中，data-uid即为next主题所需要的livere_uid。 next主题配置LiveRe在next主题_config.yml文件中，修改livere_uid的配置值为上一步获取到的data-uid。123# Support for LiveRe comments system.# You can get your uid from https://livere.com/insight/myCode (General web site)livere_uid: your uid 部署1hexo g -d]]></content>
     </entry>
 
     

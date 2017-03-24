@@ -98,7 +98,7 @@
 <meta property="og:description" content="多说将于2017年6月1日正式关停服务，不能使用了。所以评论换成LiveRe（来必力）。
 注册 LiveRe进入LiveRe，注册账号。">
 <meta property="og:image" content="https://hl10502.github.io/2017/03/24/hexo-config-livere/livere-get-code.png">
-<meta property="og:updated_time" content="2017-03-24T07:01:11.415Z">
+<meta property="og:updated_time" content="2017-03-24T07:03:46.389Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="hexo添加LiveRe评论支持">
 <meta name="twitter:description" content="多说将于2017年6月1日正式关停服务，不能使用了。所以评论换成LiveRe（来必力）。
@@ -408,15 +408,15 @@
         <p>多说将于2017年6月1日正式关停服务，不能使用了。所以评论换成LiveRe（来必力）。</p>
 <h2 id="注册-LiveRe"><a href="#注册-LiveRe" class="headerlink" title="注册 LiveRe"></a>注册 LiveRe</h2><p>进入<a href="https://livere.com/" target="_blank" rel="external">LiveRe</a>，注册账号。</p>
 <a id="more"></a>
-<h2 id="安装City版本"><a href="#安装City版本" class="headerlink" title="安装City版本"></a>安装City版本</h2><p>LiveRe 有两个版本：</p>
+<h2 id="安装City版本获取data-uid"><a href="#安装City版本获取data-uid" class="headerlink" title="安装City版本获取data-uid"></a>安装City版本获取data-uid</h2><p>LiveRe 有两个版本：  </p>
 <ul>
-<li>City 版：是一款适合所有人使用的免费版本；</li>
-<li>Premium 版：是一款能够帮助企业实现自动化管理的多功能收费版本。</li>
+<li>City 版：是一款适合所有人使用的免费版本  </li>
+<li>Premium 版：是一款能够帮助企业实现自动化管理的多功能收费版本</li>
 </ul>
 <p>个人技术博客使用City版就可以了，输入网站地址、名称、类型，申请获取代码。</p>
 <p><img src="/2017/03/24/hexo-config-livere/livere-get-code.png" alt="安装LiveRe City版"></p>
 <p>填写完成后，进入到 管理页面 -&gt; 代码管理 -&gt; 一般网站 代码中，data-uid即为next主题所需要的livere_uid。</p>
-<h2 id="next主题配置LiveRe"><a href="#next主题配置LiveRe" class="headerlink" title="next主题配置LiveRe"></a>next主题配置LiveRe</h2><p>在next主题配置_config.yml文件中修改livere_uid的配置值为上一步获取到的data-uid。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># Support for LiveRe comments system.</span></div><div class="line"><span class="comment"># You can get your uid from https://livere.com/insight/myCode (General web site)</span></div><div class="line">livere_uid: your uid</div></pre></td></tr></table></figure></p>
+<h2 id="next主题配置LiveRe"><a href="#next主题配置LiveRe" class="headerlink" title="next主题配置LiveRe"></a>next主题配置LiveRe</h2><p>在next主题_config.yml文件中，修改livere_uid的配置值为上一步获取到的data-uid。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># Support for LiveRe comments system.</span></div><div class="line"><span class="comment"># You can get your uid from https://livere.com/insight/myCode (General web site)</span></div><div class="line">livere_uid: your uid</div></pre></td></tr></table></figure></p>
 <h2 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hexo g <span class="_">-d</span></div></pre></td></tr></table></figure>
 
       
@@ -602,7 +602,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#注册-LiveRe"><span class="nav-number">1.</span> <span class="nav-text">注册 LiveRe</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装City版本"><span class="nav-number">2.</span> <span class="nav-text">安装City版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#next主题配置LiveRe"><span class="nav-number">3.</span> <span class="nav-text">next主题配置LiveRe</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#部署"><span class="nav-number">4.</span> <span class="nav-text">部署</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#注册-LiveRe"><span class="nav-number">1.</span> <span class="nav-text">注册 LiveRe</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装City版本获取data-uid"><span class="nav-number">2.</span> <span class="nav-text">安装City版本获取data-uid</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#next主题配置LiveRe"><span class="nav-number">3.</span> <span class="nav-text">next主题配置LiveRe</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#部署"><span class="nav-number">4.</span> <span class="nav-text">部署</span></a></li></ol></div>
             
 
           </div>
