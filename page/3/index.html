@@ -936,7 +936,7 @@
       
         
           <p>XenServer主机上设置ISCSI IQN。</p>
-<h2 id="查看IQN"><a href="#查看IQN" class="headerlink" title="查看IQN"></a>查看IQN</h2><p>查看ISCSI IQN的值<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@xenserver-155 ~]<span class="comment"># cat /etc/iscsi/initiatorname.iscsi</span></div><div class="line">InitiatorName=iqn.2015-02.com.example:a50ca784</div><div class="line">InitiatorAlias=xenserver-155</div></pre></td></tr></table></figure></p>
+<h2 id="查看IQN"><a href="#查看IQN" class="headerlink" title="查看IQN"></a>查看IQN</h2><p>查看ISCSI IQN的值。如果资源池内主机的IQN重复了，可以直接修改/etc/iscsi/initiatorname.iscsi的IQN<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@xenserver-155 ~]<span class="comment"># cat /etc/iscsi/initiatorname.iscsi</span></div><div class="line">InitiatorName=iqn.2015-02.com.example:a50ca784</div><div class="line">InitiatorAlias=xenserver-155</div></pre></td></tr></table></figure></p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2017/03/13/xenserver-host-2/#more" rel="contents">

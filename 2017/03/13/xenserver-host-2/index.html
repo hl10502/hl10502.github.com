@@ -90,18 +90,18 @@
 
 
 <meta name="description" content="XenServer主机上设置ISCSI IQN。
-查看IQN查看ISCSI IQN的值123[root@xenserver-155 ~]# cat /etc/iscsi/initiatorname.iscsiInitiatorName=iqn.2015-02.com.example:a50ca784InitiatorAlias=xenserver-155">
+查看IQN查看ISCSI IQN的值。如果资源池内主机的IQN重复了，可以直接修改/etc/iscsi/initiatorname.iscsi的IQN123[root@xenserver-155 ~]# cat /etc/iscsi/initiatorname.iscsiInitiatorName=iqn.2015-02.com.example:a">
 <meta property="og:type" content="article">
 <meta property="og:title" content="XenServer主机上设置ISCSI IQN">
 <meta property="og:url" content="https://hl10502.github.io/2017/03/13/xenserver-host-2/index.html">
 <meta property="og:site_name" content="hl10502的博客">
 <meta property="og:description" content="XenServer主机上设置ISCSI IQN。
-查看IQN查看ISCSI IQN的值123[root@xenserver-155 ~]# cat /etc/iscsi/initiatorname.iscsiInitiatorName=iqn.2015-02.com.example:a50ca784InitiatorAlias=xenserver-155">
-<meta property="og:updated_time" content="2017-03-16T03:19:37.448Z">
+查看IQN查看ISCSI IQN的值。如果资源池内主机的IQN重复了，可以直接修改/etc/iscsi/initiatorname.iscsi的IQN123[root@xenserver-155 ~]# cat /etc/iscsi/initiatorname.iscsiInitiatorName=iqn.2015-02.com.example:a">
+<meta property="og:updated_time" content="2017-03-29T10:14:34.232Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="XenServer主机上设置ISCSI IQN">
 <meta name="twitter:description" content="XenServer主机上设置ISCSI IQN。
-查看IQN查看ISCSI IQN的值123[root@xenserver-155 ~]# cat /etc/iscsi/initiatorname.iscsiInitiatorName=iqn.2015-02.com.example:a50ca784InitiatorAlias=xenserver-155">
+查看IQN查看ISCSI IQN的值。如果资源池内主机的IQN重复了，可以直接修改/etc/iscsi/initiatorname.iscsi的IQN123[root@xenserver-155 ~]# cat /etc/iscsi/initiatorname.iscsiInitiatorName=iqn.2015-02.com.example:a">
 
 
 
@@ -415,7 +415,7 @@
 
       
         <p>XenServer主机上设置ISCSI IQN。</p>
-<h2 id="查看IQN"><a href="#查看IQN" class="headerlink" title="查看IQN"></a>查看IQN</h2><p>查看ISCSI IQN的值<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@xenserver-155 ~]<span class="comment"># cat /etc/iscsi/initiatorname.iscsi</span></div><div class="line">InitiatorName=iqn.2015-02.com.example:a50ca784</div><div class="line">InitiatorAlias=xenserver-155</div></pre></td></tr></table></figure></p>
+<h2 id="查看IQN"><a href="#查看IQN" class="headerlink" title="查看IQN"></a>查看IQN</h2><p>查看ISCSI IQN的值。如果资源池内主机的IQN重复了，可以直接修改/etc/iscsi/initiatorname.iscsi的IQN<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@xenserver-155 ~]<span class="comment"># cat /etc/iscsi/initiatorname.iscsi</span></div><div class="line">InitiatorName=iqn.2015-02.com.example:a50ca784</div><div class="line">InitiatorAlias=xenserver-155</div></pre></td></tr></table></figure></p>
 <a id="more"></a>
 <h2 id="设置IQN"><a href="#设置IQN" class="headerlink" title="设置IQN"></a>设置IQN</h2><p>设置ISCSI IQN的值<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@xenserver-155 ~]<span class="comment"># xe host-param-set other-config:iscsi_iqn=iqn.2015-02.com.example:a50ca784 uuid=3e184f09-0aaf-4c7b-ac70-bb4b10ddcd23</span></div></pre></td></tr></table></figure></p>
 

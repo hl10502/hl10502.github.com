@@ -166,7 +166,7 @@
     <entry>
       <title><![CDATA[XenServer主机上设置ISCSI IQN]]></title>
       <url>%2F2017%2F03%2F13%2Fxenserver-host-2%2F</url>
-      <content type="text"><![CDATA[XenServer主机上设置ISCSI IQN。 查看IQN查看ISCSI IQN的值123[root@xenserver-155 ~]# cat /etc/iscsi/initiatorname.iscsiInitiatorName=iqn.2015-02.com.example:a50ca784InitiatorAlias=xenserver-155 设置IQN设置ISCSI IQN的值1[root@xenserver-155 ~]# xe host-param-set other-config:iscsi_iqn=iqn.2015-02.com.example:a50ca784 uuid=3e184f09-0aaf-4c7b-ac70-bb4b10ddcd23]]></content>
+      <content type="text"><![CDATA[XenServer主机上设置ISCSI IQN。 查看IQN查看ISCSI IQN的值。如果资源池内主机的IQN重复了，可以直接修改/etc/iscsi/initiatorname.iscsi的IQN123[root@xenserver-155 ~]# cat /etc/iscsi/initiatorname.iscsiInitiatorName=iqn.2015-02.com.example:a50ca784InitiatorAlias=xenserver-155 设置IQN设置ISCSI IQN的值1[root@xenserver-155 ~]# xe host-param-set other-config:iscsi_iqn=iqn.2015-02.com.example:a50ca784 uuid=3e184f09-0aaf-4c7b-ac70-bb4b10ddcd23]]></content>
     </entry>
 
     
