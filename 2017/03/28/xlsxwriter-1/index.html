@@ -93,7 +93,7 @@
 
 100％兼容Excel XLSX文件
 完整格式化
-合并细胞
+合并单元格
 定义名称
 图表
 自动过滤器
@@ -104,7 +104,7 @@
 单元评论
 文本框
 与Pandas集成
-用于编写大文件的内存优化模式">
+用于编写大文件的内存优化模">
 <meta property="og:type" content="article">
 <meta property="og:title" content="XlsxWriter介绍">
 <meta property="og:url" content="https://hl10502.github.io/2017/03/28/xlsxwriter-1/index.html">
@@ -113,7 +113,7 @@
 
 100％兼容Excel XLSX文件
 完整格式化
-合并细胞
+合并单元格
 定义名称
 图表
 自动过滤器
@@ -124,17 +124,17 @@
 单元评论
 文本框
 与Pandas集成
-用于编写大文件的内存优化模式">
+用于编写大文件的内存优化模">
 <meta property="og:image" content="https://hl10502.github.io/2017/03/28/xlsxwriter-1/xlsxwriter-hello-1.png">
 <meta property="og:image" content="https://hl10502.github.io/2017/03/28/xlsxwriter-1/xlsxwriter-1-s5.png">
-<meta property="og:updated_time" content="2017-03-28T10:06:37.090Z">
+<meta property="og:updated_time" content="2017-03-29T02:03:33.538Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="XlsxWriter介绍">
 <meta name="twitter:description" content="XlsxWriter是一个Python模块，可用于将文本、数字、公式和超链接写入Excel 2007+ XLSX文件中的多个工作表。 它支持格式化等功能，包括：
 
 100％兼容Excel XLSX文件
 完整格式化
-合并细胞
+合并单元格
 定义名称
 图表
 自动过滤器
@@ -145,7 +145,7 @@
 单元评论
 文本框
 与Pandas集成
-用于编写大文件的内存优化模式">
+用于编写大文件的内存优化模">
 <meta name="twitter:image" content="https://hl10502.github.io/2017/03/28/xlsxwriter-1/xlsxwriter-hello-1.png">
 
 
@@ -463,7 +463,7 @@
 <ul>
 <li>100％兼容Excel XLSX文件</li>
 <li>完整格式化</li>
-<li>合并细胞</li>
+<li>合并单元格</li>
 <li>定义名称</li>
 <li>图表</li>
 <li>自动过滤器</li>
@@ -496,7 +496,7 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">bold=workbook.add_format(&#123;<span class="string">'bold'</span>:<span class="keyword">True</span>&#125;)</div></pre></td></tr></table></figure>
 <p>  还可以使用set_bold,例如:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">bold=workbook.add_format()      bold.set_bold()</div><div class="line"><span class="comment">#border：边框，align:对齐方式，bg_color：背景颜色，font_size：字体大小，bold：字体加粗</span></div><div class="line">top = workbook.add_format(&#123;<span class="string">'border'</span>:<span class="number">1</span>,<span class="string">'align'</span>:<span class="string">'center'</span>,<span class="string">'bg_color'</span>:<span class="string">'cccccc'</span>,<span class="string">'font_size'</span>:<span class="number">13</span>,<span class="string">'bold'</span>:<span class="keyword">True</span>&#125;)</div></pre></td></tr></table></figure>
-<p>  更多格式化样式的方法见<a href="http://xlsxwriter.readthedocs.org/working_with_formats.html" target="_blank" rel="external">http://xlsxwriter.readthedocs.org/working_with_formats.html</a></p>
+<p>  更多格式化样式的方法见<br><a href="http://xlsxwriter.readthedocs.org/working_with_formats.html" target="_blank" rel="external">http://xlsxwriter.readthedocs.org/working_with_formats.html</a></p>
 </li>
 <li><p>add_chart(options):创建一个图表对象,内部是使用insert_chart()方法来实现的,options(dict类型)为图表指定一个字典属性<br>close():关闭文件</p>
 </li>
@@ -508,7 +508,7 @@
 <li>write_number():写入数字类型,worksheet.write_number(‘A2’,1.1)</li>
 <li>write_blank():写入空类型数据,worksheet.write_blank(‘A2’,None)</li>
 <li>wirte_formula():写入公式类型,worksheet.write_formula(2,0,’=SUM(B1:B5))</li>
-<li>write_datetime():写入日期类型数据,worksheet.write_datetime(7,0,datetime.datetime.strptime(‘2014-01-02’,’%Y-%m-%d),workbook.add_format({‘num_format’:’yyyy-mm-dd’}));</li>
+<li>write_datetime():写入日期类型数据,<br>  worksheet.write_datetime(7,0,datetime.datetime.strptime(‘2014-01-02’,’%Y-%m-%d),workbook.add_format({‘num_format’:’yyyy-mm-dd’}));</li>
 <li>write_boolean():写入逻辑类数据,worksheet.write_boolean(0,0,True)</li>
 <li>write_url():写入超链接类型数据,worksheet.write_url(‘A1’,’ftp://www.python.org’)</li>
 <li>write_column():写入到一列,后面接一个数组</li>
