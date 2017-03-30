@@ -1,0 +1,1239 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="2xIA6kyEisqneyrcTltYHTS8lapHWNhDBX_qkWzL2FY" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Ceph,VSM,InkScope,Ceph管理监控平台分析," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="Ceph的开源管理监控平台有好几个，比如VSM，InkScope，Calamari等。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ceph开源管理监控平台分析">
+<meta property="og:url" content="https://hl10502.github.io/2017/03/30/ceph-web-manage/index.html">
+<meta property="og:site_name" content="hl10502的博客">
+<meta property="og:description" content="Ceph的开源管理监控平台有好几个，比如VSM，InkScope，Calamari等。">
+<meta property="og:image" content="https://hl10502.github.io/2017/03/30/ceph-web-manage/vsm-team.png">
+<meta property="og:image" content="https://hl10502.github.io/2017/03/30/ceph-web-manage/vsm-roadmap.png">
+<meta property="og:image" content="https://hl10502.github.io/2017/03/30/ceph-web-manage/vsm-architecture.png">
+<meta property="og:image" content="https://hl10502.github.io/2017/03/30/ceph-web-manage/inkscope-architecture.png">
+<meta property="og:updated_time" content="2017-03-30T08:06:42.707Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ceph开源管理监控平台分析">
+<meta name="twitter:description" content="Ceph的开源管理监控平台有好几个，比如VSM，InkScope，Calamari等。">
+<meta name="twitter:image" content="https://hl10502.github.io/2017/03/30/ceph-web-manage/vsm-team.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://hl10502.github.io/2017/03/30/ceph-web-manage/"/>
+
+
+
+
+
+  <title> Ceph开源管理监控平台分析 | hl10502的博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">hl10502的博客</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">IT技术人</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            所有文章
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于我
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="https://hl10502.github.io/2017/03/30/ceph-web-manage/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="hl10502">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="hl10502的博客">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="hl10502的博客" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Ceph开源管理监控平台分析
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-30T15:30:02+08:00">
+                2017-03-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Ceph/" itemprop="url" rel="index">
+                    <span itemprop="name">Ceph</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/03/30/ceph-web-manage/" class="leancloud_visitors" data-flag-title="Ceph开源管理监控平台分析">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Ceph的开源管理监控平台有好几个，比如VSM，InkScope，Calamari等。</p>
+<a id="more"></a>
+<h2 id="VSM"><a href="#VSM" class="headerlink" title="VSM"></a>VSM</h2><p>VSM（Virtual Storage Manager）：Intel的Wang, Yaguang (Yaguang.wang@intel.com)团队开发。</p>
+<p><img src="/2017/03/30/ceph-web-manage/vsm-team.png" alt="vsm-team"></p>
+<p>Roadmap<br><img src="/2017/03/30/ceph-web-manage/vsm-roadmap.png" alt="vsm-roadmap"> </p>
+<h3 id="VSM架构"><a href="#VSM架构" class="headerlink" title="VSM架构"></a>VSM架构</h3><p><img src="/2017/03/30/ceph-web-manage/vsm-architecture.png" alt="vsm-architecture"></p>
+<p>从上面VSM的架构图，我们可以看出，VSM分为核心的两个部分，VSM控制节点与VSM存储节点。</p>
+<ul>
+<li>VSM控制节点<ul>
+<li>WebUI – 通过访问VSM REST API用于集群的管理、监控</li>
+<li>REST API – 供vsm client访问</li>
+<li>mariadb, rabbitmq</li>
+</ul>
+</li>
+<li>VSM存储节点<ul>
+<li>使用diamond收集ceph节点的监控信息</li>
+<li>vsm-agent工具对ceph节点进行管理</li>
+</ul>
+</li>
+</ul>
+<h3 id="组件"><a href="#组件" class="headerlink" title="组件"></a>组件</h3><ul>
+<li>Dashboard（vsm-dashboard）：VSM的webUI界面，用户通过Dashboard来管理与监控ceph集群</li>
+<li>vsmclient（python-vsmclient）：VSM restapi 调用的client</li>
+<li>API（vsm）：VSM的restapi</li>
+<li>scheduler（vsm）：VSM的调度组件</li>
+<li>conductor（vsm）：VSM的数据库操作组件，即所有的数据库操作都是通过conductor来调用mysql</li>
+<li>RabbitMQ：消息中间件，VSM的各个组件相对独立，都是通过发送消息，通过RPC的方式来相互调用</li>
+<li>agent（vsm）：VSM代理服务</li>
+</ul>
+<h4 id="组件代码"><a href="#组件代码" class="headerlink" title="组件代码"></a>组件代码</h4><p>VSM目前最新的发行版本为2.1，VSM的代码组件分为四个：</p>
+<ul>
+<li>vsm-dashboard：VSM的管理与监控web界面</li>
+<li>python-vsmclient：调用restapi的client</li>
+<li>vsm：VSM的核心组件（包括api、scheduler、conductor、agent等）</li>
+<li>vsm-deploy：ceph部署工具 </li>
+</ul>
+<p>代码基于Python语言，使用了wsgi、django等技术框架</p>
+<h3 id="GitHub"><a href="#GitHub" class="headerlink" title="GitHub"></a>GitHub</h3><p>Git主页：<br><a href="https://github.com/01org/virtual-storage-manager" target="_blank" rel="external">https://github.com/01org/virtual-storage-manager</a></p>
+<p>releases版本代码下载：<br><a href="https://github.com/01org/virtual-storage-manager/releases" target="_blank" rel="external">https://github.com/01org/virtual-storage-manager/releases</a></p>
+<p>vsm-dependencies：<br><a href="https://github.com/01org/vsm-dependencies" target="_blank" rel="external">https://github.com/01org/vsm-dependencies</a></p>
+<h3 id="支持功能"><a href="#支持功能" class="headerlink" title="支持功能"></a>支持功能</h3><ul>
+<li>仪表盘：查看vsm、cluster、storage group、OSD、MON、MDS、PG的状态统计信息<ul>
+<li>可以判断OSD是否正常运作，空间是否满</li>
+<li>查看IOPS、latency、bandwidth、CPU实时监控信息(通过diamond实现数据的收集)</li>
+<li>可以用来发现ntp延迟的问题</li>
+</ul>
+</li>
+<li>所有的宿主节点都需要在安装vsm的时候写在配置文件中</li>
+<li>添加删除MON/OSD守护进程</li>
+<li>OSD 增删、重启、恢复（N/A）</li>
+<li>osd pool的管理 – 支持cache tier的增删、replicated/EC pool的创建</li>
+<li>StorageGroup的管理 – 添加新的SG，存储资源将以SG为单位进行统计</li>
+<li>支持Ceph系统的升级功能，通过github下载源码实现</li>
+<li>将通过ssh配置openstack的控制节点把rbd pool present给cinder</li>
+<li>管理系统的临界值，将在dashboard中得到体现</li>
+<li>vsm 账户管理（keystone管理账户）</li>
+</ul>
+<h2 id="Inkscope"><a href="#Inkscope" class="headerlink" title="Inkscope"></a>Inkscope</h2><p>Inkscope目前最新版为1.40,  <a href="http://inkscope.blogspot.fr/" target="_blank" rel="external">http://inkscope.blogspot.fr/</a></p>
+<h3 id="Inkscope架构"><a href="#Inkscope架构" class="headerlink" title="Inkscope架构"></a>Inkscope架构</h3><p><img src="/2017/03/30/ceph-web-manage/inkscope-architecture.png" alt="inkscope-architecture"></p>
+<h3 id="组件-1"><a href="#组件-1" class="headerlink" title="组件"></a>组件</h3><ul>
+<li>inkscope-common：包含inkscope的默认配置文件以及其他进程(cephprobe,sysprobe)启动所需的依赖文件，所有相关节点都需要安装。</li>
+<li>inkscope-admviz：包含inkscope的web控制台文件，含接口和界面，仅需要安装一个，该节点（管理节点）上同时需要按安装flask和mongodb</li>
+<li>inkscope-cephrestapi：用于安装启动 ceph rest api 的脚本，仅需要安装在提供api接口的节点上，即mon节点。</li>
+<li>inkscope-cephprobe：用于安装启动 cephprobe 的脚本(整个集群只需一个)，安装在mon节点，脚本主要实现：获取Ceph集群的一些信息，并使用端口（5000）提供服务，将数据存入mongodb数据库中。</li>
+<li>inkscope-sysprobe：安装用于所有mon和osd的sysprobe 所需要脚本，即所有节点均安装，实现获取节点设备资源信息如：CPU、内存、磁盘等等。</li>
+</ul>
+<h4 id="组件代码-1"><a href="#组件代码-1" class="headerlink" title="组件代码"></a>组件代码</h4><ul>
+<li>inkscopeViz：Web客户端</li>
+<li>inkscopeCtrl：inkscope的服务器端，提供了REST API</li>
+<li>inkscopeProbe：收集ceph节点的系统信息，收集到的数据将传输到MongoDB<ul>
+<li>cephprobe：用来或者集群的相关信息和操作的</li>
+<li>sysprobe：获取节点的磁盘分区等相关信息的</li>
+</ul>
+</li>
+<li>inkscopeMonitor：对接第三方监控框架</li>
+</ul>
+<p>代码基于python语言，使用了wsgi、flask等技术框架</p>
+<h3 id="GitHub-1"><a href="#GitHub-1" class="headerlink" title="GitHub"></a>GitHub</h3><p>Git主页:<br><a href="https://github.com/inkscope/inkscope" target="_blank" rel="external">https://github.com/inkscope/inkscope</a></p>
+<p>inkscope-packaging：<br><a href="https://github.com/inkscope/inkscope-packaging" target="_blank" rel="external">https://github.com/inkscope/inkscope-packaging</a></p>
+<h3 id="支持功能-1"><a href="#支持功能-1" class="headerlink" title="支持功能"></a>支持功能</h3><ul>
+<li>仪表盘：查看cluster、OSD、MON、MDS、PG的状态统计信息可以判断OSD是否正常运作，空间是否满</li>
+<li>分模块管理OSD、Pool、PG、RBD、RadosGW、MDS</li>
+<li>inkscope账户管理</li>
+</ul>
+<h2 id="Calamari"><a href="#Calamari" class="headerlink" title="Calamari"></a>Calamari</h2><p>暂未研究</p>
+<h2 id="管理平台比较"><a href="#管理平台比较" class="headerlink" title="管理平台比较"></a>管理平台比较</h2><h3 id="技术上"><a href="#技术上" class="headerlink" title="技术上"></a>技术上</h3><table>
+<thead>
+<tr>
+<th>对比项</th>
+<th>VSM</th>
+<th>InkScope</th>
+<th>Calamari</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>license</td>
+<td>Apache v2</td>
+<td>Apache v2</td>
+<td></td>
+</tr>
+<tr>
+<td>开发语言</td>
+<td>Python</td>
+<td>Python</td>
+<td></td>
+</tr>
+<tr>
+<td>Web框架</td>
+<td>Apache/django</td>
+<td>Apache/flask</td>
+<td></td>
+</tr>
+<tr>
+<td>js_lib</td>
+<td>无</td>
+<td>AngularJS</td>
+<td></td>
+</tr>
+<tr>
+<td>css</td>
+<td>bootstrap</td>
+<td>bootstrap</td>
+<td></td>
+</tr>
+<tr>
+<td>数据库</td>
+<td>MySQL</td>
+<td>mongoDB</td>
+<td></td>
+</tr>
+<tr>
+<td>Restapi</td>
+<td>重量级、封装ceph-rest-api</td>
+<td>轻量级，直接用ceph-rest-api</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h4><ul>
+<li>VSM相对比InkScope的代码复杂<ul>
+<li>多封装一层restapi</li>
+<li>依赖openstack的组件，例如keystone、openstack_auth</li>
+</ul>
+</li>
+</ul>
+<h3 id="功能上"><a href="#功能上" class="headerlink" title="功能上"></a>功能上</h3><table>
+<thead>
+<tr>
+<th>对比项</th>
+<th>VSM</th>
+<th>InkScope</th>
+<th>Calamari</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>创建集群</td>
+<td>vsm-deploy工具</td>
+<td>命令行</td>
+<td></td>
+</tr>
+<tr>
+<td>仪表盘</td>
+<td>较多</td>
+<td>无带宽等性能</td>
+<td></td>
+</tr>
+<tr>
+<td>监控状态</td>
+<td>state只有列表</td>
+<td>较多，有图形展示</td>
+<td></td>
+</tr>
+<tr>
+<td>MON管理</td>
+<td>是</td>
+<td>否</td>
+<td></td>
+</tr>
+<tr>
+<td>OSD管理</td>
+<td>有添加删除、无图形展示状态、无更新状态</td>
+<td>无添加删除，有图形展示状态及更新状态</td>
+<td></td>
+</tr>
+<tr>
+<td>Pool管理</td>
+<td>是</td>
+<td>更多，并支持快照</td>
+<td></td>
+</tr>
+<tr>
+<td>RBD管理</td>
+<td>只有查看state</td>
+<td>可以创建image、快照等</td>
+<td></td>
+</tr>
+<tr>
+<td>RadosGW管理</td>
+<td>否</td>
+<td>是</td>
+<td></td>
+</tr>
+<tr>
+<td>MDS</td>
+<td>否</td>
+<td>只有查看state</td>
+<td></td>
+</tr>
+<tr>
+<td>纠删码管理</td>
+<td>否</td>
+<td>是</td>
+<td></td>
+</tr>
+<tr>
+<td>设置flags</td>
+<td>否</td>
+<td>是</td>
+<td></td>
+</tr>
+<tr>
+<td>集成openstack</td>
+<td>集合紧密，依赖keystone、openstack_auth等组件</td>
+<td>否</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="分析-1"><a href="#分析-1" class="headerlink" title="分析"></a>分析</h4><ul>
+<li>VSM有vsm-deploy工具来创建集群，而InkScope只有使用Ceph CLI来创建</li>
+<li>InkScope相对比VSM支持的功能更多</li>
+<li>VSM支持openstack，可以跟openstack很好地结合</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Ceph/" rel="tag"># Ceph</a>
+          
+            <a href="/tags/VSM/" rel="tag"># VSM</a>
+          
+            <a href="/tags/InkScope/" rel="tag"># InkScope</a>
+          
+            <a href="/tags/Ceph管理监控平台分析/" rel="tag"># Ceph管理监控平台分析</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/29/xlsxwriter-2/" rel="next" title="Python XlsxWriter操作excel写入中文字符串变量出错">
+                <i class="fa fa-chevron-left"></i> Python XlsxWriter操作excel写入中文字符串变量出错
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8yNzg2Ny80NDQ0"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="hl10502" />
+          <p class="site-author-name" itemprop="name">hl10502</p>
+          <p class="site-description motion-element" itemprop="description">关注云计算/虚拟化/分布式存储等</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">49</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">94</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/hl10502" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#VSM"><span class="nav-number">1.</span> <span class="nav-text">VSM</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#VSM架构"><span class="nav-number">1.1.</span> <span class="nav-text">VSM架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#组件"><span class="nav-number">1.2.</span> <span class="nav-text">组件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#组件代码"><span class="nav-number">1.2.1.</span> <span class="nav-text">组件代码</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GitHub"><span class="nav-number">1.3.</span> <span class="nav-text">GitHub</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#支持功能"><span class="nav-number">1.4.</span> <span class="nav-text">支持功能</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Inkscope"><span class="nav-number">2.</span> <span class="nav-text">Inkscope</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Inkscope架构"><span class="nav-number">2.1.</span> <span class="nav-text">Inkscope架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#组件-1"><span class="nav-number">2.2.</span> <span class="nav-text">组件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#组件代码-1"><span class="nav-number">2.2.1.</span> <span class="nav-text">组件代码</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GitHub-1"><span class="nav-number">2.3.</span> <span class="nav-text">GitHub</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#支持功能-1"><span class="nav-number">2.4.</span> <span class="nav-text">支持功能</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Calamari"><span class="nav-number">3.</span> <span class="nav-text">Calamari</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#管理平台比较"><span class="nav-number">4.</span> <span class="nav-text">管理平台比较</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#技术上"><span class="nav-number">4.1.</span> <span class="nav-text">技术上</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#分析"><span class="nav-number">4.1.1.</span> <span class="nav-text">分析</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#功能上"><span class="nav-number">4.2.</span> <span class="nav-text">功能上</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#分析-1"><span class="nav-number">4.2.1.</span> <span class="nav-text">分析</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">hl10502</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("LE6b1aXtXOedOvsqgG7uXyrn-gzGzoHsz", "WHQseHdLj7t7hyj5EXO7pveG");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>
