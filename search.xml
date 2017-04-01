@@ -5,7 +5,7 @@
     <entry>
       <title><![CDATA[修改VSM的Web界面为中文]]></title>
       <url>%2F2017%2F03%2F31%2Fvsm-web-zh%2F</url>
-      <content type="text"><![CDATA[安装VSM之后，默认使用的是英文界面。在VSM的控制节点将vsm-dashboard编译为中文就可以将VSM的界面修改成中文。 修改settings.py修改settings.py中的语言编码为中文，将LANGUAGE_CODE = ‘en’改成LANGUAGE_CODE = ‘zh-cn’12[root@vsmcontroller /]# cd /usr/share/vsm-dashboard/vsm_dashboard[root@vsmcontroller vsm_dashboard]# vi settings.py LANGUAGE_CODE = &apos;zh-cn&apos; 重新编译django.mo执行 django-admin compilemessages 命令将django.po编译成django.mo123[root@vsmcontroller /]# cd /usr/share/vsm-dashboard/vsm_dashboard/[root@vsmcontroller vsm_dashboard]# django-admin compilemessagesprocessing file django.po in /usr/share/vsm-dashboard/vsm_dashboard/locale/zh_CN/LC_MESSAGES 重启httpd服务12[root@vsmcontroller vsm_dashboard]# service httpd restartRedirecting to /bin/systemctl restart httpd.service 重新登录]]></content>
+      <content type="text"><![CDATA[安装VSM之后，默认使用的是英文界面。在VSM的控制节点将vsm-dashboard编译为中文就可以将VSM的界面修改成中文。 修改settings.py修改settings.py中的语言编码为中文，将LANGUAGE_CODE = ‘en’改成LANGUAGE_CODE = ‘zh-cn’12[root@vsmcontroller /]# cd /usr/share/vsm-dashboard/vsm_dashboard[root@vsmcontroller vsm_dashboard]# vi settings.py LANGUAGE_CODE = &apos;zh-cn&apos; 重新编译django.mo下载 django.po，放到/usr/share/vsm-dashboard/vsm_dashboard/目录下。 执行 django-admin compilemessages 命令将django.po编译成django.mo123[root@vsmcontroller /]# cd /usr/share/vsm-dashboard/vsm_dashboard/[root@vsmcontroller vsm_dashboard]# django-admin compilemessagesprocessing file django.po in /usr/share/vsm-dashboard/vsm_dashboard/locale/zh_CN/LC_MESSAGES 重启httpd服务12[root@vsmcontroller vsm_dashboard]# service httpd restartRedirecting to /bin/systemctl restart httpd.service 重新登录]]></content>
     </entry>
 
     

@@ -96,7 +96,7 @@
 <meta property="og:site_name" content="hl10502的博客">
 <meta property="og:description" content="安装VSM之后，默认使用的是英文界面。在VSM的控制节点将vsm-dashboard编译为中文就可以将VSM的界面修改成中文。">
 <meta property="og:image" content="https://hl10502.github.io/2017/03/31/vsm-web-zh/vsm-web-zh.png">
-<meta property="og:updated_time" content="2017-03-31T09:57:07.212Z">
+<meta property="og:updated_time" content="2017-04-01T08:27:50.110Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="修改VSM的Web界面为中文">
 <meta name="twitter:description" content="安装VSM之后，默认使用的是英文界面。在VSM的控制节点将vsm-dashboard编译为中文就可以将VSM的界面修改成中文。">
@@ -417,7 +417,8 @@
 <a id="more"></a>
 <h2 id="修改settings-py"><a href="#修改settings-py" class="headerlink" title="修改settings.py"></a>修改settings.py</h2><p>修改settings.py中的语言编码为中文，将LANGUAGE_CODE = ‘en’改成LANGUAGE_CODE = ‘zh-cn’<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@vsmcontroller /]<span class="comment"># cd /usr/share/vsm-dashboard/vsm_dashboard</span></div><div class="line">[root@vsmcontroller vsm_dashboard]<span class="comment"># vi settings.py</span></div></pre></td></tr></table></figure></p>
 <pre><code>LANGUAGE_CODE = &apos;zh-cn&apos;
-</code></pre><h2 id="重新编译django-mo"><a href="#重新编译django-mo" class="headerlink" title="重新编译django.mo"></a>重新编译django.mo</h2><p>执行 django-admin compilemessages 命令将django.po编译成django.mo<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@vsmcontroller /]<span class="comment"># cd /usr/share/vsm-dashboard/vsm_dashboard/</span></div><div class="line">[root@vsmcontroller vsm_dashboard]<span class="comment"># django-admin compilemessages</span></div><div class="line">processing file django.po <span class="keyword">in</span> /usr/share/vsm-dashboard/vsm_dashboard/locale/zh_CN/LC_MESSAGES</div></pre></td></tr></table></figure></p>
+</code></pre><h2 id="重新编译django-mo"><a href="#重新编译django-mo" class="headerlink" title="重新编译django.mo"></a>重新编译django.mo</h2><p>下载 <a href="django.po">django.po</a>，放到/usr/share/vsm-dashboard/vsm_dashboard/目录下。</p>
+<p>执行 django-admin compilemessages 命令将django.po编译成django.mo<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@vsmcontroller /]<span class="comment"># cd /usr/share/vsm-dashboard/vsm_dashboard/</span></div><div class="line">[root@vsmcontroller vsm_dashboard]<span class="comment"># django-admin compilemessages</span></div><div class="line">processing file django.po <span class="keyword">in</span> /usr/share/vsm-dashboard/vsm_dashboard/locale/zh_CN/LC_MESSAGES</div></pre></td></tr></table></figure></p>
 <h2 id="重启httpd服务"><a href="#重启httpd服务" class="headerlink" title="重启httpd服务"></a>重启httpd服务</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@vsmcontroller vsm_dashboard]<span class="comment"># service httpd restart</span></div><div class="line">Redirecting to /bin/systemctl restart  httpd.service</div></pre></td></tr></table></figure>
 <h2 id="重新登录"><a href="#重新登录" class="headerlink" title="重新登录"></a>重新登录</h2><p><img src="/2017/03/31/vsm-web-zh/vsm-web-zh.png" alt="vsm-web-zh"></p>
 
