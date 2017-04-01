@@ -131,7 +131,7 @@
 
 
 
-  <title> 归档 | hl10502的博客 </title>
+  <title> 云计算,虚拟化,分布式存储,OpenStack,XenServer,VMware,PowerVM,Ceph,Java,JVM,C#,Python - hl10502的博客 关注云计算/虚拟化/分布式存储等 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -156,7 +156,9 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left  page-archive  ">
+  <div class="container one-collumn sidebar-position-left 
+   page-home 
+ ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -280,402 +282,1734 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-
-  <section id="posts" class="posts-collapse">
-    <span class="archive-move-on"></span>
-
-    <span class="archive-page-counter">
+  <section id="posts" class="posts-expand">
+    
       
-      
-       
-        
-      好! 目前共计 51 篇日志。 继续努力。
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="https://hl10502.github.io/2017/03/16/xenserver-vm-5/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="hl10502">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="hl10502的博客">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="hl10502的博客" src="">
     </span>
+  </span>
 
     
+      <header class="post-header">
 
-      
-      
-      
-
-      
         
-        <div class="collection-title">
-          <h2 class="archive-year motion-element" id="archive-year-2017">2017</h2>
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/03/16/xenserver-vm-5/" itemprop="url">
+                  虚拟机绑定物理CPU
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-16T15:30:33+08:00">
+                2017-03-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/XenServer/" itemprop="url" rel="index">
+                    <span itemprop="name">XenServer</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/XenServer/VM/" itemprop="url" rel="index">
+                    <span itemprop="name">VM</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/03/16/xenserver-vm-5/" class="leancloud_visitors" data-flag-title="虚拟机绑定物理CPU">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
         </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
       
       
 
       
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
         
-            <a class="post-title-link" href="/2017/03/16/xenserver-vm-5/" itemprop="url">
-              
-                <span itemprop="name">虚拟机绑定物理CPU</span>
-              
+          <h2 id="VM绑定物理CPU"><a href="#VM绑定物理CPU" class="headerlink" title="VM绑定物理CPU"></a>VM绑定物理CPU</h2><p>设置VM使用物理CPU排序中的第1,2个CPU<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@node200 ~]<span class="comment"># xe vm-param-set uuid=247e8ddf-9361-4557-889c-f6c1961c6706 VCPUs-params:mask=1,2</span></div></pre></td></tr></table></figure></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/03/16/xenserver-vm-5/#more" rel="contents">
+              阅读全文 &raquo;
             </a>
+          </div>
+          <!--/noindex-->
         
-      </h1>
+      
+    </div>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-03-16T15:30:33+08:00"
-              content="2017-03-16" >
-          03-16
-        </time>
-      </div>
+    <div>
+      
+    </div>
 
-    </header>
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
   </article>
 
 
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="https://hl10502.github.io/2017/03/16/xenserver-vm-4/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="hl10502">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="hl10502的博客">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="hl10502的博客" src="">
+    </span>
+  </span>
 
     
+      <header class="post-header">
 
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
         
-            <a class="post-title-link" href="/2017/03/16/xenserver-vm-4/" itemprop="url">
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
               
-                <span itemprop="name">虚拟机随物理主机开机自动启动</span>
+                
+                <a class="post-title-link" href="/2017/03/16/xenserver-vm-4/" itemprop="url">
+                  虚拟机随物理主机开机自动启动
+                </a>
               
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-16T15:15:27+08:00">
+                2017-03-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/XenServer/" itemprop="url" rel="index">
+                    <span itemprop="name">XenServer</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/XenServer/VM/" itemprop="url" rel="index">
+                    <span itemprop="name">VM</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/03/16/xenserver-vm-4/" class="leancloud_visitors" data-flag-title="虚拟机随物理主机开机自动启动">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>XenServer主机上的虚拟机默认是不会随物理主机开机自动启动的，是为了防止在HA环境中出现某些异常，所以物理主机异常断电恢复启动后，所有的虚拟机均为关机状态。但如果没配置HA，还是可以设置让虚拟机随物理主机开机自动启动。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/03/16/xenserver-vm-4/#more" rel="contents">
+              阅读全文 &raquo;
             </a>
+          </div>
+          <!--/noindex-->
         
-      </h1>
+      
+    </div>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-03-16T15:15:27+08:00"
-              content="2017-03-16" >
-          03-16
-        </time>
-      </div>
+    <div>
+      
+    </div>
 
-    </header>
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
   </article>
 
 
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="https://hl10502.github.io/2017/03/16/xenserver-vm-3/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="hl10502">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="hl10502的博客">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="hl10502的博客" src="">
+    </span>
+  </span>
 
     
+      <header class="post-header">
 
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
         
-            <a class="post-title-link" href="/2017/03/16/xenserver-vm-3/" itemprop="url">
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
               
-                <span itemprop="name">判断虚拟机是否灵活</span>
+                
+                <a class="post-title-link" href="/2017/03/16/xenserver-vm-3/" itemprop="url">
+                  判断虚拟机是否灵活
+                </a>
               
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-16T14:55:22+08:00">
+                2017-03-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/XenServer/" itemprop="url" rel="index">
+                    <span itemprop="name">XenServer</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/XenServer/VM/" itemprop="url" rel="index">
+                    <span itemprop="name">VM</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/03/16/xenserver-vm-3/" class="leancloud_visitors" data-flag-title="判断虚拟机是否灵活">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>灵活的虚拟机必须满足下面三个条件：</p>
+<ul>
+<li>虚拟机的所有虚拟磁盘必须置于共享存储中</li>
+<li>虚拟机一定不能连接到配置的本地 DVD 驱动器</li>
+<li>虚拟机的虚拟网络接口应位于池范围内的网络中</li>
+</ul>
+<p>通过这三个条件统一来判断，只要有一项不满足，虚拟机就是不灵活的。另外可以直接使用xe diagnostic-vm-status uuid=[vm uuid] 命令判断虚拟机是否灵活。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/03/16/xenserver-vm-3/#more" rel="contents">
+              阅读全文 &raquo;
             </a>
+          </div>
+          <!--/noindex-->
         
-      </h1>
+      
+    </div>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-03-16T14:55:22+08:00"
-              content="2017-03-16" >
-          03-16
-        </time>
-      </div>
+    <div>
+      
+    </div>
 
-    </header>
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
   </article>
 
 
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="https://hl10502.github.io/2017/03/16/xenserver-vm-2/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="hl10502">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="hl10502的博客">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="hl10502的博客" src="">
+    </span>
+  </span>
 
     
+      <header class="post-header">
 
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
         
-            <a class="post-title-link" href="/2017/03/16/xenserver-vm-2/" itemprop="url">
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
               
-                <span itemprop="name">虚拟机进不了控制台或者挂住</span>
+                
+                <a class="post-title-link" href="/2017/03/16/xenserver-vm-2/" itemprop="url">
+                  虚拟机进不了控制台或者挂住
+                </a>
               
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-16T14:23:12+08:00">
+                2017-03-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/XenServer/" itemprop="url" rel="index">
+                    <span itemprop="name">XenServer</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/XenServer/VM/" itemprop="url" rel="index">
+                    <span itemprop="name">VM</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/03/16/xenserver-vm-2/" class="leancloud_visitors" data-flag-title="虚拟机进不了控制台或者挂住">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>在RHEL6、Centos6、Win2008R2、Win7以上操作系统的全虚VM，安装tools之后重启进不了控制台（半虚的VM正常），是因为VM参数platform:viridian设置为true，由于xapi会判断如果xs-tools是up-to-date，并且没有viridian，就会自动加上并设置true，需要手工修改platform:viridian的值为false。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/03/16/xenserver-vm-2/#more" rel="contents">
+              阅读全文 &raquo;
             </a>
+          </div>
+          <!--/noindex-->
         
-      </h1>
+      
+    </div>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-03-16T14:23:12+08:00"
-              content="2017-03-16" >
-          03-16
-        </time>
-      </div>
+    <div>
+      
+    </div>
 
-    </header>
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
   </article>
 
 
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="https://hl10502.github.io/2017/03/16/xenserver-vm-1/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="hl10502">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="hl10502的博客">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="hl10502的博客" src="">
+    </span>
+  </span>
 
     
+      <header class="post-header">
 
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
         
-            <a class="post-title-link" href="/2017/03/16/xenserver-vm-1/" itemprop="url">
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
               
-                <span itemprop="name">Linux虚拟机安装、卸载XenServer Tools</span>
+                
+                <a class="post-title-link" href="/2017/03/16/xenserver-vm-1/" itemprop="url">
+                  Linux虚拟机安装、卸载XenServer Tools
+                </a>
               
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-16T11:32:49+08:00">
+                2017-03-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/XenServer/" itemprop="url" rel="index">
+                    <span itemprop="name">XenServer</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/XenServer/VM/" itemprop="url" rel="index">
+                    <span itemprop="name">VM</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/03/16/xenserver-vm-1/" class="leancloud_visitors" data-flag-title="Linux虚拟机安装、卸载XenServer Tools">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>XenServer下Linux虚拟机安装、卸载XenServer Tools。</p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>先选择要安装Tools的虚拟机，在XenCenter上挂载xs-tools.iso<br>进入要安装的虚拟机Console，先后执行下面命令：</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/03/16/xenserver-vm-1/#more" rel="contents">
+              阅读全文 &raquo;
             </a>
+          </div>
+          <!--/noindex-->
         
-      </h1>
+      
+    </div>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-03-16T11:32:49+08:00"
-              content="2017-03-16" >
-          03-16
-        </time>
-      </div>
+    <div>
+      
+    </div>
 
-    </header>
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
   </article>
 
 
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="https://hl10502.github.io/2017/03/16/xenserver-vdi-2/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="hl10502">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="hl10502的博客">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="hl10502的博客" src="">
+    </span>
+  </span>
 
     
+      <header class="post-header">
 
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
         
-            <a class="post-title-link" href="/2017/03/16/xenserver-vdi-2/" itemprop="url">
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
               
-                <span itemprop="name">虚拟机挂载磁盘个数</span>
+                
+                <a class="post-title-link" href="/2017/03/16/xenserver-vdi-2/" itemprop="url">
+                  虚拟机挂载磁盘个数
+                </a>
               
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-16T11:07:38+08:00">
+                2017-03-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/XenServer/" itemprop="url" rel="index">
+                    <span itemprop="name">XenServer</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/XenServer/VDI/" itemprop="url" rel="index">
+                    <span itemprop="name">VDI</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/03/16/xenserver-vdi-2/" class="leancloud_visitors" data-flag-title="虚拟机挂载磁盘个数">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="原来的计算方式"><a href="#原来的计算方式" class="headerlink" title="原来的计算方式"></a>原来的计算方式</h2><p>虚拟机可以挂载磁盘设备为allowed-VBD-devices中的值，值的个数为还可以挂载的VDI个数（在XenCenter上虚拟机挂载VDI时也是通过这种方式来计算校验）</p>
+<ul>
+<li>虚拟机挂载磁盘个数默认最大值为16（除去CD光驱就是15个）</li>
+<li>如果虚拟机系统异常，获取不到操作系统、未安装tools等，则挂载磁盘个数最大值为4（除去CD光驱就是3个）</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/03/16/xenserver-vdi-2/#more" rel="contents">
+              阅读全文 &raquo;
             </a>
+          </div>
+          <!--/noindex-->
         
-      </h1>
+      
+    </div>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-03-16T11:07:38+08:00"
-              content="2017-03-16" >
-          03-16
-        </time>
-      </div>
+    <div>
+      
+    </div>
 
-    </header>
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
   </article>
 
 
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="https://hl10502.github.io/2017/03/16/xenserver-vdi-1/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="hl10502">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="hl10502的博客">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="hl10502的博客" src="">
+    </span>
+  </span>
 
     
+      <header class="post-header">
 
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
         
-            <a class="post-title-link" href="/2017/03/16/xenserver-vdi-1/" itemprop="url">
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
               
-                <span itemprop="name">虚拟机VDI扩容</span>
+                
+                <a class="post-title-link" href="/2017/03/16/xenserver-vdi-1/" itemprop="url">
+                  虚拟机VDI扩容
+                </a>
               
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-16T10:29:37+08:00">
+                2017-03-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/XenServer/" itemprop="url" rel="index">
+                    <span itemprop="name">XenServer</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/XenServer/VDI/" itemprop="url" rel="index">
+                    <span itemprop="name">VDI</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/03/16/xenserver-vdi-1/" class="leancloud_visitors" data-flag-title="虚拟机VDI扩容">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>虚拟机的磁盘容量不够时，可以进行扩容操作。<br>两种方式：</p>
+<ul>
+<li>增加新的虚拟磁盘,比较简单，直接添加数据盘通过vdi-create、vbd-plug就可以。  </li>
+<li>扩展磁盘的大小，增大磁盘的容量。</li>
+</ul>
+<p>下面以Centos7为例，扩展系统盘的大小从10G扩展到50G。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/03/16/xenserver-vdi-1/#more" rel="contents">
+              阅读全文 &raquo;
             </a>
+          </div>
+          <!--/noindex-->
         
-      </h1>
+      
+    </div>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-03-16T10:29:37+08:00"
-              content="2017-03-16" >
-          03-16
-        </time>
-      </div>
+    <div>
+      
+    </div>
 
-    </header>
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
   </article>
 
 
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="https://hl10502.github.io/2017/03/15/xenserver-sr-4/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="hl10502">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="hl10502的博客">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="hl10502的博客" src="">
+    </span>
+  </span>
 
     
+      <header class="post-header">
 
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
         
-            <a class="post-title-link" href="/2017/03/15/xenserver-sr-4/" itemprop="url">
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
               
-                <span itemprop="name">查看SR与VDI路径</span>
+                
+                <a class="post-title-link" href="/2017/03/15/xenserver-sr-4/" itemprop="url">
+                  查看SR与VDI路径
+                </a>
               
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-15T11:32:08+08:00">
+                2017-03-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/XenServer/" itemprop="url" rel="index">
+                    <span itemprop="name">XenServer</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/XenServer/SR/" itemprop="url" rel="index">
+                    <span itemprop="name">SR</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/03/15/xenserver-sr-4/" class="leancloud_visitors" data-flag-title="查看SR与VDI路径">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>查看SR与VDI在物理主机上的文件路径。SR类型：</p>
+<ul>
+<li>NFS与ISO</li>
+<li>LVM与HBA</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/03/15/xenserver-sr-4/#more" rel="contents">
+              阅读全文 &raquo;
             </a>
+          </div>
+          <!--/noindex-->
         
-      </h1>
+      
+    </div>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-03-15T11:32:08+08:00"
-              content="2017-03-15" >
-          03-15
-        </time>
-      </div>
+    <div>
+      
+    </div>
 
-    </header>
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
   </article>
 
 
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="https://hl10502.github.io/2017/03/15/xenserver-sr-3/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="hl10502">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="hl10502的博客">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="hl10502的博客" src="">
+    </span>
+  </span>
 
     
+      <header class="post-header">
 
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
         
-            <a class="post-title-link" href="/2017/03/15/xenserver-sr-3/" itemprop="url">
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
               
-                <span itemprop="name">卸载PBD失败 Error code: SR_BACKEND_FAILURE_202 Error parameters</span>
+                
+                <a class="post-title-link" href="/2017/03/15/xenserver-sr-3/" itemprop="url">
+                  卸载PBD失败 Error code: SR_BACKEND_FAILURE_202 Error parameters
+                </a>
               
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-15T11:17:17+08:00">
+                2017-03-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/XenServer/" itemprop="url" rel="index">
+                    <span itemprop="name">XenServer</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/XenServer/SR/" itemprop="url" rel="index">
+                    <span itemprop="name">SR</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/03/15/xenserver-sr-3/" class="leancloud_visitors" data-flag-title="卸载PBD失败 Error code: SR_BACKEND_FAILURE_202 Error parameters">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>后端存储问题，卸载PBD失败 Error code: SR_BACKEND_FAILURE_202 Error parameters: , General backend error [opterr=Command os.stat(/var/run/sr-mount/f9facf7f-501e-04ad-a136-37d500bd3a3c) failed (5): failed],</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/03/15/xenserver-sr-3/#more" rel="contents">
+              阅读全文 &raquo;
             </a>
+          </div>
+          <!--/noindex-->
         
-      </h1>
+      
+    </div>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-03-15T11:17:17+08:00"
-              content="2017-03-15" >
-          03-15
-        </time>
-      </div>
+    <div>
+      
+    </div>
 
-    </header>
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
   </article>
 
 
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="https://hl10502.github.io/2017/03/14/xenserver-sr-2/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="hl10502">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="hl10502的博客">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="hl10502的博客" src="">
+    </span>
+  </span>
 
     
+      <header class="post-header">
 
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
         
-            <a class="post-title-link" href="/2017/03/14/xenserver-sr-2/" itemprop="url">
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
               
-                <span itemprop="name">XenServer存储池操作</span>
+                
+                <a class="post-title-link" href="/2017/03/14/xenserver-sr-2/" itemprop="url">
+                  XenServer存储池操作
+                </a>
               
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-14T16:41:01+08:00">
+                2017-03-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/XenServer/" itemprop="url" rel="index">
+                    <span itemprop="name">XenServer</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/XenServer/SR/" itemprop="url" rel="index">
+                    <span itemprop="name">SR</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/03/14/xenserver-sr-2/" class="leancloud_visitors" data-flag-title="XenServer存储池操作">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>存储池有4种状态：活动、未挂载、挂载异常、异常。</p>
+<ul>
+<li><p>活动：存储池正常挂载在物理主机上面。共享存储池同时挂载给资源池里所有的物理主机。活动状态下可以执行卸载操作。</p>
+</li>
+<li><p>挂载异常：存储池与物理主机有PBD连接信息，但是未挂载到物理主机上，或者未同时挂载给资源池里所有物理主机。挂载异常状态下可以执行挂载、移除、删除操作。</p>
+</li>
+<li><p>未挂载：存储池与物理主机没有PBD连接信息。活动状态下的存储池进行了分离操作后出现该状态。未挂载状态下可以执行重新连接、移除、删除操作。</p>
+</li>
+<li><p>异常：存储池与主机有连接信息，并且挂载到主机上，但是存储池本身出现异常（后端存储LUN不存在、网络异常等）。可以通过xe sr-scan超时来判断。</p>
+</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/03/14/xenserver-sr-2/#more" rel="contents">
+              阅读全文 &raquo;
             </a>
+          </div>
+          <!--/noindex-->
         
-      </h1>
+      
+    </div>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-03-14T16:41:01+08:00"
-              content="2017-03-14" >
-          03-14
-        </time>
-      </div>
+    <div>
+      
+    </div>
 
-    </header>
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
   </article>
 
 
-
     
-
   </section>
 
   
   <nav class="pagination">
     <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
-
 
 
           
@@ -877,12 +2211,6 @@
 
 
   
-  
-    <script type="text/javascript" id="motion.page.archive">
-      $('.archive-year').velocity('transition.slideLeftIn');
-    </script>
-  
-
 
   
 
