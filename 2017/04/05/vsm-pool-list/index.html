@@ -89,12 +89,14 @@
 
 
 
-<meta name="description" content="VSM的代码调用是从vsm-dashboard——&amp;gt;vsmclient——&amp;gt;vsm。">
+<meta name="description" content="VSM的代码调用是从vsm-dashboard——&amp;gt;vsmclient——&amp;gt;vsm。
+存储池列表查询是从页面dashboard发送请求，获取vsm数据库storage_pools表的存储池数据。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="VSM源码分析（一）——存储池列表">
 <meta property="og:url" content="https://hl10502.github.io/2017/04/05/vsm-pool-list/index.html">
 <meta property="og:site_name" content="hl10502的博客">
-<meta property="og:description" content="VSM的代码调用是从vsm-dashboard——&amp;gt;vsmclient——&amp;gt;vsm。">
+<meta property="og:description" content="VSM的代码调用是从vsm-dashboard——&amp;gt;vsmclient——&amp;gt;vsm。
+存储池列表查询是从页面dashboard发送请求，获取vsm数据库storage_pools表的存储池数据。">
 <meta property="og:image" content="https://hl10502.github.io/2017/04/05/vsm-pool-list/vsm-storage-list.png">
 <meta property="og:image" content="https://hl10502.github.io/2017/04/05/vsm-pool-list/vsm-dashboard-poollist.png">
 <meta property="og:image" content="https://hl10502.github.io/2017/04/05/vsm-pool-list/vsm-dashboard-poollist-dir.png">
@@ -111,10 +113,11 @@
 <meta property="og:image" content="https://hl10502.github.io/2017/04/05/vsm-pool-list/vsm-storagepool-list-manage.png">
 <meta property="og:image" content="https://hl10502.github.io/2017/04/05/vsm-pool-list/vsm-storagepool-list-dbapi.png">
 <meta property="og:image" content="https://hl10502.github.io/2017/04/05/vsm-pool-list/vsm-dbapi-poolgetall.png">
-<meta property="og:updated_time" content="2017-04-05T06:55:39.001Z">
+<meta property="og:updated_time" content="2017-04-05T07:06:15.142Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="VSM源码分析（一）——存储池列表">
-<meta name="twitter:description" content="VSM的代码调用是从vsm-dashboard——&amp;gt;vsmclient——&amp;gt;vsm。">
+<meta name="twitter:description" content="VSM的代码调用是从vsm-dashboard——&amp;gt;vsmclient——&amp;gt;vsm。
+存储池列表查询是从页面dashboard发送请求，获取vsm数据库storage_pools表的存储池数据。">
 <meta name="twitter:image" content="https://hl10502.github.io/2017/04/05/vsm-pool-list/vsm-storage-list.png">
 
 
@@ -429,7 +432,7 @@
 
       
         <p>VSM的代码调用是从vsm-dashboard——&gt;vsmclient——&gt;vsm。</p>
-<a id="more"></a>
+<p>存储池列表查询是从页面dashboard发送请求，获取vsm数据库storage_pools表的存储池数据。<br><a id="more"></a></p>
 <p>查询存储池的流程图如下：<br><img src="/2017/04/05/vsm-pool-list/vsm-storage-list.png" alt="vsm-storage-list"></p>
 <h2 id="vsm-dashboard"><a href="#vsm-dashboard" class="headerlink" title="vsm-dashboard"></a>vsm-dashboard</h2><p>vsm-dashboard\vsm_dashboard\dashboards\vsm\dashboard.py<br>所有的面板在dashboard中注册，存储池管理是集群管理的第四个panel<br><img src="/2017/04/05/vsm-pool-list/vsm-dashboard-poollist.png" alt="vsm-dashboard-poollist"></p>
 <p>存储池管理的代码结构如下：<br><img src="/2017/04/05/vsm-pool-list/vsm-dashboard-poollist-dir.png" alt="vsm-dashboard-poollist-dir"></p>
@@ -494,8 +497,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/03/31/vsm-web-zh/" rel="next" title="修改VSM的Web界面为中文">
-                <i class="fa fa-chevron-left"></i> 修改VSM的Web界面为中文
+              <a href="/2017/04/05/vsm-base-core/" rel="next" title="VSM消息协议与服务简介">
+                <i class="fa fa-chevron-left"></i> VSM消息协议与服务简介
               </a>
             
           </div>
@@ -574,7 +577,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">52</span>
+                <span class="site-state-item-count">53</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -592,7 +595,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">101</span>
+                <span class="site-state-item-count">102</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
