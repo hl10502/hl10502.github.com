@@ -97,7 +97,7 @@
 <meta property="og:description" content="缓存池可提升后端存储内某些（热点）数据的 I/O 性能。缓存池需创建一个由高速存储设备（例如SSD ）组成的存储池作为缓存层，以及一个相对低速/廉价设备组成的后端存储池作为数据存储层。">
 <meta property="og:image" content="https://hl10502.github.io/2017/04/06/vsm-create-cachepool/vsm-cachepool.png">
 <meta property="og:image" content="https://hl10502.github.io/2017/04/06/vsm-create-cachepool/vsm-create-cachepool-web.png">
-<meta property="og:updated_time" content="2017-04-06T09:01:52.952Z">
+<meta property="og:updated_time" content="2017-04-06T10:06:57.070Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="VSM源码分析（二）——创建缓存池">
 <meta name="twitter:description" content="缓存池可提升后端存储内某些（热点）数据的 I/O 性能。缓存池需创建一个由高速存储设备（例如SSD ）组成的存储池作为缓存层，以及一个相对低速/廉价设备组成的后端存储池作为数据存储层。">
@@ -451,7 +451,7 @@
 <ul>
 <li>查询数据库，根据ID分别获取storage_pool_name、cache_pool_name</li>
 <li>执行添加cache存储池命令<ul>
-<li>ceph osd tier add {storagepool} {cachepool} –force-nonempty 或 ceph osd tier add {storagepool} {cachepool}</li>
+<li>ceph osd tier add {storagepool} {cachepool} --force-nonempty 或 ceph osd tier add {storagepool} {cachepool}</li>
 <li>设置cache mode：ceph osd tier cache-mode {cachepool} {cache-mode}</li>
 <li>如果cachemode为writeback，设置 ceph osd tier set-overlay {storagepool} {cachepool}</li>
 </ul>
@@ -591,7 +591,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">55</span>
+                <span class="site-state-item-count">56</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -609,7 +609,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">106</span>
+                <span class="site-state-item-count">108</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
