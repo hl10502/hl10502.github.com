@@ -89,22 +89,16 @@
 
 
 
-<meta name="description" content="将 ISO“rhel-server-6.7-x86_64-dvd.iso”加载到 VM rhel 上的 DVD 驱动器中内部错误: Object with type VM and id 9ef237f8-bd9c-6604-1581-949a0a4643e0/vbd.xvdd does not exist in xenopsd
-分析vbd的device xvdd在底层不存在。
-查看虚拟机的VBD1">
+<meta name="description" content="将 ISO“rhel-server-6.7-x86_64-dvd.iso”加载到 VM rhel 上的 DVD 驱动器中内部错误: Object with type VM and id 9ef237f8-bd9c-6604-1581-949a0a4643e0/vbd.xvdd does not exist in xenopsd">
 <meta property="og:type" content="article">
 <meta property="og:title" content="V2V转换器（九）——转换后的虚拟机挂载ISO失败">
 <meta property="og:url" content="https://hl10502.github.io/2017/04/28/v2v-9/index.html">
 <meta property="og:site_name" content="hl10502的博客">
-<meta property="og:description" content="将 ISO“rhel-server-6.7-x86_64-dvd.iso”加载到 VM rhel 上的 DVD 驱动器中内部错误: Object with type VM and id 9ef237f8-bd9c-6604-1581-949a0a4643e0/vbd.xvdd does not exist in xenopsd
-分析vbd的device xvdd在底层不存在。
-查看虚拟机的VBD1">
-<meta property="og:updated_time" content="2017-04-28T02:52:06.422Z">
+<meta property="og:description" content="将 ISO“rhel-server-6.7-x86_64-dvd.iso”加载到 VM rhel 上的 DVD 驱动器中内部错误: Object with type VM and id 9ef237f8-bd9c-6604-1581-949a0a4643e0/vbd.xvdd does not exist in xenopsd">
+<meta property="og:updated_time" content="2017-04-28T02:57:30.132Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="V2V转换器（九）——转换后的虚拟机挂载ISO失败">
-<meta name="twitter:description" content="将 ISO“rhel-server-6.7-x86_64-dvd.iso”加载到 VM rhel 上的 DVD 驱动器中内部错误: Object with type VM and id 9ef237f8-bd9c-6604-1581-949a0a4643e0/vbd.xvdd does not exist in xenopsd
-分析vbd的device xvdd在底层不存在。
-查看虚拟机的VBD1">
+<meta name="twitter:description" content="将 ISO“rhel-server-6.7-x86_64-dvd.iso”加载到 VM rhel 上的 DVD 驱动器中内部错误: Object with type VM and id 9ef237f8-bd9c-6604-1581-949a0a4643e0/vbd.xvdd does not exist in xenopsd">
 
 
 
@@ -407,6 +401,7 @@
 
       
         <p>将 ISO“rhel-server-6.7-x86_64-dvd.iso”加载到 VM rhel 上的 DVD 驱动器中<br>内部错误: Object with type VM and id 9ef237f8-bd9c-6604-1581-949a0a4643e0/vbd.xvdd does not exist in xenopsd</p>
+<a id="more"></a>
 <h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>vbd的device xvdd在底层不存在。</p>
 <p>查看虚拟机的VBD<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">[root@171 ~]<span class="comment"># xe vbd-list vm-uuid=9ef237f8-bd9c-6604-1581-949a0a4643e0</span></div><div class="line">uuid ( RO)             : 0a766793-c791-34c9-04ba-425ee5eb015c</div><div class="line">          vm-uuid ( RO): 9ef237f8-bd9c-6604-1581-949a0a4643e0</div><div class="line">    vm-name-label ( RO): rhel</div><div class="line">         vdi-uuid ( RO): 7c350add-6846-4d83<span class="_">-a</span>865<span class="_">-d</span>0c9b5c38f3d</div><div class="line">            empty ( RO): <span class="literal">false</span></div><div class="line">           device ( RO): xvda</div><div class="line"></div><div class="line"></div><div class="line">uuid ( RO)             : 8b98a12c-fb3a-0bb2-ed27-c13dcf757bcb</div><div class="line">          vm-uuid ( RO): 9ef237f8-bd9c-6604-1581-949a0a4643e0</div><div class="line">    vm-name-label ( RO): rhel</div><div class="line">         vdi-uuid ( RO): &lt;not <span class="keyword">in</span> database&gt;</div><div class="line">            empty ( RO): <span class="literal">true</span></div><div class="line">           device ( RO):</div></pre></td></tr></table></figure></p>
 <p>UUID为8b98a12c-fb3a-0bb2-ed27-c13dcf757bcb的VBD的vdi-uuid、device都为空,类型为CD<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">[root@171 ~]<span class="comment"># xe vbd-param-list uuid=8b98a12c-fb3a-0bb2-ed27-c13dcf757bcb</span></div><div class="line">uuid ( RO)                        : 8b98a12c-fb3a-0bb2-ed27-c13dcf757bcb</div><div class="line">                     vm-uuid ( RO): 9ef237f8-bd9c-6604-1581-949a0a4643e0</div><div class="line">               vm-name-label ( RO): rhel</div><div class="line">                    vdi-uuid ( RO): &lt;not <span class="keyword">in</span> database&gt;</div><div class="line">              vdi-name-label ( RO): &lt;EMPTY&gt;</div><div class="line">          allowed-operations (SRO): attach; insert</div><div class="line">          current-operations (SRO):</div><div class="line">                       empty ( RO): <span class="literal">true</span></div><div class="line">                      device ( RO): </div><div class="line">                  userdevice ( RW): 1</div><div class="line">                    bootable ( RW): <span class="literal">false</span></div><div class="line">                        mode ( RW): RO</div><div class="line">                        <span class="built_in">type</span> ( RW): CD</div><div class="line">                 unpluggable ( RW): <span class="literal">true</span></div><div class="line">          currently-attached ( RO): <span class="literal">false</span></div><div class="line">                  attachable ( RO): <span class="literal">true</span></div><div class="line">                storage-lock ( RO): <span class="literal">false</span></div><div class="line">                 status-code ( RO): 0</div><div class="line">               status-detail ( RO):</div><div class="line">          qos_algorithm_type ( RW):</div><div class="line">        qos_algorithm_params (MRW):</div><div class="line">    qos_supported_algorithms (SRO):</div><div class="line">                other-config (MRW):</div><div class="line">                 io_read_kbs ( RO): &lt;unknown&gt;</div><div class="line">                io_write_kbs ( RO): &lt;unknown&gt;</div></pre></td></tr></table></figure></p>
