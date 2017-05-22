@@ -97,7 +97,7 @@
 <meta property="og:site_name" content="hl10502的博客">
 <meta property="og:description" content="fio（Flexible I/O Tester）是个非常强大的IO性能测试工具
 官网：http://freecode.com/projects/fioGitHub：https://github.com/axboe/fio">
-<meta property="og:updated_time" content="2017-05-22T09:25:14.043Z">
+<meta property="og:updated_time" content="2017-05-22T09:31:14.747Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="fio安装使用">
 <meta name="twitter:description" content="fio（Flexible I/O Tester）是个非常强大的IO性能测试工具
@@ -516,7 +516,7 @@
 <p>4K随机读<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fio -filename=/dev/nvme0n1 -iodepth=128 -numjobs=32 -thread -rw=randread -bs=4k -ioengine=libaio -group_reporting -name=randread-4k -randrepeat=0 -time_based -runtime=120 -timeout=60 -direct=1</div></pre></td></tr></table></figure></p>
 <p>4K随机写<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fio -filename=/dev/nvme0n1 -iodepth=128 -numjobs=32 -thread -rw=randwrite -bs=4k -ioengine=libaio -group_reporting -name=randwrite-4k -randrepeat=0 -time_based -runtime=120 -timeout=60 -direct=1</div></pre></td></tr></table></figure></p>
 <h2 id="使用gnuplot画图"><a href="#使用gnuplot画图" class="headerlink" title="使用gnuplot画图"></a>使用gnuplot画图</h2><h3 id="安装gnuplot"><a href="#安装gnuplot" class="headerlink" title="安装gnuplot"></a>安装gnuplot</h3><p>安装画图插件gnuplot<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@node001 ~]<span class="comment"># yum install gnuplot</span></div></pre></td></tr></table></figure></p>
-<h3 id="设置fio输出日志"><a href="#设置fio输出日志" class="headerlink" title="设置fio输出日志"></a>设置fio输出日志</h3><p>fio的输出日志主要包含三种：bw，lat和iops，在Job文件中[randread-4k]下设置这三种的参数如下：<br>    write_bw_log=randread-4k<br>    write_lat_log=randread-4k<br>    write_iops_log=randread-4k</p>
+<h3 id="设置fio输出日志"><a href="#设置fio输出日志" class="headerlink" title="设置fio输出日志"></a>设置fio输出日志</h3><p>fio的输出日志主要包含三种：bw，lat和iops，在Job文件中[randread-4k]下设置这三种参数如下：<br>    write_bw_log=randread-4k<br>    write_lat_log=randread-4k<br>    write_iops_log=randread-4k</p>
 <p>randread-4k是输出日志文件名的前缀，生成的日志文件如下：<br>    randread-4k_bw.log<br>    randread-4k_clat.log<br>    randread-4k_iops.log<br>    randread-4k_lat.log<br>    randread-4k_slat.log</p>
 <h3 id="画图"><a href="#画图" class="headerlink" title="画图"></a>画图</h3><p>执行fio_generate_plots命令画图，randread-4k是Job中配置的write_bw_log、write_lat_log、write_iops_log的值，也即日志文件名的前缀<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fio_generate_plots randread-4k</div></pre></td></tr></table></figure></p>
 <p>生成的图片文件如下：<br>    randread-4k-bw.svg<br>    randread-4k-clat.svg<br>    randread-4k-iops.svg<br>    randread-4k-lat.svg<br>    randread-4k-slat.svg</p>
