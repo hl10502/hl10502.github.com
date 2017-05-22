@@ -89,21 +89,18 @@
 
 
 
-<meta name="description" content="fio安装使用
-fio（Flexible I/O Tester）是个非常强大的IO性能测试工具
+<meta name="description" content="fio（Flexible I/O Tester）是个非常强大的IO性能测试工具
 官网：http://freecode.com/projects/fioGitHub：https://github.com/axboe/fio">
 <meta property="og:type" content="article">
 <meta property="og:title" content="fio安装使用">
 <meta property="og:url" content="https://hl10502.github.io/2017/05/22/fio-install-use/index.html">
 <meta property="og:site_name" content="hl10502的博客">
-<meta property="og:description" content="fio安装使用
-fio（Flexible I/O Tester）是个非常强大的IO性能测试工具
+<meta property="og:description" content="fio（Flexible I/O Tester）是个非常强大的IO性能测试工具
 官网：http://freecode.com/projects/fioGitHub：https://github.com/axboe/fio">
-<meta property="og:updated_time" content="2017-05-22T07:26:52.701Z">
+<meta property="og:updated_time" content="2017-05-22T07:38:04.196Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="fio安装使用">
-<meta name="twitter:description" content="fio安装使用
-fio（Flexible I/O Tester）是个非常强大的IO性能测试工具
+<meta name="twitter:description" content="fio（Flexible I/O Tester）是个非常强大的IO性能测试工具
 官网：http://freecode.com/projects/fioGitHub：https://github.com/axboe/fio">
 
 
@@ -417,8 +414,7 @@ fio（Flexible I/O Tester）是个非常强大的IO性能测试工具
       
 
       
-        <p>fio安装使用</p>
-<p>fio（Flexible I/O Tester）是个非常强大的IO性能测试工具</p>
+        <p>fio（Flexible I/O Tester）是个非常强大的IO性能测试工具</p>
 <p>官网：<a href="http://freecode.com/projects/fio" target="_blank" rel="external">http://freecode.com/projects/fio</a><br>GitHub：<a href="https://github.com/axboe/fio" target="_blank" rel="external">https://github.com/axboe/fio</a></p>
 <a id="more"></a>
 <h2 id="安装fio"><a href="#安装fio" class="headerlink" title="安装fio"></a>安装fio</h2><h3 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h3><p>CentOS7.2</p>
@@ -440,7 +436,7 @@ fio（Flexible I/O Tester）是个非常强大的IO性能测试工具
 <tbody>
 <tr>
 <td>ioengine</td>
-<td>负载引擎；我们一般使用libaio，发起异步IO请求。</td>
+<td>负载引擎，我们一般使用libaio，发起异步IO请求</td>
 </tr>
 <tr>
 <td>bs</td>
@@ -448,15 +444,15 @@ fio（Flexible I/O Tester）是个非常强大的IO性能测试工具
 </tr>
 <tr>
 <td>direct</td>
-<td>直接写； 绕过操作系统Cache。因为我们测试的是硬盘，而不是操作系统的Cache，所以设置为1。</td>
+<td>直接写，绕过操作系统Cache。因为我们测试的是硬盘，而不是操作系统的Cache，所以设置为1</td>
 </tr>
 <tr>
 <td>rw</td>
-<td>读写模式；顺序写write、顺序读read、随机写randwrite、随机读randread。</td>
+<td>读写模式：顺序写write、顺序读read、顺序读写rw、随机写randwrite、随机读randread、随机读写randrw</td>
 </tr>
 <tr>
 <td>size</td>
-<td>寻址空间，IO会落在 [0, size)这个区间的硬盘空间上。一般不设置，默认为测试对象的大小。</td>
+<td>寻址空间，IO会落在 [0, size)这个区间的硬盘空间上。一般不设置，默认为测试对象的大小</td>
 </tr>
 <tr>
 <td>filename</td>
@@ -464,7 +460,7 @@ fio（Flexible I/O Tester）是个非常强大的IO性能测试工具
 </tr>
 <tr>
 <td>iodepth</td>
-<td>队列深度，只有使用libaio时才有意义。这是一个可以影响IOPS的参数。</td>
+<td>队列深度，只有使用libaio时才有意义。这是一个可以影响IOPS的参数</td>
 </tr>
 <tr>
 <td>numjobs</td>
@@ -530,7 +526,7 @@ fio（Flexible I/O Tester）是个非常强大的IO性能测试工具
 <td>IOPS</td>
 <td>4K随机读写</td>
 <td>在硬盘上随机位置读写数据，每次4KB</td>
-<td>操作系统运行、软件运行、数据库。</td>
+<td>操作系统运行、软件运行、数据库</td>
 </tr>
 </tbody>
 </table>
