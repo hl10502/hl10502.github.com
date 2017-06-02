@@ -97,7 +97,7 @@
 <meta property="og:site_name" content="hl10502的博客">
 <meta property="og:description" content="fio（Flexible I/O Tester）是个非常强大的IO性能测试工具
 官网：http://freecode.com/projects/fioGitHub：https://github.com/axboe/fio">
-<meta property="og:updated_time" content="2017-05-22T09:31:14.747Z">
+<meta property="og:updated_time" content="2017-06-02T02:15:00.335Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="fio安装使用">
 <meta name="twitter:description" content="fio（Flexible I/O Tester）是个非常强大的IO性能测试工具
@@ -504,7 +504,7 @@
 块大小必须是扇区的倍数
 </code></pre><p>4K随机读写<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fio -filename=/dev/nvme0n1 -iodepth=128 -numjobs=4 -thread -rw=randrw -rwmixread=70 -bs=4k -ioengine=libaio -group_reporting -name=mytest -randrepeat=0 -time_based -runtime=120 -direct=1</div></pre></td></tr></table></figure></p>
 <p>4K随机读<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fio -filename=/dev/nvme0n1 -iodepth=128 -numjobs=4 -thread -rw=randread -bs=4k -ioengine=libaio -group_reporting -name=mytest -randrepeat=0 -time_based -runtime=120 -direct=1</div></pre></td></tr></table></figure></p>
-<p>4K随机写<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fio -filename=/dev/nvme0n1 -iodepth=128 -numjobs=4 -thread -rw=randread -bs=4k -ioengine=libaio -group_reporting -name=mytest -randrepeat=0 -time_based -runtime=120 -direct=1</div></pre></td></tr></table></figure></p>
+<p>4K随机写<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fio -filename=/dev/nvme0n1 -iodepth=128 -numjobs=4 -thread -rw=randwrite -bs=4k -ioengine=libaio -group_reporting -name=mytest -randrepeat=0 -time_based -runtime=120 -direct=1</div></pre></td></tr></table></figure></p>
 <h2 id="Job文件"><a href="#Job文件" class="headerlink" title="Job文件"></a>Job文件</h2><p>fio可以通过一个job文件来描述IO负载。一个job文件可以控制产生任意数目的线程和文件。典型的job文件有一个global段（定义共享参数），一个或多少job段（描述具体要产生的job）。</p>
 <p>运行Job文件时，fio从文件读这些参数，做处理，并根据这些参数描述，启动这些线程/进程。</p>
 <p>Job运行方式<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fio [jobfile]</div></pre></td></tr></table></figure></p>
