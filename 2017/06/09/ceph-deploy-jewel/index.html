@@ -1,0 +1,1087 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="2xIA6kyEisqneyrcTltYHTS8lapHWNhDBX_qkWzL2FY" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Ceph,Jewel,CentOS7.2部署Jewel版Ceph-10.2.7," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="在CentOS7.2上安装部署Jewel版最新Ceph-10.2.7。
+环境每台主机
+
+CentOS Linux release 7.2.1511 (Core)
+两个100G的磁盘做OSD">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CentOS7.2部署Jewel版Ceph-10.2.7">
+<meta property="og:url" content="https://hl10502.github.io/2017/06/09/ceph-deploy-jewel/index.html">
+<meta property="og:site_name" content="hl10502的博客">
+<meta property="og:description" content="在CentOS7.2上安装部署Jewel版最新Ceph-10.2.7。
+环境每台主机
+
+CentOS Linux release 7.2.1511 (Core)
+两个100G的磁盘做OSD">
+<meta property="og:updated_time" content="2017-06-09T09:43:32.517Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CentOS7.2部署Jewel版Ceph-10.2.7">
+<meta name="twitter:description" content="在CentOS7.2上安装部署Jewel版最新Ceph-10.2.7。
+环境每台主机
+
+CentOS Linux release 7.2.1511 (Core)
+两个100G的磁盘做OSD">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://hl10502.github.io/2017/06/09/ceph-deploy-jewel/"/>
+
+
+
+
+
+  <title> CentOS7.2部署Jewel版Ceph-10.2.7 | hl10502的博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">hl10502的博客</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">IT技术人</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            所有文章
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于我
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="https://hl10502.github.io/2017/06/09/ceph-deploy-jewel/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="hl10502">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="hl10502的博客">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="hl10502的博客" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                CentOS7.2部署Jewel版Ceph-10.2.7
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-06-09T17:14:39+08:00">
+                2017-06-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Ceph/" itemprop="url" rel="index">
+                    <span itemprop="name">Ceph</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Ceph/Jewel/" itemprop="url" rel="index">
+                    <span itemprop="name">Jewel</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/06/09/ceph-deploy-jewel/" class="leancloud_visitors" data-flag-title="CentOS7.2部署Jewel版Ceph-10.2.7">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在CentOS7.2上安装部署Jewel版最新Ceph-10.2.7。</p>
+<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><p>每台主机</p>
+<ul>
+<li>CentOS Linux release 7.2.1511 (Core)</li>
+<li>两个100G的磁盘做OSD</li>
+</ul>
+<a id="more"></a>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]<span class="comment"># cat /etc/redhat-release</span></div><div class="line">CentOS Linux release 7.2.1511 (Core)</div><div class="line"></div><div class="line">[root@localhost ~]<span class="comment"># lsblk</span></div><div class="line">NAME            MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT</div><div class="line">sr0              11:0    1 1024M  0 rom</div><div class="line">xvda            202:0    0   10G  0 disk</div><div class="line">├─xvda1         202:1    0  500M  0 part /boot</div><div class="line">└─xvda2         202:2    0  9.5G  0 part</div><div class="line">  ├─centos-root 253:0    0  8.5G  0 lvm  /</div><div class="line">  └─centos-swap 253:1    0    1G  0 lvm  [SWAP]</div><div class="line">xvdb            202:16   0  100G  0 disk</div><div class="line">xvdc            202:32   0  100G  0 disk</div></pre></td></tr></table></figure>
+<p>主机ceph-210作为管理节点，部署ceph-deploy。三台主机配置如下</p>
+<table>
+<thead>
+<tr>
+<th>主机</th>
+<th>IP</th>
+<th>安装组件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ceph-210</td>
+<td>192.168.217.210</td>
+<td>ceph-deploy、mon、osd</td>
+</tr>
+<tr>
+<td>ceph-211</td>
+<td>192.168.217.211</td>
+<td>mon、osd</td>
+</tr>
+<tr>
+<td>ceph-212</td>
+<td>192.168.217.212</td>
+<td>mon、osd</td>
+</tr>
+</tbody>
+</table>
+<h3 id="域名解析"><a href="#域名解析" class="headerlink" title="域名解析"></a>域名解析</h3><p>修改每台主机的hostname<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]<span class="comment"># hostnamectl set-hostname [hostname]</span></div></pre></td></tr></table></figure></p>
+<p>hostname分别为ceph-210、ceph-211、ceph-212</p>
+<p>修改/etc/hosts<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]<span class="comment"># vi /etc/hosts</span></div></pre></td></tr></table></figure></p>
+<p>添加<br>192.168.217.210 ceph-210<br>192.168.217.211 ceph-211<br>192.168.217.212 ceph-212</p>
+<h2 id="yum源配置"><a href="#yum源配置" class="headerlink" title="yum源配置"></a>yum源配置</h2><p><strong>在每台主机上执行。</strong></p>
+<p>删除默认的源<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]<span class="comment"># yum clean all</span></div><div class="line">已加载插件：fastestmirror</div><div class="line">Repository base is listed more than once <span class="keyword">in</span> the configuration</div><div class="line">Repository updates is listed more than once <span class="keyword">in</span> the configuration</div><div class="line">Repository extras is listed more than once <span class="keyword">in</span> the configuration</div><div class="line">Repository centosplus is listed more than once <span class="keyword">in</span> the configuration</div><div class="line">正在清理软件源： Ceph Ceph-noarch base extras updates</div><div class="line">Cleaning up everything</div><div class="line">Cleaning up list of fastest mirrors</div><div class="line"></div><div class="line">[root@localhost ~]<span class="comment"># rm -rf /etc/yum.repos.d/*.repo</span></div></pre></td></tr></table></figure></p>
+<p>下载阿里云的base源<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]<span class="comment"># wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo</span></div><div class="line">--2017-06-07 14:26:39--  http://mirrors.aliyun.com/repo/Centos-7.repo</div><div class="line">正在解析主机 mirrors.aliyun.com (mirrors.aliyun.com)... 112.124.140.210, 115.28.122.210</div><div class="line">正在连接 mirrors.aliyun.com (mirrors.aliyun.com)|112.124.140.210|:80... 已连接。</div><div class="line">已发出 HTTP 请求，正在等待回应... 200 OK</div><div class="line">长度：2573 (2.5K) [application/octet-stream]</div><div class="line">正在保存至: “/etc/yum.repos.d/CentOS-Base.repo”</div><div class="line"></div><div class="line">100%[===================================================================================================================================&gt;] 2,573       --.-K/s 用时 0s</div><div class="line"></div><div class="line">2017-06-07 14:26:39 (28.0 MB/s) - 已保存 “/etc/yum.repos.d/CentOS-Base.repo” [2573/2573])</div></pre></td></tr></table></figure></p>
+<p>下载阿里云的epel源<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]<span class="comment"># wget -O /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo</span></div><div class="line">--2017-06-07 14:27:08--  http://mirrors.aliyun.com/repo/epel-7.repo</div><div class="line">正在解析主机 mirrors.aliyun.com (mirrors.aliyun.com)... 115.28.122.210, 112.124.140.210</div><div class="line">正在连接 mirrors.aliyun.com (mirrors.aliyun.com)|115.28.122.210|:80... 已连接。</div><div class="line">已发出 HTTP 请求，正在等待回应... 200 OK</div><div class="line">长度：1084 (1.1K) [application/octet-stream]</div><div class="line">正在保存至: “/etc/yum.repos.d/epel.repo”</div><div class="line"></div><div class="line">100%[===================================================================================================================================&gt;] 1,084       --.-K/s 用时 0s</div><div class="line"></div><div class="line">2017-06-07 14:27:08 (121 MB/s) - 已保存 “/etc/yum.repos.d/epel.repo” [1084/1084])</div></pre></td></tr></table></figure></p>
+<p>修改里面的系统版本为7.3.1611，当前用的CentOS7.2.1511版本的yum源已经清空了<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]<span class="comment"># sed -i '/aliyuncs/d' /etc/yum.repos.d/CentOS-Base.repo</span></div><div class="line">[root@localhost ~]<span class="comment"># sed -i '/aliyuncs/d' /etc/yum.repos.d/epel.repo</span></div><div class="line">[root@localhost ~]<span class="comment"># sed -i 's/$releasever/7.3.1611/g' /etc/yum.repos.d/CentOS-Base.repo</span></div></pre></td></tr></table></figure></p>
+<p>添加网易的ceph源（阿里云的ceph源没有最新的10.2.7版本）<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]<span class="comment"># vi /etc/yum.repos.d/ceph.repo</span></div></pre></td></tr></table></figure></p>
+<p>添加<br>[ceph]<br>name=ceph<br>baseurl=<a href="http://mirrors.163.com/ceph/rpm-jewel/el7/x86_64/" target="_blank" rel="external">http://mirrors.163.com/ceph/rpm-jewel/el7/x86_64/</a><br>gpgcheck=0<br>[ceph-noarch]<br>name=cephnoarch<br>baseurl=<a href="http://mirrors.163.com/ceph/rpm-jewel/el7/noarch/" target="_blank" rel="external">http://mirrors.163.com/ceph/rpm-jewel/el7/noarch/</a><br>gpgcheck=0</p>
+<p>进行yum的makecache<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]<span class="comment"># yum makecache</span></div></pre></td></tr></table></figure></p>
+<h2 id="安装ceph"><a href="#安装ceph" class="headerlink" title="安装ceph"></a>安装ceph</h2><p>下载ceph的相关rpm到本地<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]<span class="comment"># yum install --downloadonly --downloaddir=/tmp/ceph ceph</span></div></pre></td></tr></table></figure></p>
+<p>在每台主机上安装ceph<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]<span class="comment"># yum install -C -y --disablerepo=* /tmp/ceph/*.rpm</span></div></pre></td></tr></table></figure></p>
+<p>安装成功，查看ceph版本<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@localhost yum.repos.d]<span class="comment"># ceph -v</span></div><div class="line">ceph version 10.2.7 (50e863e0f4bc8f4b9e31156de690d765af245185)</div></pre></td></tr></table></figure></p>
+<h2 id="关闭selinux与firewalld"><a href="#关闭selinux与firewalld" class="headerlink" title="关闭selinux与firewalld"></a>关闭selinux与firewalld</h2><p>关闭每台主机的selinux、firewalld<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]<span class="comment"># sed -i 's/SELINUX=.*/SELINUX=disabled/' /etc/selinux/config</span></div><div class="line">[root@localhost ~]<span class="comment"># setenforce 0</span></div><div class="line">[root@localhost ~]<span class="comment"># systemctl stop firewalld </span></div><div class="line">[root@localhost ~]<span class="comment"># systemctl disable firewalld</span></div></pre></td></tr></table></figure></p>
+<h2 id="部署ceph"><a href="#部署ceph" class="headerlink" title="部署ceph"></a>部署ceph</h2><p>在管理节点ceph-210上执行。</p>
+<h3 id="配置无密码访问"><a href="#配置无密码访问" class="headerlink" title="配置无密码访问"></a>配置无密码访问</h3><p>生成本机密钥<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@ceph-210 ~]<span class="comment"># ssh-keygen -t rsa</span></div></pre></td></tr></table></figure></p>
+<p>将本机密钥copy到ceph-211、ceph-212<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@ceph-210 ~]<span class="comment"># ssh-copy-id root@ceph-211</span></div><div class="line">[root@ceph-210 ~]<span class="comment"># ssh-copy-id root@ceph-212</span></div></pre></td></tr></table></figure></p>
+<p>验证配置是否成功<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@ceph-210 ~]<span class="comment"># ssh root@ceph-211</span></div><div class="line">[root@ceph-210 ~]<span class="comment"># ssh root@ceph-212</span></div></pre></td></tr></table></figure></p>
+<h3 id="安装ceph-deploy"><a href="#安装ceph-deploy" class="headerlink" title="安装ceph-deploy"></a>安装ceph-deploy</h3><p>下载ceph-deploy<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@ceph-210 ~]<span class="comment">#yum install --downloadonly --downloaddir=/tmp/ceph-deploy/ ceph-deploy</span></div></pre></td></tr></table></figure></p>
+<p>安装ceph-deploy<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@ceph-210 ~]<span class="comment">#yum install -C -y --disablerepo=* /tmp/ceph-deploy/*.rpm</span></div></pre></td></tr></table></figure></p>
+<p>安装成功，查看ceph-deploy版本<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@ceph-210 yum.repos.d]<span class="comment"># ceph-deploy --version</span></div><div class="line">1.5.37</div></pre></td></tr></table></figure></p>
+<h3 id="部署集群"><a href="#部署集群" class="headerlink" title="部署集群"></a>部署集群</h3><p>创建部署目录，部署集群<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@ceph-210 ~]<span class="comment"># mkdir ceph-cluster</span></div><div class="line">[root@ceph-210 ~]<span class="comment"># cd ceph-cluster</span></div><div class="line">[root@ceph-210 ceph-cluster]<span class="comment"># ceph-deploy new ceph-210 ceph-211 ceph-212</span></div></pre></td></tr></table></figure></p>
+<p>修改ceph.conf文件，添加 <strong>public_network=192.168.217.0/24</strong><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@ceph-210 ~]<span class="comment"># vi ceph.conf</span></div></pre></td></tr></table></figure></p>
+<p>部署mon<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@ceph-210 ceph-cluster]<span class="comment"># ceph-deploy mon create-initial</span></div></pre></td></tr></table></figure></p>
+<p>创建osd<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@ceph-210 ceph-cluster]<span class="comment"># ceph-deploy --overwrite-conf osd prepare ceph-210:/dev/xvdb ceph-210:/dev/xvdc ceph-211:/dev/xvdb ceph-211:/dev/xvdc ceph-212:/dev/xvdb ceph-212:/dev/xvdc --zap-disk</span></div></pre></td></tr></table></figure></p>
+<p>激活osd<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@ceph-210 ceph-cluster]<span class="comment"># ceph-deploy --overwrite-conf osd activate ceph-210:/dev/xvdb1 ceph-210:/dev/xvdc1 ceph-211:/dev/xvdb1 ceph-211:/dev/xvdc1 ceph-212:/dev/xvdb1 ceph-212:/dev/xvdc1</span></div></pre></td></tr></table></figure></p>
+<p>查看集群<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">[root@ceph-210 ceph-cluster]<span class="comment"># ceph -s</span></div><div class="line">    cluster b1945f0d-38df-4f17-83df-42b4749d2bed</div><div class="line">     health HEALTH_WARN</div><div class="line">            clock skew detected on mon.ceph-211, mon.ceph-212</div><div class="line">            Monitor clock skew detected</div><div class="line">     monmap e1: 3 mons at &#123;ceph-210=192.168.217.210:6789/0,ceph-211=192.168.217.211:6789/0,ceph-212=192.168.217.212:6789/0&#125;</div><div class="line">            election epoch 8, quorum 0,1,2 ceph-210,ceph-211,ceph-212</div><div class="line">     osdmap e31: 6 osds: 6 up, 6 <span class="keyword">in</span></div><div class="line">            flags sortbitwise,require_jewel_osds</div><div class="line">      pgmap v87: 64 pgs, 1 pools, 0 bytes data, 0 objects</div><div class="line">            202 MB used, 569 GB / 569 GB avail</div><div class="line">                  64 active+clean</div></pre></td></tr></table></figure></p>
+<p><strong>参考</strong></p>
+<p><a href="http://www.xuxiaopang.com/2016/10/09/ceph-quick-install-el7-jewel/" target="_blank" rel="external">http://www.xuxiaopang.com/2016/10/09/ceph-quick-install-el7-jewel/</a></p>
+<p><a href="http://linux.it.net.cn/CentOS/course/2016/1213/25330.html" target="_blank" rel="external">http://linux.it.net.cn/CentOS/course/2016/1213/25330.html</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Ceph/" rel="tag"># Ceph</a>
+          
+            <a href="/tags/Jewel/" rel="tag"># Jewel</a>
+          
+            <a href="/tags/CentOS7-2部署Jewel版Ceph-10-2-7/" rel="tag"># CentOS7.2部署Jewel版Ceph-10.2.7</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/09/ceph-libselinux-conflicts/" rel="next" title="Error: libselinux conflicts with systemd-219-19.el7.x86_64">
+                <i class="fa fa-chevron-left"></i> Error: libselinux conflicts with systemd-219-19.el7.x86_64
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8yNzg2Ny80NDQ0"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="hl10502" />
+          <p class="site-author-name" itemprop="name">hl10502</p>
+          <p class="site-description motion-element" itemprop="description">关注云计算/虚拟化/分布式存储等</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">62</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">119</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/hl10502" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#环境"><span class="nav-number">1.</span> <span class="nav-text">环境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#域名解析"><span class="nav-number">1.1.</span> <span class="nav-text">域名解析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#yum源配置"><span class="nav-number">2.</span> <span class="nav-text">yum源配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装ceph"><span class="nav-number">3.</span> <span class="nav-text">安装ceph</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关闭selinux与firewalld"><span class="nav-number">4.</span> <span class="nav-text">关闭selinux与firewalld</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#部署ceph"><span class="nav-number">5.</span> <span class="nav-text">部署ceph</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置无密码访问"><span class="nav-number">5.1.</span> <span class="nav-text">配置无密码访问</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装ceph-deploy"><span class="nav-number">5.2.</span> <span class="nav-text">安装ceph-deploy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#部署集群"><span class="nav-number">5.3.</span> <span class="nav-text">部署集群</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">hl10502</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("LE6b1aXtXOedOvsqgG7uXyrn-gzGzoHsz", "WHQseHdLj7t7hyj5EXO7pveG");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

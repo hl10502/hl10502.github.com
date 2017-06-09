@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://hl10502.github.io/2017/06/09/ceph-deploy-jewel/</loc>
+    
+    <lastmod>2017-06-09T09:43:32.517Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://hl10502.github.io/2017/06/09/ceph-libselinux-conflicts/</loc>
     
     <lastmod>2017-06-09T08:18:16.551Z</lastmod>
