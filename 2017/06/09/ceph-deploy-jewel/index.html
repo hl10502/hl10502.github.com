@@ -103,7 +103,7 @@ CentOS Linux release 7.2.1511 (Core) Mini版
 
 CentOS Linux release 7.2.1511 (Core) Mini版
 两个100G的磁盘做OSD">
-<meta property="og:updated_time" content="2017-06-12T06:06:09.519Z">
+<meta property="og:updated_time" content="2017-06-12T06:27:53.239Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CentOS7.2部署Jewel版Ceph-10.2.7">
 <meta name="twitter:description" content="在CentOS7.2上安装部署Jewel版最新Ceph-10.2.7。
@@ -444,17 +444,17 @@ CentOS Linux release 7.2.1511 (Core) Mini版
 <tr>
 <td>ceph-210</td>
 <td>192.168.217.210</td>
-<td>ceph-deploy、mon、osd</td>
+<td>ceph-deploy、mon、osd、ntp</td>
 </tr>
 <tr>
 <td>ceph-211</td>
 <td>192.168.217.211</td>
-<td>mon、osd</td>
+<td>mon、osd、ntpdate</td>
 </tr>
 <tr>
 <td>ceph-212</td>
 <td>192.168.217.212</td>
-<td>mon、osd</td>
+<td>mon、osd、ntpdate</td>
 </tr>
 </tbody>
 </table>
@@ -462,6 +462,8 @@ CentOS Linux release 7.2.1511 (Core) Mini版
 <p>hostname分别为ceph-210、ceph-211、ceph-212</p>
 <p>修改/etc/hosts<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]<span class="comment"># vi /etc/hosts</span></div></pre></td></tr></table></figure></p>
 <p>添加<br>192.168.217.210 ceph-210<br>192.168.217.211 ceph-211<br>192.168.217.212 ceph-212</p>
+<h2 id="NTP-配置"><a href="#NTP-配置" class="headerlink" title="NTP 配置"></a>NTP 配置</h2><p>NTP配置请参考 <a href="http://www.hl10502.com/2017/06/12/centos-ntp-config/" target="_blank" rel="external">CentOS7.2配置NTP服务</a></p>
+<p>ceph-210作为NTP服务端，ceph-211、ceph-212作为NTP客户端</p>
 <h2 id="yum源配置"><a href="#yum源配置" class="headerlink" title="yum源配置"></a>yum源配置</h2><p><strong>在每台主机上执行。</strong></p>
 <p>删除默认的源<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]<span class="comment"># yum clean all</span></div><div class="line">已加载插件：fastestmirror</div><div class="line">Repository base is listed more than once <span class="keyword">in</span> the configuration</div><div class="line">Repository updates is listed more than once <span class="keyword">in</span> the configuration</div><div class="line">Repository extras is listed more than once <span class="keyword">in</span> the configuration</div><div class="line">Repository centosplus is listed more than once <span class="keyword">in</span> the configuration</div><div class="line">正在清理软件源： Ceph Ceph-noarch base extras updates</div><div class="line">Cleaning up everything</div><div class="line">Cleaning up list of fastest mirrors</div><div class="line"></div><div class="line">[root@localhost ~]<span class="comment"># rm -rf /etc/yum.repos.d/*.repo</span></div></pre></td></tr></table></figure></p>
 <p>下载阿里云的base源<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]<span class="comment"># wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo</span></div><div class="line">--2017-06-07 14:26:39--  http://mirrors.aliyun.com/repo/Centos-7.repo</div><div class="line">正在解析主机 mirrors.aliyun.com (mirrors.aliyun.com)... 112.124.140.210, 115.28.122.210</div><div class="line">正在连接 mirrors.aliyun.com (mirrors.aliyun.com)|112.124.140.210|:80... 已连接。</div><div class="line">已发出 HTTP 请求，正在等待回应... 200 OK</div><div class="line">长度：2573 (2.5K) [application/octet-stream]</div><div class="line">正在保存至: “/etc/yum.repos.d/CentOS-Base.repo”</div><div class="line"></div><div class="line">100%[===================================================================================================================================&gt;] 2,573       --.-K/s 用时 0s</div><div class="line"></div><div class="line">2017-06-07 14:26:39 (28.0 MB/s) - 已保存 “/etc/yum.repos.d/CentOS-Base.repo” [2573/2573])</div></pre></td></tr></table></figure></p>
@@ -678,7 +680,7 @@ CentOS Linux release 7.2.1511 (Core) Mini版
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#环境"><span class="nav-number">1.</span> <span class="nav-text">环境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#域名解析"><span class="nav-number">1.1.</span> <span class="nav-text">域名解析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#yum源配置"><span class="nav-number">2.</span> <span class="nav-text">yum源配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装ceph"><span class="nav-number">3.</span> <span class="nav-text">安装ceph</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关闭selinux与firewalld"><span class="nav-number">4.</span> <span class="nav-text">关闭selinux与firewalld</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#部署ceph"><span class="nav-number">5.</span> <span class="nav-text">部署ceph</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置无密码访问"><span class="nav-number">5.1.</span> <span class="nav-text">配置无密码访问</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装ceph-deploy"><span class="nav-number">5.2.</span> <span class="nav-text">安装ceph-deploy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#部署集群"><span class="nav-number">5.3.</span> <span class="nav-text">部署集群</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#环境"><span class="nav-number">1.</span> <span class="nav-text">环境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#域名解析"><span class="nav-number">1.1.</span> <span class="nav-text">域名解析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NTP-配置"><span class="nav-number">2.</span> <span class="nav-text">NTP 配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#yum源配置"><span class="nav-number">3.</span> <span class="nav-text">yum源配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装ceph"><span class="nav-number">4.</span> <span class="nav-text">安装ceph</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关闭selinux与firewalld"><span class="nav-number">5.</span> <span class="nav-text">关闭selinux与firewalld</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#部署ceph"><span class="nav-number">6.</span> <span class="nav-text">部署ceph</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置无密码访问"><span class="nav-number">6.1.</span> <span class="nav-text">配置无密码访问</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装ceph-deploy"><span class="nav-number">6.2.</span> <span class="nav-text">安装ceph-deploy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#部署集群"><span class="nav-number">6.3.</span> <span class="nav-text">部署集群</span></a></li></ol></li></ol></div>
             
 
           </div>
