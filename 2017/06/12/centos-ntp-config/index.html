@@ -90,27 +90,18 @@
 
 
 <meta name="description" content="环境
-CentOS Linux release 7.2.1511 (Core) Mini版
-
-NTP服务端设置时区[root@ceph-210 ~]# timedatectl set-timezone Asia/Shanghai[root@ceph-210 ~]# hwclock –systohc
-安装ntp12[root@ceph-210 ~]# yum install --downloadon">
+CentOS Linux release 7.2.1511 (Core) Mini版">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CentOS7.2配置NTP服务">
 <meta property="og:url" content="https://hl10502.github.io/2017/06/12/centos-ntp-config/index.html">
 <meta property="og:site_name" content="hl10502的博客">
 <meta property="og:description" content="环境
-CentOS Linux release 7.2.1511 (Core) Mini版
-
-NTP服务端设置时区[root@ceph-210 ~]# timedatectl set-timezone Asia/Shanghai[root@ceph-210 ~]# hwclock –systohc
-安装ntp12[root@ceph-210 ~]# yum install --downloadon">
-<meta property="og:updated_time" content="2017-06-12T06:30:35.508Z">
+CentOS Linux release 7.2.1511 (Core) Mini版">
+<meta property="og:updated_time" content="2017-06-12T06:31:28.748Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CentOS7.2配置NTP服务">
 <meta name="twitter:description" content="环境
-CentOS Linux release 7.2.1511 (Core) Mini版
-
-NTP服务端设置时区[root@ceph-210 ~]# timedatectl set-timezone Asia/Shanghai[root@ceph-210 ~]# hwclock –systohc
-安装ntp12[root@ceph-210 ~]# yum install --downloadon">
+CentOS Linux release 7.2.1511 (Core) Mini版">
 
 
 
@@ -415,6 +406,7 @@ NTP服务端设置时区[root@ceph-210 ~]# timedatectl set-timezone Asia/Shangha
         <h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><ul>
 <li>CentOS Linux release 7.2.1511 (Core) Mini版</li>
 </ul>
+<a id="more"></a>
 <h2 id="NTP服务端"><a href="#NTP服务端" class="headerlink" title="NTP服务端"></a>NTP服务端</h2><h3 id="设置时区"><a href="#设置时区" class="headerlink" title="设置时区"></a>设置时区</h3><p>[root@ceph-210 ~]# timedatectl set-timezone Asia/Shanghai<br>[root@ceph-210 ~]# hwclock –systohc</p>
 <h3 id="安装ntp"><a href="#安装ntp" class="headerlink" title="安装ntp"></a>安装ntp</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@ceph-210 ~]<span class="comment"># yum install --downloadonly --downloaddir=/tmp/ntp ntp</span></div><div class="line">[root@ceph-210 ~]<span class="comment"># yum localinstall -C -y --disablerepo=* /tmp/ntp/*.rpm</span></div></pre></td></tr></table></figure>
 <h3 id="修改配置"><a href="#修改配置" class="headerlink" title="修改配置"></a>修改配置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@ceph-210 ~]<span class="comment"># vi /etc/ntp.conf</span></div></pre></td></tr></table></figure>

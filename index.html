@@ -405,25 +405,16 @@
 
       
         
-          
-            <h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><ul>
+          <h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><ul>
 <li>CentOS Linux release 7.2.1511 (Core) Mini版</li>
 </ul>
-<h2 id="NTP服务端"><a href="#NTP服务端" class="headerlink" title="NTP服务端"></a>NTP服务端</h2><h3 id="设置时区"><a href="#设置时区" class="headerlink" title="设置时区"></a>设置时区</h3><p>[root@ceph-210 ~]# timedatectl set-timezone Asia/Shanghai<br>[root@ceph-210 ~]# hwclock –systohc</p>
-<h3 id="安装ntp"><a href="#安装ntp" class="headerlink" title="安装ntp"></a>安装ntp</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@ceph-210 ~]<span class="comment"># yum install --downloadonly --downloaddir=/tmp/ntp ntp</span></div><div class="line">[root@ceph-210 ~]<span class="comment"># yum localinstall -C -y --disablerepo=* /tmp/ntp/*.rpm</span></div></pre></td></tr></table></figure>
-<h3 id="修改配置"><a href="#修改配置" class="headerlink" title="修改配置"></a>修改配置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@ceph-210 ~]<span class="comment"># vi /etc/ntp.conf</span></div></pre></td></tr></table></figure>
-<p>注释<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">server 0.centos.pool.ntp.org iburst</div><div class="line">server 1.centos.pool.ntp.org iburst</div><div class="line">server 2.centos.pool.ntp.org iburst</div><div class="line">server 3.centos.pool.ntp.org iburst</div></pre></td></tr></table></figure></p>
-<p>增加<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">server 127.127.1.0  iburst   <span class="comment"># local clock 使用本机时间作为时间服务的标准</span></div><div class="line">fudge 127.127.1.0 stratum 10 <span class="comment">#这个值不能太高0-15，太高会报错</span></div></pre></td></tr></table></figure></p>
-<h3 id="启动NTP服务"><a href="#启动NTP服务" class="headerlink" title="启动NTP服务"></a>启动NTP服务</h3><p>开机启动NTP服务<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@ceph-210 ~]<span class="comment"># systemctl enable ntpd</span></div><div class="line">Created symlink from /etc/systemd/system/multi-user.target.wants/ntpd.service to /usr/lib/systemd/system/ntpd.service.</div></pre></td></tr></table></figure></p>
-<p>启动NTP服务<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@ceph-210 ~]<span class="comment"># systemctl start ntpd</span></div></pre></td></tr></table></figure></p>
-<p>查看NTP服务<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[root@ceph-210 ~]<span class="comment"># systemctl status ntpd</span></div><div class="line">● ntpd.service - Network Time Service</div><div class="line">   Loaded: loaded (/usr/lib/systemd/system/ntpd.service; enabled; vendor preset: disabled)</div><div class="line">   Active: active (running) since Mon 2017-06-12 00:45:05 EDT; 16s ago</div><div class="line">  Process: 2635 ExecStart=/usr/sbin/ntpd -u ntp:ntp <span class="variable">$OPTIONS</span> (code=exited, status=0/SUCCESS)</div><div class="line"> Main PID: 2636 (ntpd)</div><div class="line">   CGroup: /system.slice/ntpd.service</div><div class="line">           └─2636 /usr/sbin/ntpd -u ntp:ntp -g</div></pre></td></tr></table></figure></p>
-<h3 id="验证NTP服务"><a href="#验证NTP服务" class="headerlink" title="验证NTP服务"></a>验证NTP服务</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@ceph-210 ntp]<span class="comment"># ntpq -p</span></div><div class="line">     remote           refid      st t when poll reach   delay   offset  jitter</div><div class="line">==============================================================================</div><div class="line">*LOCAL(0)        .LOCL.          10 l   36   64    1    0.000    0.000   0.000</div></pre></td></tr></table></figure>
-<h2 id="NTP客户端"><a href="#NTP客户端" class="headerlink" title="NTP客户端"></a>NTP客户端</h2><h3 id="设置时区-1"><a href="#设置时区-1" class="headerlink" title="设置时区"></a>设置时区</h3><p>[root@ceph-211 ~]# timedatectl set-timezone Asia/Shanghai</p>
-<h3 id="安装ntpdate"><a href="#安装ntpdate" class="headerlink" title="安装ntpdate"></a>安装ntpdate</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@ceph-211 ~]<span class="comment"># yum install --downloadonly --downloaddir=/tmp/ntpdate ntpdate</span></div><div class="line">[root@ceph-211 ~]<span class="comment"># yum localinstall -C -y --disablerepo=* /tmp/ntpdate/*.rpm</span></div></pre></td></tr></table></figure>
-<h3 id="配置crontab"><a href="#配置crontab" class="headerlink" title="配置crontab"></a>配置crontab</h3><p>每3分钟定时同步NTP服务器192.168.217.210的时间<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@ceph-211 ~]<span class="comment"># crontab -e</span></div><div class="line">*/3 * * * * /usr/sbin/ntpdate 192.168.217.210 &gt;&gt; /var/<span class="built_in">log</span>/ntpdate.log 2&gt;&amp;1</div></pre></td></tr></table></figure></p>
-<p>重启crontab<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@ceph-211 ~]<span class="comment"># systemctl restart crond.service</span></div></pre></td></tr></table></figure></p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/06/12/centos-ntp-config/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
