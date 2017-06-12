@@ -97,7 +97,7 @@ CentOS Linux release 7.2.1511 (Core) Mini版">
 <meta property="og:site_name" content="hl10502的博客">
 <meta property="og:description" content="环境
 CentOS Linux release 7.2.1511 (Core) Mini版">
-<meta property="og:updated_time" content="2017-06-12T06:38:38.497Z">
+<meta property="og:updated_time" content="2017-06-12T08:04:07.499Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CentOS7.2配置NTP服务">
 <meta name="twitter:description" content="环境
@@ -407,7 +407,7 @@ CentOS Linux release 7.2.1511 (Core) Mini版">
 <li>CentOS Linux release 7.2.1511 (Core) Mini版</li>
 </ul>
 <a id="more"></a>
-<h2 id="NTP服务端"><a href="#NTP服务端" class="headerlink" title="NTP服务端"></a>NTP服务端</h2><h3 id="设置时区"><a href="#设置时区" class="headerlink" title="设置时区"></a>设置时区</h3><p>[root@ceph-210 ~]# timedatectl set-timezone Asia/Shanghai<br>[root@ceph-210 ~]# hwclock –systohc</p>
+<h2 id="NTP服务端"><a href="#NTP服务端" class="headerlink" title="NTP服务端"></a>NTP服务端</h2><h3 id="设置时区"><a href="#设置时区" class="headerlink" title="设置时区"></a>设置时区</h3><p>[root@ceph-210 ~]# timedatectl set-timezone Asia/Shanghai<br>[root@ceph-210 ~]# hwclock --systohc</p>
 <h3 id="安装NTP"><a href="#安装NTP" class="headerlink" title="安装NTP"></a>安装NTP</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@ceph-210 ~]<span class="comment"># yum install --downloadonly --downloaddir=/tmp/ntp ntp</span></div><div class="line">[root@ceph-210 ~]<span class="comment"># yum localinstall -C -y --disablerepo=* /tmp/ntp/*.rpm</span></div></pre></td></tr></table></figure>
 <h3 id="修改配置"><a href="#修改配置" class="headerlink" title="修改配置"></a>修改配置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@ceph-210 ~]<span class="comment"># vi /etc/ntp.conf</span></div></pre></td></tr></table></figure>
 <p>注释或删除<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">server 0.centos.pool.ntp.org iburst</div><div class="line">server 1.centos.pool.ntp.org iburst</div><div class="line">server 2.centos.pool.ntp.org iburst</div><div class="line">server 3.centos.pool.ntp.org iburst</div></pre></td></tr></table></figure></p>
