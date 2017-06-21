@@ -2,6 +2,34 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://hl10502.github.io/2017/06/19/ceph-deploy-mon/</loc>
+    
+    <lastmod>2017-06-21T09:02:41.347Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://hl10502.github.io/2017/06/20/ceph-error-authentication/</loc>
+    
+    <lastmod>2017-06-20T10:11:33.896Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://hl10502.github.io/2017/06/19/ceph-deploy-new/</loc>
+    
+    <lastmod>2017-06-20T07:39:31.464Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://hl10502.github.io/2017/06/15/ceph-deploy-cli/</loc>
+    
+    <lastmod>2017-06-20T07:19:58.692Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://hl10502.github.io/2017/06/12/centos-ntp-config/</loc>
     
     <lastmod>2017-06-12T08:04:07.499Z</lastmod>

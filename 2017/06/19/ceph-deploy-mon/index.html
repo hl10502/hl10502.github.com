@@ -1,0 +1,1120 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="2xIA6kyEisqneyrcTltYHTS8lapHWNhDBX_qkWzL2FY" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Ceph,ceph-deploy,mon.py,mon管理," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="ceph-deploy的mon.py模块是用来管理mon守护进程。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ceph-deploy源码分析（三）——mon模块">
+<meta property="og:url" content="https://hl10502.github.io/2017/06/19/ceph-deploy-mon/index.html">
+<meta property="og:site_name" content="hl10502的博客">
+<meta property="og:description" content="ceph-deploy的mon.py模块是用来管理mon守护进程。">
+<meta property="og:updated_time" content="2017-06-21T09:02:41.347Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ceph-deploy源码分析（三）——mon模块">
+<meta name="twitter:description" content="ceph-deploy的mon.py模块是用来管理mon守护进程。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://hl10502.github.io/2017/06/19/ceph-deploy-mon/"/>
+
+
+
+
+
+  <title> ceph-deploy源码分析（三）——mon模块 | hl10502的博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">hl10502的博客</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">IT技术人</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            所有文章
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于我
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="https://hl10502.github.io/2017/06/19/ceph-deploy-mon/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="hl10502">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="hl10502的博客">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="hl10502的博客" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                ceph-deploy源码分析（三）——mon模块
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-06-19T17:44:40+08:00">
+                2017-06-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Ceph/" itemprop="url" rel="index">
+                    <span itemprop="name">Ceph</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Ceph/ceph-deploy/" itemprop="url" rel="index">
+                    <span itemprop="name">ceph-deploy</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/06/19/ceph-deploy-mon/" class="leancloud_visitors" data-flag-title="ceph-deploy源码分析（三）——mon模块">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>ceph-deploy的mon.py模块是用来管理mon守护进程。</p>
+<a id="more"></a>
+<p>mon 子命令格式如下<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ceph-deploy mon [-h] &#123;add,create,create-initial,destroy&#125; ...</div></pre></td></tr></table></figure></p>
+<ul>
+<li>create: 创建mon</li>
+<li>add: 添加mon到集群</li>
+<li>create-initial: 创建mon并初始化</li>
+<li>destroy: 删除mon，如果集群只有一个mon则不能删除</li>
+</ul>
+<p>在创建mon时，使用 ceph-deploy mon create-initial 来创建。</p>
+<h2 id="mon管理"><a href="#mon管理" class="headerlink" title="mon管理"></a>mon管理</h2><p>make函数priority为30，子命令设置的默认函数为mon函数。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div></pre></td><td class="code"><pre><div class="line">@priority(30)</div><div class="line">def make(parser):</div><div class="line">    <span class="string">""</span><span class="string">"</span></div><div class="line">    Ceph MON Daemon management</div><div class="line">    "<span class="string">""</span></div><div class="line">    parser.formatter_class = ToggleRawTextHelpFormatter</div><div class="line"></div><div class="line">    mon_parser = parser.add_subparsers(dest=<span class="string">'subcommand'</span>)</div><div class="line">    mon_parser.required = True</div><div class="line"></div><div class="line">    mon_add = mon_parser.add_parser(</div><div class="line">        <span class="string">'add'</span>,</div><div class="line">        <span class="built_in">help</span>=(<span class="string">'R|Add a monitor to an existing cluster:\n'</span></div><div class="line">              <span class="string">'\tceph-deploy mon add node1\n'</span></div><div class="line">              <span class="string">'Or:\n'</span></div><div class="line">              <span class="string">'\tceph-deploy mon add --address 192.168.1.10 node1\n'</span></div><div class="line">              <span class="string">'If the section for the monitor exists and defines a `mon addr` that\n'</span></div><div class="line">              <span class="string">'will be used, otherwise it will fallback by resolving the hostname to an\n'</span></div><div class="line">              <span class="string">'IP. If `--address` is used it will override all other options.'</span>)</div><div class="line">    )</div><div class="line">    mon_add.add_argument(</div><div class="line">        <span class="string">'--address'</span>,</div><div class="line">        nargs=<span class="string">'?'</span>,</div><div class="line">    )</div><div class="line">    mon_add.add_argument(</div><div class="line">        <span class="string">'mon'</span>,</div><div class="line">        nargs=1,</div><div class="line">    )</div><div class="line"></div><div class="line">    mon_create = mon_parser.add_parser(</div><div class="line">        <span class="string">'create'</span>,</div><div class="line">        <span class="built_in">help</span>=(<span class="string">'R|Deploy monitors by specifying them like:\n'</span></div><div class="line">              <span class="string">'\tceph-deploy mon create node1 node2 node3\n'</span></div><div class="line">              <span class="string">'If no hosts are passed it will default to use the\n'</span></div><div class="line">              <span class="string">'`mon initial members` defined in the configuration.'</span>)</div><div class="line">    )</div><div class="line">    mon_create.add_argument(</div><div class="line">        <span class="string">'--keyrings'</span>,</div><div class="line">        nargs=<span class="string">'?'</span>,</div><div class="line">        <span class="built_in">help</span>=<span class="string">'concatenate multiple keyrings to be seeded on new monitors'</span>,</div><div class="line">    )</div><div class="line">    mon_create.add_argument(</div><div class="line">        <span class="string">'mon'</span>,</div><div class="line">        nargs=<span class="string">'*'</span>,</div><div class="line">    )</div><div class="line"></div><div class="line">    mon_create_initial = mon_parser.add_parser(</div><div class="line">        <span class="string">'create-initial'</span>,</div><div class="line">        <span class="built_in">help</span>=(<span class="string">'Will deploy for monitors defined in `mon initial members`, '</span></div><div class="line">              <span class="string">'wait until they form quorum and then gatherkeys, reporting '</span></div><div class="line">              <span class="string">'the monitor status along the process. If monitors don\'</span>t form <span class="string">'</span></div><div class="line">              'quorum the <span class="built_in">command</span> will eventually time out.<span class="string">')</span></div><div class="line">    )</div><div class="line">    mon_create_initial.add_argument(</div><div class="line">        '--keyrings<span class="string">',</span></div><div class="line">        nargs='?<span class="string">',</span></div><div class="line">        help='concatenate multiple keyrings to be seeded on new monitors<span class="string">',</span></div><div class="line">    )</div><div class="line"></div><div class="line">    mon_destroy = mon_parser.add_parser(</div><div class="line">        'destroy<span class="string">',</span></div><div class="line">        help='Completely remove Ceph MON from remote host(s)<span class="string">'</span></div><div class="line">    )</div><div class="line">    mon_destroy.add_argument(</div><div class="line">        'mon<span class="string">',</span></div><div class="line">        nargs='+<span class="string">',</span></div><div class="line">    )</div><div class="line"></div><div class="line">    parser.set_defaults(</div><div class="line">        func=mon,</div><div class="line">    )</div></pre></td></tr></table></figure></p>
+<h2 id="mon子命令"><a href="#mon子命令" class="headerlink" title="mon子命令"></a>mon子命令</h2><p>mon 函数，mon有四个subcmd为create、add、destroy、create-initial，分别对应mon_create、mon_add、mon_destroy、mon_create_initial四个函数<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">def mon(args):</div><div class="line">    <span class="keyword">if</span> args.subcommand == <span class="string">'create'</span>:</div><div class="line">        mon_create(args)</div><div class="line">    <span class="keyword">elif</span> args.subcommand == <span class="string">'add'</span>:</div><div class="line">        mon_add(args)</div><div class="line">    <span class="keyword">elif</span> args.subcommand == <span class="string">'destroy'</span>:</div><div class="line">        mon_destroy(args)</div><div class="line">    <span class="keyword">elif</span> args.subcommand == <span class="string">'create-initial'</span>:</div><div class="line">        mon_create_initial(args)</div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        LOG.error(<span class="string">'subcommand %s not implemented'</span>, args.subcommand)</div></pre></td></tr></table></figure></p>
+<h3 id="创建mon"><a href="#创建mon" class="headerlink" title="创建mon"></a>创建mon</h3><p>命令行格式为： ceph-deploy mon create [node1] [node2] [node3] …</p>
+<p>mon_create函数创建mon</p>
+<ul>
+<li>args参数校验</li>
+<li>调用hosts.get函数获取操作系统版本信息，检查是否安装ceph包，目前支持的操作系统为centos/debian/fedora/rhel/suse，如果需要修改代码支持其他操作系统，可以从hosts入手修改，比如增加支持XenServer</li>
+<li>调用相应操作系统模块下的create函数创建mon，比如操作系统为centos，即hosts/centos下的mon模块</li>
+<li>调用mon_status函数检测mon状态</li>
+<li>调用catch_mon_errors函数获取mon的错误信息，写入logger<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div></pre></td><td class="code"><pre><div class="line">def mon_create(args):</div><div class="line"></div><div class="line">    <span class="comment"># 获取配置文件</span></div><div class="line">    cfg = conf.ceph.load(args)</div><div class="line">    <span class="keyword">if</span> not args.mon:</div><div class="line">        <span class="comment"># 参数没指定mon，调用get_mon_initial_members函数从配置文件获取mon_initial_members作为mon</span></div><div class="line">        args.mon = get_mon_initial_members(args, error_on_empty=True, _cfg=cfg)</div><div class="line"></div><div class="line">    <span class="keyword">if</span> args.keyrings:</div><div class="line">        monitor_keyring = concatenate_keyrings(args)</div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        keyring_path = <span class="string">'&#123;cluster&#125;.mon.keyring'</span>.format(cluster=args.cluster)</div><div class="line">        try:</div><div class="line">            <span class="comment"># 获取ceph.mon.keyring文件信息</span></div><div class="line">            monitor_keyring = files.read_file(keyring_path)</div><div class="line">        except IOError:</div><div class="line">            LOG.warning(<span class="string">'keyring (%s) not found, creating a new one'</span> % keyring_path)</div><div class="line">            new_mon_keyring(args)</div><div class="line">            monitor_keyring = files.read_file(keyring_path)</div><div class="line"></div><div class="line">    LOG.debug(</div><div class="line">        <span class="string">'Deploying mon, cluster %s hosts %s'</span>,</div><div class="line">        args.cluster,</div><div class="line">        <span class="string">' '</span>.join(args.mon),</div><div class="line">        )</div><div class="line"></div><div class="line">    errors = 0</div><div class="line">    <span class="comment"># 循环mon</span></div><div class="line">    <span class="keyword">for</span> (name, host) <span class="keyword">in</span> mon_hosts(args.mon):</div><div class="line">        try:</div><div class="line">            <span class="comment"># TODO add_bootstrap_peer_hint</span></div><div class="line">            LOG.debug(<span class="string">'detecting platform for host %s ...'</span>, name)</div><div class="line"></div><div class="line">            <span class="comment"># 获取操作系统版本信息，检查是否安装ceph包，如果需要修改代码支持其他操作系统，可以从hosts入手修改</span></div><div class="line">            distro = hosts.get(</div><div class="line">                host,</div><div class="line">                username=args.username,</div><div class="line">                callbacks=[packages.ceph_is_installed]</div><div class="line">            )</div><div class="line">            LOG.info(<span class="string">'distro info: %s %s %s'</span>, distro.name, distro.release, distro.codename)</div><div class="line">            rlogger = logging.getLogger(name)</div><div class="line"></div><div class="line">            <span class="comment"># ensure remote hostname is good to go</span></div><div class="line">            hostname_is_compatible(distro.conn, rlogger, name)</div><div class="line">            rlogger.debug(<span class="string">'deploying mon to %s'</span>, name)</div><div class="line">            <span class="comment"># 创建mon，调用hosts目录的相应操作系列目录，比如系统是centos，那就是hosts/centos下的mon模块</span></div><div class="line">            distro.mon.create(distro, args, monitor_keyring)</div><div class="line"></div><div class="line">            <span class="comment"># tell me the status of the deployed mon</span></div><div class="line">            time.sleep(2)  <span class="comment"># give some room to start</span></div><div class="line"></div><div class="line">            <span class="comment"># 检测mon的状态</span></div><div class="line">            mon_status(distro.conn, rlogger, name, args)</div><div class="line"></div><div class="line">            <span class="comment"># 获取mon的错误信息，写入logger</span></div><div class="line">            catch_mon_errors(distro.conn, rlogger, name, cfg, args)</div><div class="line">            distro.conn.exit()</div><div class="line"></div><div class="line">        except RuntimeError as e:</div><div class="line">            LOG.error(e)</div><div class="line">            errors += 1</div><div class="line"></div><div class="line">    <span class="keyword">if</span> errors:</div><div class="line">        raise exc.GenericError(<span class="string">'Failed to create %d monitors'</span> % errors)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>以centos为例，hosts/centos下的mon模块的<strong>init</strong>.py<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">from ceph_deploy.hosts.common import mon_add as add  <span class="comment"># noqa</span></div><div class="line">from ceph_deploy.hosts.common import mon_create as create  <span class="comment"># noqa</span></div></pre></td></tr></table></figure></p>
+<p>mon_create函数在hosts/common.py模块</p>
+<ul>
+<li>创建/etc/ceph/ceph.conf文件，从cph-deploy new创建的ceph.conf与args中写入数据到/etc/ceph/ceph.conf</li>
+<li>将ceph-deploy new创建的ceph.mon.keyring文件内容写入临时文件/var/lib/ceph/tmp/ceph.mon.keyring</li>
+<li>创建mon，初始化keyring数据</li>
+<li>创建空白的done文件，并将文件的拥有者设置成uid、gid</li>
+<li>创建init文件，并将文件的拥有者设置成uid、gid</li>
+<li>设置mon服务开机启动，启动mon服务<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div></pre></td><td class="code"><pre><div class="line">def mon_create(distro, args, monitor_keyring):</div><div class="line">    hostname = distro.conn.remote_module.shortname()</div><div class="line">    logger = distro.conn.logger</div><div class="line">    logger.debug(<span class="string">'remote hostname: %s'</span> % hostname)</div><div class="line"></div><div class="line">    <span class="comment"># mon目录，比如：/var/lib/ceph/mon/ceph-1</span></div><div class="line">    path = paths.mon.path(args.cluster, hostname)</div><div class="line">    <span class="comment"># 获取/var/lib/ceph目录的用户id</span></div><div class="line">    uid = distro.conn.remote_module.path_getuid(constants.base_path)</div><div class="line">    <span class="comment"># 获取/var/lib/ceph目录的用户组gid</span></div><div class="line">    gid = distro.conn.remote_module.path_getgid(constants.base_path)</div><div class="line"></div><div class="line">    <span class="comment"># 获取mon下的done文件路径，比如：/var/lib/ceph/mon/ceph-1/done</span></div><div class="line">    done_path = paths.mon.done(args.cluster, hostname)</div><div class="line"></div><div class="line">    <span class="comment"># 获取mon下的init文件路径，比如：/var/lib/ceph/mon/ceph-1/init</span></div><div class="line">    init_path = paths.mon.init(args.cluster, hostname, distro.init)</div><div class="line"></div><div class="line">    <span class="comment"># 获取ceph-deploy创建的ceph.conf文件数据</span></div><div class="line">    conf_data = conf.ceph.load_raw(args)</div><div class="line"></div><div class="line">    <span class="comment"># write the configuration file</span></div><div class="line">    <span class="comment"># 写入/etc/ceph/ceph.conf</span></div><div class="line">    distro.conn.remote_module.write_conf(</div><div class="line">        args.cluster,</div><div class="line">        conf_data,</div><div class="line">        args.overwrite_conf,</div><div class="line">    )</div><div class="line"></div><div class="line">    <span class="comment"># if the mon path does not exist, create it</span></div><div class="line">    <span class="comment"># 如果mon文件目录不存在，创建mon目录，并将目录的拥有者改成uid、gid</span></div><div class="line">    distro.conn.remote_module.create_mon_path(path, uid, gid)</div><div class="line"></div><div class="line">    logger.debug(<span class="string">'checking for done path: %s'</span> % done_path)</div><div class="line">    <span class="keyword">if</span> not distro.conn.remote_module.path_exists(done_path):</div><div class="line">        <span class="comment"># done文件不存在</span></div><div class="line">        logger.debug(<span class="string">'done path does not exist: %s'</span> % done_path)</div><div class="line">        <span class="keyword">if</span> not distro.conn.remote_module.path_exists(paths.mon.constants.tmp_path):</div><div class="line">            <span class="comment"># /var/lib/ceph/tmp目录不存在</span></div><div class="line">            logger.info(<span class="string">'creating tmp path: %s'</span> % paths.mon.constants.tmp_path)</div><div class="line">            <span class="comment"># 创建/var/lib/ceph/tmp目录</span></div><div class="line">            distro.conn.remote_module.makedir(paths.mon.constants.tmp_path)</div><div class="line"></div><div class="line">        <span class="comment"># 获取/var/lib/ceph/tmp/ceph.mon.keyring</span></div><div class="line">        keyring = paths.mon.keyring(args.cluster, hostname)</div><div class="line"></div><div class="line">        logger.info(<span class="string">'creating keyring file: %s'</span> % keyring)</div><div class="line"></div><div class="line">        <span class="comment"># 将ceph-deploy new创建的ceph.mon.keyring文件内容写入临时文件/var/lib/ceph/tmp/ceph.mon.keyring</span></div><div class="line">        distro.conn.remote_module.write_monitor_keyring(</div><div class="line">            keyring,</div><div class="line">            monitor_keyring,</div><div class="line">            uid, gid,</div><div class="line">        )</div><div class="line"></div><div class="line">        user_args = []</div><div class="line">        <span class="keyword">if</span> uid != 0:</div><div class="line">            user_args = user_args + [ <span class="string">'--setuser'</span>, str(uid) ]</div><div class="line">        <span class="keyword">if</span> gid != 0:</div><div class="line">            user_args = user_args + [ <span class="string">'--setgroup'</span>, str(gid) ]</div><div class="line"></div><div class="line">        <span class="comment"># 创建mon</span></div><div class="line">        remoto.process.run(</div><div class="line">            distro.conn,</div><div class="line">            [</div><div class="line">                <span class="string">'ceph-mon'</span>,</div><div class="line">                <span class="string">'--cluster'</span>, args.cluster,</div><div class="line">                <span class="string">'--mkfs'</span>,</div><div class="line">                <span class="string">'-i'</span>, hostname,</div><div class="line">                <span class="string">'--keyring'</span>, keyring,</div><div class="line">            ] + user_args</div><div class="line">        )</div><div class="line"></div><div class="line">        logger.info(<span class="string">'unlinking keyring file %s'</span> % keyring)</div><div class="line">        distro.conn.remote_module.unlink(keyring)</div><div class="line"></div><div class="line">    <span class="comment"># create the done file</span></div><div class="line">    <span class="comment"># 创建空白的done文件，并将文件的拥有者设置成uid、gid，表示mon创建完成</span></div><div class="line">    distro.conn.remote_module.create_done_path(done_path, uid, gid)</div><div class="line"></div><div class="line">    <span class="comment"># create init path</span></div><div class="line">    <span class="comment"># 创建init文件，并将文件的拥有者设置成uid、gid</span></div><div class="line">    distro.conn.remote_module.create_init_path(init_path, uid, gid)</div><div class="line"></div><div class="line">    <span class="comment"># start mon service</span></div><div class="line">    <span class="comment"># 启动mon服务</span></div><div class="line">    start_mon_service(distro, args.cluster, hostname)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="添加mon到集群"><a href="#添加mon到集群" class="headerlink" title="添加mon到集群"></a>添加mon到集群</h3><p>命令行格式为： ceph-deploy mon add [--address [ADDRESS]] mon …</p>
+<p>mon_add函数</p>
+<ul>
+<li>调用admin模块admin函数（即ceph-deploy admin子命令），远程host上写入/etc/ceph/ceph.conf与/etc/ceph/ceph.client.admin.keyring文件</li>
+<li>调用操作系统类型相应的mon的add函数，创建mon</li>
+<li>调用catch_mon_errors函数校验error</li>
+<li>调用mon_status校验mon的状态<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div></pre></td><td class="code"><pre><div class="line">def mon_add(args):</div><div class="line">    cfg = conf.ceph.load(args)</div><div class="line"></div><div class="line">    <span class="comment"># args.mon is a list with only one entry</span></div><div class="line">    mon_host = args.mon[0]</div><div class="line"></div><div class="line">    <span class="comment"># 获取ceph.mon.keyring文件配置信息</span></div><div class="line">    try:</div><div class="line">        with open(<span class="string">'&#123;cluster&#125;.mon.keyring'</span>.format(cluster=args.cluster),</div><div class="line">                  <span class="string">'rb'</span>) as f:</div><div class="line">            monitor_keyring = f.read()</div><div class="line">    except IOError:</div><div class="line">        raise RuntimeError(</div><div class="line">            <span class="string">'mon keyring not found; run \'</span>new\<span class="string">' to create a new cluster'</span></div><div class="line">        )</div><div class="line"></div><div class="line">    LOG.info(<span class="string">'ensuring configuration of new mon host: %s'</span>, mon_host)</div><div class="line">    args.client = args.mon</div><div class="line">    <span class="comment"># 调用admin模块admin函数，在远程host上写入/etc/ceph/ceph.conf与/etc/ceph/ceph.client.admin.keyring文件</span></div><div class="line">    admin.admin(args)</div><div class="line">    LOG.debug(</div><div class="line">        <span class="string">'Adding mon to cluster %s, host %s'</span>,</div><div class="line">        args.cluster,</div><div class="line">        mon_host,</div><div class="line">    )</div><div class="line"></div><div class="line">    mon_section = <span class="string">'mon.%s'</span> % mon_host</div><div class="line">    cfg_mon_addr = cfg.safe_get(mon_section, <span class="string">'mon addr'</span>)</div><div class="line"></div><div class="line">    <span class="comment"># 校验mon ip</span></div><div class="line">    <span class="keyword">if</span> args.address:</div><div class="line">        LOG.debug(<span class="string">'using mon address via --address %s'</span> % args.address)</div><div class="line">        mon_ip = args.address</div><div class="line">    <span class="keyword">elif</span> cfg_mon_addr:</div><div class="line">        LOG.debug(<span class="string">'using mon address via configuration: %s'</span> % cfg_mon_addr)</div><div class="line">        mon_ip = cfg_mon_addr</div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        mon_ip = net.get_nonlocal_ip(mon_host)</div><div class="line">        LOG.debug(<span class="string">'using mon address by resolving host: %s'</span> % mon_ip)</div><div class="line"></div><div class="line">    try:</div><div class="line">        LOG.debug(<span class="string">'detecting platform for host %s ...'</span>, mon_host)</div><div class="line">        distro = hosts.get(</div><div class="line">            mon_host,</div><div class="line">            username=args.username,</div><div class="line">            callbacks=[packages.ceph_is_installed]</div><div class="line">        )</div><div class="line">        LOG.info(<span class="string">'distro info: %s %s %s'</span>, distro.name, distro.release, distro.codename)</div><div class="line">        rlogger = logging.getLogger(mon_host)</div><div class="line"></div><div class="line">        <span class="comment"># ensure remote hostname is good to go</span></div><div class="line">        hostname_is_compatible(distro.conn, rlogger, mon_host)</div><div class="line">        rlogger.debug(<span class="string">'adding mon to %s'</span>, mon_host)</div><div class="line">        args.address = mon_ip</div><div class="line">        <span class="comment"># 添加mon到集群</span></div><div class="line">        distro.mon.add(distro, args, monitor_keyring)</div><div class="line"></div><div class="line">        <span class="comment"># tell me the status of the deployed mon</span></div><div class="line">        time.sleep(2)  <span class="comment"># give some room to start</span></div><div class="line">        <span class="comment"># 获取mon的错误信息写入logger warning</span></div><div class="line">        catch_mon_errors(distro.conn, rlogger, mon_host, cfg, args)</div><div class="line">        <span class="comment"># 校验mon的状态</span></div><div class="line">        mon_status(distro.conn, rlogger, mon_host, args)</div><div class="line">        distro.conn.exit()</div><div class="line"></div><div class="line">    except RuntimeError as e:</div><div class="line">        LOG.error(e)</div><div class="line">        raise exc.GenericError(<span class="string">'Failed to add monitor to host:  %s'</span> % mon_host)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>add函数，以centos为例，在hosts/centos/mon/<strong>init</strong>.py<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">from ceph_deploy.hosts.common import mon_add as add  <span class="comment"># noqa</span></div><div class="line">from ceph_deploy.hosts.common import mon_create as create  <span class="comment"># noqa</span></div></pre></td></tr></table></figure></p>
+<p>hosts/common.py模块的mon_add函数</p>
+<ul>
+<li>创建/etc/ceph/ceph.conf文件，从cph-deploy new创建的ceph.conf与args中写入数据到/etc/ceph/ceph.conf</li>
+<li>将ceph-deploy new创建的ceph.mon.keyring文件内容写入临时文件/var/lib/ceph/tmp/ceph.mon.keyring</li>
+<li>获取mon的monmap</li>
+<li>创建mon，初始化monmap和keyring数据</li>
+<li>创建空白的done文件，并将文件的拥有者设置成uid、gid</li>
+<li>创建init文件，并将文件的拥有者设置成uid、gid</li>
+<li>设置mon服务开机启动，启动mon服务</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div></pre></td><td class="code"><pre><div class="line">def mon_add(distro, args, monitor_keyring):</div><div class="line">    hostname = distro.conn.remote_module.shortname()</div><div class="line">    logger = distro.conn.logger</div><div class="line">    path = paths.mon.path(args.cluster, hostname)</div><div class="line">    uid = distro.conn.remote_module.path_getuid(constants.base_path)</div><div class="line">    gid = distro.conn.remote_module.path_getgid(constants.base_path)</div><div class="line">    monmap_path = paths.mon.monmap(args.cluster, hostname)</div><div class="line">    done_path = paths.mon.done(args.cluster, hostname)</div><div class="line">    init_path = paths.mon.init(args.cluster, hostname, distro.init)</div><div class="line"></div><div class="line">    conf_data = conf.ceph.load_raw(args)</div><div class="line"></div><div class="line">    <span class="comment"># write the configuration file</span></div><div class="line">    distro.conn.remote_module.write_conf(</div><div class="line">        args.cluster,</div><div class="line">        conf_data,</div><div class="line">        args.overwrite_conf,</div><div class="line">    )</div><div class="line"></div><div class="line">    <span class="comment"># if the mon path does not exist, create it</span></div><div class="line">    distro.conn.remote_module.create_mon_path(path, uid, gid)</div><div class="line"></div><div class="line">    logger.debug(<span class="string">'checking for done path: %s'</span> % done_path)</div><div class="line">    <span class="keyword">if</span> not distro.conn.remote_module.path_exists(done_path):</div><div class="line">        logger.debug(<span class="string">'done path does not exist: %s'</span> % done_path)</div><div class="line">        <span class="keyword">if</span> not distro.conn.remote_module.path_exists(paths.mon.constants.tmp_path):</div><div class="line">            logger.info(<span class="string">'creating tmp path: %s'</span> % paths.mon.constants.tmp_path)</div><div class="line">            distro.conn.remote_module.makedir(paths.mon.constants.tmp_path)</div><div class="line">        keyring = paths.mon.keyring(args.cluster, hostname)</div><div class="line"></div><div class="line">        logger.info(<span class="string">'creating keyring file: %s'</span> % keyring)</div><div class="line">        distro.conn.remote_module.write_monitor_keyring(</div><div class="line">            keyring,</div><div class="line">            monitor_keyring,</div><div class="line">            uid, gid,</div><div class="line">        )</div><div class="line"></div><div class="line">        <span class="comment"># get the monmap</span></div><div class="line">        remoto.process.run(</div><div class="line">            distro.conn,</div><div class="line">            [</div><div class="line">                <span class="string">'ceph'</span>,</div><div class="line">                <span class="string">'--cluster'</span>, args.cluster,</div><div class="line">                <span class="string">'mon'</span>,</div><div class="line">                <span class="string">'getmap'</span>,</div><div class="line">                <span class="string">'-o'</span>,</div><div class="line">                monmap_path,</div><div class="line">            ],</div><div class="line">        )</div><div class="line"></div><div class="line">        <span class="comment"># now use it to prepare the monitor's data dir</span></div><div class="line">        user_args = []</div><div class="line">        <span class="keyword">if</span> uid != 0:</div><div class="line">            user_args = user_args + [ <span class="string">'--setuser'</span>, str(uid) ]</div><div class="line">        <span class="keyword">if</span> gid != 0:</div><div class="line">            user_args = user_args + [ <span class="string">'--setgroup'</span>, str(gid) ]</div><div class="line"></div><div class="line">        remoto.process.run(</div><div class="line">            distro.conn,</div><div class="line">            [</div><div class="line">                <span class="string">'ceph-mon'</span>,</div><div class="line">                <span class="string">'--cluster'</span>, args.cluster,</div><div class="line">                <span class="string">'--mkfs'</span>,</div><div class="line">                <span class="string">'-i'</span>, hostname,</div><div class="line">                <span class="string">'--monmap'</span>,</div><div class="line">                monmap_path,</div><div class="line">                <span class="string">'--keyring'</span>, keyring,</div><div class="line">            ] + user_args</div><div class="line">        )</div><div class="line"></div><div class="line">        logger.info(<span class="string">'unlinking keyring file %s'</span> % keyring)</div><div class="line">        distro.conn.remote_module.unlink(keyring)</div><div class="line"></div><div class="line">    <span class="comment"># create the done file</span></div><div class="line">    distro.conn.remote_module.create_done_path(done_path, uid, gid)</div><div class="line"></div><div class="line">    <span class="comment"># create init path</span></div><div class="line">    distro.conn.remote_module.create_init_path(init_path, uid, gid)</div><div class="line"></div><div class="line">    <span class="comment"># start mon service</span></div><div class="line">    start_mon_service(distro, args.cluster, hostname)</div></pre></td></tr></table></figure>
+<h3 id="删除mon"><a href="#删除mon" class="headerlink" title="删除mon"></a>删除mon</h3><p>命令行格式为： ceph-deploy mon destroy [-h] mon [mon …]</p>
+<p>mon_destroy函数，调用destroy_mon函数<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">def mon_destroy(args):</div><div class="line">    errors = 0</div><div class="line">    <span class="keyword">for</span> (name, host) <span class="keyword">in</span> mon_hosts(args.mon):</div><div class="line">        try:</div><div class="line">            LOG.debug(<span class="string">'Removing mon from %s'</span>, name)</div><div class="line"></div><div class="line">            distro = hosts.get(</div><div class="line">                host,</div><div class="line">                username=args.username,</div><div class="line">                callbacks=[packages.ceph_is_installed]</div><div class="line">            )</div><div class="line">            hostname = distro.conn.remote_module.shortname()</div><div class="line"></div><div class="line">            <span class="comment"># 删除mon</span></div><div class="line">            destroy_mon(</div><div class="line">                distro.conn,</div><div class="line">                args.cluster,</div><div class="line">                hostname,</div><div class="line">            )</div><div class="line">            distro.conn.exit()</div><div class="line"></div><div class="line">        except RuntimeError as e:</div><div class="line">            LOG.error(e)</div><div class="line">            errors += 1</div><div class="line"></div><div class="line">    <span class="keyword">if</span> errors:</div><div class="line">        raise exc.GenericError(<span class="string">'Failed to destroy %d monitors'</span> % errors)</div></pre></td></tr></table></figure></p>
+<p>destroy_mon函数</p>
+<ul>
+<li>从集群中删除mon</li>
+<li>停止mon服务</li>
+<li>将mon数据文件移动到/var/lib/ceph/mon-removed目录归档文件<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div></pre></td><td class="code"><pre><div class="line">def destroy_mon(conn, cluster, hostname):</div><div class="line">    import datetime</div><div class="line">    import time</div><div class="line">    retries = 5</div><div class="line"></div><div class="line">    <span class="comment"># mon的目录，比如/var/lib/ceph/mon/ceph-node1</span></div><div class="line">    path = paths.mon.path(cluster, hostname)</div><div class="line"></div><div class="line">    <span class="keyword">if</span> conn.remote_module.path_exists(path):</div><div class="line">        <span class="comment"># remove from cluster</span></div><div class="line">        <span class="comment"># 从集群中删除mon</span></div><div class="line">        remoto.process.run(</div><div class="line">            conn,</div><div class="line">            [</div><div class="line">                <span class="string">'ceph'</span>,</div><div class="line">                <span class="string">'--cluster=&#123;cluster&#125;'</span>.format(cluster=cluster),</div><div class="line">                <span class="string">'-n'</span>, <span class="string">'mon.'</span>,</div><div class="line">                <span class="string">'-k'</span>, <span class="string">'&#123;path&#125;/keyring'</span>.format(path=path),</div><div class="line">                <span class="string">'mon'</span>,</div><div class="line">                <span class="string">'remove'</span>,</div><div class="line">                hostname,</div><div class="line">            ],</div><div class="line">            timeout=7,</div><div class="line">        )</div><div class="line"></div><div class="line">        <span class="comment"># stop</span></div><div class="line">        <span class="keyword">if</span> conn.remote_module.path_exists(os.path.join(path, <span class="string">'upstart'</span>)) or system.is_upstart(conn):</div><div class="line">            status_args = [</div><div class="line">                <span class="string">'initctl'</span>,</div><div class="line">                <span class="string">'status'</span>,</div><div class="line">                <span class="string">'ceph-mon'</span>,</div><div class="line">                <span class="string">'cluster=&#123;cluster&#125;'</span>.format(cluster=cluster),</div><div class="line">                <span class="string">'id=&#123;hostname&#125;'</span>.format(hostname=hostname),</div><div class="line">            ]</div><div class="line"></div><div class="line">        <span class="keyword">elif</span> conn.remote_module.path_exists(os.path.join(path, <span class="string">'sysvinit'</span>)):</div><div class="line">            status_args = [</div><div class="line">                <span class="string">'service'</span>,</div><div class="line">                <span class="string">'ceph'</span>,</div><div class="line">                <span class="string">'status'</span>,</div><div class="line">                <span class="string">'mon.&#123;hostname&#125;'</span>.format(hostname=hostname),</div><div class="line">            ]</div><div class="line">        <span class="keyword">elif</span> system.is_systemd(conn):</div><div class="line">            <span class="comment"># 停止mon服务</span></div><div class="line">            status_args = [</div><div class="line">                <span class="string">'systemctl'</span>,</div><div class="line">                <span class="string">'stop'</span>,</div><div class="line">                <span class="string">'ceph-mon@&#123;hostname&#125;.service'</span>.format(hostname=hostname),</div><div class="line">            ]</div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            raise RuntimeError(<span class="string">'could not detect a supported init system, cannot continue'</span>)</div><div class="line"></div><div class="line">        <span class="keyword">while</span> retries:</div><div class="line">            conn.logger.info(<span class="string">'polling the daemon to verify it stopped'</span>)</div><div class="line">            <span class="keyword">if</span> is_running(conn, status_args):</div><div class="line">                time.sleep(5)</div><div class="line">                retries -= 1</div><div class="line">                <span class="keyword">if</span> retries &lt;= 0:</div><div class="line">                    raise RuntimeError(<span class="string">'ceph-mon deamon did not stop'</span>)</div><div class="line">            <span class="keyword">else</span>:</div><div class="line">                <span class="built_in">break</span></div><div class="line"></div><div class="line">        <span class="comment"># archive old monitor directory</span></div><div class="line">        fn = <span class="string">'&#123;cluster&#125;-&#123;hostname&#125;-&#123;stamp&#125;'</span>.format(</div><div class="line">            hostname=hostname,</div><div class="line">            cluster=cluster,</div><div class="line">            stamp=datetime.datetime.utcnow().strftime(<span class="string">"%Y-%m-%dZ%H:%M:%S"</span>),</div><div class="line">            )</div><div class="line"></div><div class="line">        <span class="comment"># 创建/var/lib/ceph/mon-removed目录</span></div><div class="line">        remoto.process.run(</div><div class="line">            conn,</div><div class="line">            [</div><div class="line">                <span class="string">'mkdir'</span>,</div><div class="line">                <span class="string">'-p'</span>,</div><div class="line">                <span class="string">'/var/lib/ceph/mon-removed'</span>,</div><div class="line">            ],</div><div class="line">        )</div><div class="line"></div><div class="line">        <span class="comment"># 将mon数据文件移动到/var/lib/ceph/mon-removed目录归档文件</span></div><div class="line">        conn.remote_module.make_mon_removed_dir(path, fn)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="创建mon并初始化"><a href="#创建mon并初始化" class="headerlink" title="创建mon并初始化"></a>创建mon并初始化</h3><p>命令行格式为： ceph-deploy mon create-initial [-h] [--keyrings [KEYRINGS]]</p>
+<p>mon_create_initial函数</p>
+<ul>
+<li>调用mon_create函数，创建mon，可参考create部分</li>
+<li>判断集群中的mon_in_quorum与ceph.conf中的mon_initial_members是否完全匹配</li>
+<li>调用gatherkeys模块gatherkeys函数，收集用于配置新节点的keys<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line">def mon_create_initial(args):</div><div class="line">    <span class="comment"># 获取ceph.conf中的mon_initial_members</span></div><div class="line">    mon_initial_members = get_mon_initial_members(args, error_on_empty=True)</div><div class="line"></div><div class="line">    <span class="comment"># create them normally through mon_create</span></div><div class="line">    args.mon = mon_initial_members</div><div class="line">    <span class="comment"># 创建mon</span></div><div class="line">    mon_create(args)</div><div class="line"></div><div class="line">    <span class="comment"># make the sets to be able to compare late</span></div><div class="line">    mon_in_quorum = <span class="built_in">set</span>([])</div><div class="line">    mon_members = <span class="built_in">set</span>([host <span class="keyword">for</span> host <span class="keyword">in</span> mon_initial_members])</div><div class="line"></div><div class="line">    <span class="keyword">for</span> host <span class="keyword">in</span> mon_initial_members:</div><div class="line">        mon_name = <span class="string">'mon.%s'</span> % host</div><div class="line">        LOG.info(<span class="string">'processing monitor %s'</span>, mon_name)</div><div class="line">        sleeps = [20, 20, 15, 10, 10, 5]</div><div class="line">        tries = 5</div><div class="line">        rlogger = logging.getLogger(host)</div><div class="line">        distro = hosts.get(</div><div class="line">            host,</div><div class="line">            username=args.username,</div><div class="line">            callbacks=[packages.ceph_is_installed]</div><div class="line">        )</div><div class="line"></div><div class="line">        <span class="keyword">while</span> tries:</div><div class="line">            <span class="comment"># 获取mon的状态</span></div><div class="line">            status = mon_status_check(distro.conn, rlogger, host, args)</div><div class="line">            has_reached_quorum = status.get(<span class="string">'state'</span>, <span class="string">''</span>) <span class="keyword">in</span> [<span class="string">'peon'</span>, <span class="string">'leader'</span>]</div><div class="line">            <span class="keyword">if</span> not has_reached_quorum:</div><div class="line">                LOG.warning(<span class="string">'%s monitor is not yet in quorum, tries left: %s'</span> % (mon_name, tries))</div><div class="line">                tries -= 1</div><div class="line">                sleep_seconds = sleeps.pop()</div><div class="line">                LOG.warning(<span class="string">'waiting %s seconds before retrying'</span>, sleep_seconds)</div><div class="line">                time.sleep(sleep_seconds)  <span class="comment"># Magic number</span></div><div class="line">            <span class="keyword">else</span>:</div><div class="line">                mon_in_quorum.add(host)</div><div class="line">                LOG.info(<span class="string">'%s monitor has reached quorum!'</span>, mon_name)</div><div class="line">                <span class="built_in">break</span></div><div class="line">        distro.conn.exit()</div><div class="line"></div><div class="line">    <span class="comment"># 集群中的mon_in_quorum与ceph.conf中的mon_initial_members完全匹配</span></div><div class="line">    <span class="keyword">if</span> mon_in_quorum == mon_members:</div><div class="line">        LOG.info(<span class="string">'all initial monitors are running and have formed quorum'</span>)</div><div class="line">        LOG.info(<span class="string">'Running gatherkeys...'</span>)</div><div class="line">        <span class="comment"># 调用gatherkeys模块gatherkeys函数，收集用于配置新节点的keys</span></div><div class="line">        gatherkeys.gatherkeys(args)</div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        LOG.error(<span class="string">'Some monitors have still not reached quorum:'</span>)</div><div class="line">        <span class="keyword">for</span> host <span class="keyword">in</span> mon_members - mon_in_quorum:</div><div class="line">            LOG.error(<span class="string">'%s'</span>, host)</div><div class="line">        raise SystemExit(<span class="string">'cluster may not be in a healthy state'</span>)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="手工管理mon"><a href="#手工管理mon" class="headerlink" title="手工管理mon"></a>手工管理mon</h2><h3 id="创建mon-1"><a href="#创建mon-1" class="headerlink" title="创建mon"></a>创建mon</h3><p>以ceph-deploy创建mon：ceph-deploy mon create ceph-231为例，对应的手工操作。</p>
+<h4 id="生成fsid"><a href="#生成fsid" class="headerlink" title="生成fsid"></a>生成fsid</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@ceph-231 ~]<span class="comment"># uuidgen</span></div><div class="line">a3b9b0aa-01ab-4e1b-bba3-6f5317b0795b</div></pre></td></tr></table></figure>
+<h4 id="创建ceph-conf"><a href="#创建ceph-conf" class="headerlink" title="创建ceph.conf"></a>创建ceph.conf</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[root@ceph-231 ~]<span class="comment"># vi /etc/ceph/ceph.conf</span></div><div class="line">[global]</div><div class="line">fsid = a3b9b0aa-01ab-4e1b-bba3-6f5317b0795b</div><div class="line">mon_initial_members = ceph-231</div><div class="line">mon_host = 192.168.217.231</div><div class="line">auth_cluster_required = cephx</div><div class="line">auth_service_required = cephx</div><div class="line">auth_client_required = cephx</div></pre></td></tr></table></figure>
+<h4 id="创建ceph-ceph-231-mon-keyring"><a href="#创建ceph-ceph-231-mon-keyring" class="headerlink" title="创建ceph-ceph-231.mon.keyring"></a>创建ceph-ceph-231.mon.keyring</h4><p>创建keyring<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[root@ceph-231 ~]<span class="comment"># ceph-authtool --create-keyring /var/lib/ceph/tmp/ceph-ceph-231.mon.keyring --gen-key -n mon. --cap mon 'allow *'</span></div><div class="line">[root@ceph-231 ~]<span class="comment"># cat /var/lib/ceph/tmp/ceph-ceph-231.mon.keyring</span></div><div class="line">[mon.]</div><div class="line">        key = AQBzv0hZAAAAABAAJLiETzmegHWmVO7JwvsMdQ==</div><div class="line">        caps mon = <span class="string">"allow *"</span></div></pre></td></tr></table></figure></p>
+<p>改变文件拥有者为ceph<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@ceph-231 ~]<span class="comment"># chown ceph:ceph /var/lib/ceph/tmp/ceph-ceph-231.mon.keyring</span></div></pre></td></tr></table></figure></p>
+<h4 id="创建mon-2"><a href="#创建mon-2" class="headerlink" title="创建mon"></a>创建mon</h4><p>获取ceph用户的uid、gid<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@ceph-231 ~]<span class="comment"># id ceph</span></div><div class="line">uid=167(ceph) gid=167(ceph) groups=167(ceph)</div></pre></td></tr></table></figure></p>
+<p>创建mon<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@ceph-231 ~]<span class="comment"># ceph-mon --cluster ceph --mkfs -i ceph-231 --keyring /var/lib/ceph/tmp/ceph-ceph-231.mon.keyring --setuser 167 --setgroup 167</span></div></pre></td></tr></table></figure></p>
+<h4 id="创建done文件"><a href="#创建done文件" class="headerlink" title="创建done文件"></a>创建done文件</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@ceph-231 ~]<span class="comment"># touch /var/lib/ceph/mon/ceph-ceph-231/done</span></div><div class="line">[root@ceph-231 ~]<span class="comment"># chown ceph:ceph /var/lib/ceph/mon/ceph-ceph-231/done</span></div></pre></td></tr></table></figure>
+<h4 id="启动mon"><a href="#启动mon" class="headerlink" title="启动mon"></a>启动mon</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@ceph-231 ~]<span class="comment"># systemctl enable ceph.target</span></div><div class="line">[root@ceph-231 ~]<span class="comment"># systemctl enable ceph-mon@ceph-231</span></div><div class="line">[root@ceph-231 ~]<span class="comment"># systemctl start ceph-mon@ceph-231</span></div></pre></td></tr></table></figure>
+<h4 id="查看mon状态"><a href="#查看mon状态" class="headerlink" title="查看mon状态"></a>查看mon状态</h4><ul>
+<li>rank大于等于0，表示mon正在运行</li>
+<li>rank等于-1，state为mon的状态<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">[root@ceph-231 ceph-ceph-231]<span class="comment"># ceph --cluster=ceph --admin-daemon /var/run/ceph/ceph-mon.ceph-231.asok mon_status</span></div><div class="line">&#123;</div><div class="line">    <span class="string">"name"</span>: <span class="string">"ceph-231"</span>,</div><div class="line">    <span class="string">"rank"</span>: 0,</div><div class="line">    <span class="string">"state"</span>: <span class="string">"leader"</span>,</div><div class="line">    <span class="string">"election_epoch"</span>: 3,</div><div class="line">    <span class="string">"quorum"</span>: [</div><div class="line">        0</div><div class="line">    ],</div><div class="line">    <span class="string">"outside_quorum"</span>: [],</div><div class="line">    <span class="string">"extra_probe_peers"</span>: [],</div><div class="line">    <span class="string">"sync_provider"</span>: [],</div><div class="line">    <span class="string">"monmap"</span>: &#123;</div><div class="line">        <span class="string">"epoch"</span>: 1,</div><div class="line">        <span class="string">"fsid"</span>: <span class="string">"a3b9b0aa-01ab-4e1b-bba3-6f5317b0795b"</span>,</div><div class="line">        <span class="string">"modified"</span>: <span class="string">"2017-06-20 15:53:44.533604"</span>,</div><div class="line">        <span class="string">"created"</span>: <span class="string">"2017-06-20 15:53:44.533604"</span>,</div><div class="line">        <span class="string">"mons"</span>: [</div><div class="line">            &#123;</div><div class="line">                <span class="string">"rank"</span>: 0,</div><div class="line">                <span class="string">"name"</span>: <span class="string">"ceph-231"</span>,</div><div class="line">                <span class="string">"addr"</span>: <span class="string">"192.168.217.231:6789\/0"</span></div><div class="line">            &#125;</div><div class="line">        ]</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="添加mon到集群-1"><a href="#添加mon到集群-1" class="headerlink" title="添加mon到集群"></a>添加mon到集群</h3><p>集群ceph-231上添加ceph-232这个mon。</p>
+<h4 id="ceph-conf添加public-network"><a href="#ceph-conf添加public-network" class="headerlink" title="ceph.conf添加public_network"></a>ceph.conf添加public_network</h4><p>修改ceph.conf文件，添加 public_network=192.168.217.0/24<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@ceph-231 ~]<span class="comment"># vi /etc/ceph/ceph.conf</span></div></pre></td></tr></table></figure></p>
+<h4 id="copy配置与keyring"><a href="#copy配置与keyring" class="headerlink" title="copy配置与keyring"></a>copy配置与keyring</h4><p>复制/etc/ceph/ceph.conf与/etc/ceph/ceph.client.admin.keyring文件<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@ceph-231 ~]<span class="comment"># scp /etc/ceph/ceph.conf root@ceph-232:/etc/ceph</span></div><div class="line">[root@ceph-231 ~]<span class="comment"># scp /etc/ceph/ceph.client.admin.keyring root@ceph-232:/etc/ceph</span></div></pre></td></tr></table></figure></p>
+<p>复制mon的keyring<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@ceph-231 ~]<span class="comment"># scp /var/lib/ceph/mon/ceph-ceph-231/keyring root@ceph-232:/var/lib/ceph/tmp/ceph-ceph-232.mon.keyring</span></div></pre></td></tr></table></figure></p>
+<p>设置keyring的用户权限<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@ceph-232 ~]<span class="comment"># chown ceph:ceph /var/lib/ceph/tmp/ceph-ceph-232.mon.keyring</span></div></pre></td></tr></table></figure></p>
+<h4 id="创建mon-3"><a href="#创建mon-3" class="headerlink" title="创建mon"></a>创建mon</h4><p>获取ceph-232的monmap<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@ceph-232 ~]<span class="comment"># ceph --cluster ceph mon getmap -o /var/lib/ceph/tmp/ceph.ceph-232.monmap</span></div></pre></td></tr></table></figure></p>
+<p>获取用户ceph的uid、gid<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@ceph-232 ~]<span class="comment"># id ceph</span></div><div class="line">uid=167(ceph) gid=167(ceph) groups=167(ceph)</div></pre></td></tr></table></figure></p>
+<p>创建ceph-232的mon<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@ceph-232 ~]<span class="comment"># ceph-mon --cluster ceph --mkfs -i ceph-232 --monmap /var/lib/ceph/tmp/ceph.ceph-232.monmap --keyring /var/lib/ceph/tmp/ceph-ceph-232.mon.keyring --setuser 167 --setgroup 167</span></div></pre></td></tr></table></figure></p>
+<h4 id="创建done文件-1"><a href="#创建done文件-1" class="headerlink" title="创建done文件"></a>创建done文件</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@ceph-232 ~]<span class="comment"># touch /var/lib/ceph/mon/ceph-ceph-232/done</span></div><div class="line">[root@ceph-232 ~]<span class="comment"># chown ceph:ceph /var/lib/ceph/mon/ceph-ceph-232/done</span></div></pre></td></tr></table></figure>
+<h4 id="启动mon-1"><a href="#启动mon-1" class="headerlink" title="启动mon"></a>启动mon</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@ceph-232 ~]<span class="comment"># systemctl enable ceph.target</span></div><div class="line">[root@ceph-232 ~]<span class="comment"># systemctl enable ceph-mon@ceph-232</span></div><div class="line">[root@ceph-232 ~]<span class="comment"># systemctl start ceph-mon@ceph-232</span></div></pre></td></tr></table></figure>
+<h4 id="查看mon状态-1"><a href="#查看mon状态-1" class="headerlink" title="查看mon状态"></a>查看mon状态</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">[root@ceph-232 ~]<span class="comment"># ceph --cluster=ceph --admin-daemon /var/run/ceph/ceph-mon.ceph-232.asok mon_status</span></div><div class="line">&#123;</div><div class="line">    <span class="string">"name"</span>: <span class="string">"ceph-232"</span>,</div><div class="line">    <span class="string">"rank"</span>: 1,</div><div class="line">    <span class="string">"state"</span>: <span class="string">"peon"</span>,</div><div class="line">    <span class="string">"election_epoch"</span>: 6,</div><div class="line">    <span class="string">"quorum"</span>: [</div><div class="line">        0,</div><div class="line">        1</div><div class="line">    ],</div><div class="line">    <span class="string">"outside_quorum"</span>: [],</div><div class="line">    <span class="string">"extra_probe_peers"</span>: [],</div><div class="line">    <span class="string">"sync_provider"</span>: [],</div><div class="line">    <span class="string">"monmap"</span>: &#123;</div><div class="line">        <span class="string">"epoch"</span>: 4,</div><div class="line">        <span class="string">"fsid"</span>: <span class="string">"e1d69cc3-f40c-44c7-a758-fdfd4e5ef43e"</span>,</div><div class="line">        <span class="string">"modified"</span>: <span class="string">"2017-06-21 16:46:01.518137"</span>,</div><div class="line">        <span class="string">"created"</span>: <span class="string">"2017-06-21 16:16:34.913008"</span>,</div><div class="line">        <span class="string">"mons"</span>: [</div><div class="line">            &#123;</div><div class="line">                <span class="string">"rank"</span>: 0,</div><div class="line">                <span class="string">"name"</span>: <span class="string">"ceph-231"</span>,</div><div class="line">                <span class="string">"addr"</span>: <span class="string">"192.168.217.231:6789\/0"</span></div><div class="line">            &#125;,</div><div class="line">            &#123;</div><div class="line">                <span class="string">"rank"</span>: 1,</div><div class="line">                <span class="string">"name"</span>: <span class="string">"ceph-232"</span>,</div><div class="line">                <span class="string">"addr"</span>: <span class="string">"192.168.217.232:6789\/0"</span></div><div class="line">            &#125;</div><div class="line">        ]</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="删除mon-1"><a href="#删除mon-1" class="headerlink" title="删除mon"></a>删除mon</h3><p>如果集群只有一个mon则不能删除mon<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@ceph-232 ~]<span class="comment"># ceph --cluster=ceph -n mon. -k /var/lib/ceph/mon/ceph-ceph-232/keyring mon remove ceph-232</span></div><div class="line">removing mon.ceph-232 at 192.168.217.232:6789/0, there will be 1 monitors</div></pre></td></tr></table></figure></p>
+<h3 id="创建mon并初始化-1"><a href="#创建mon并初始化-1" class="headerlink" title="创建mon并初始化"></a>创建mon并初始化</h3><h4 id="创建mon-4"><a href="#创建mon-4" class="headerlink" title="创建mon"></a>创建mon</h4><p>创建mon与前面【创建mon】相同</p>
+<h4 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h4><p>初始化，创建keys</p>
+<p>client.admin<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[root@ceph-231 ~]<span class="comment"># /usr/bin/ceph --connect-timeout=25 --cluster=ceph --name mon. --keyring=/var/lib/ceph/mon/ceph-ceph-231/keyring auth get client.admin</span></div><div class="line">exported keyring <span class="keyword">for</span> client.admin</div><div class="line">[client.admin]</div><div class="line">        key = AQAEI0JZupXTFRAAmFF56vYMzKkzc5nxLit6mA==</div><div class="line">        caps mds = <span class="string">"allow *"</span></div><div class="line">        caps mon = <span class="string">"allow *"</span></div><div class="line">        caps osd = <span class="string">"allow *"</span></div></pre></td></tr></table></figure></p>
+<p>client.bootstrap-mds<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[root@ceph-231 ~]<span class="comment"># /usr/bin/ceph --connect-timeout=25 --cluster=ceph --name mon. --keyring=/var/lib/ceph/mon/ceph-ceph-231/keyring auth get client.bootstrap-mds</span></div><div class="line">exported keyring <span class="keyword">for</span> client.bootstrap-mds</div><div class="line">[client.bootstrap-mds]</div><div class="line">        key = AQBjzklZ5D6oLRAAMSwQ169JjzNnPBMzIv6vCw==</div><div class="line">        caps mon = <span class="string">"allow profile bootstrap-mds"</span></div></pre></td></tr></table></figure></p>
+<p>如果client.bootstrap-mds在keyring中不存在，则创建<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@ceph-231 ~]<span class="comment"># /usr/bin/ceph --connect-timeout=25 --cluster=ceph --name mon. --keyring=/var/lib/ceph/mon/ceph-ceph-231/keyring auth get-or-create client.bootstrap-mds mon "allow profile bootstrap-mds"</span></div></pre></td></tr></table></figure></p>
+<p>client.bootstrap-osd<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[root@ceph-231 ~]<span class="comment"># /usr/bin/ceph --connect-timeout=25 --cluster=ceph --name mon. --keyring=/var/lib/ceph/mon/ceph-ceph-231/keyring auth get client.bootstrap-osd</span></div><div class="line">exported keyring <span class="keyword">for</span> client.bootstrap-osd</div><div class="line">[client.bootstrap-osd]</div><div class="line">        key = AQBkzklZf/NpKhAAeJwteZDEGfZj66BUnbxC1Q==</div><div class="line">        caps mon = <span class="string">"allow profile bootstrap-osd"</span></div></pre></td></tr></table></figure></p>
+<p>如果client.bootstrap-osd在keyring中不存在，则创建<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@ceph-231 ~]<span class="comment"># /usr/bin/ceph --connect-timeout=25 --cluster=ceph --name mon. --keyring=/var/lib/ceph/mon/ceph-ceph-231/keyring auth get-or-create client.bootstrap-osd mon "allow profile bootstrap-osd"</span></div></pre></td></tr></table></figure></p>
+<p>client.bootstrap-rgw<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[root@ceph-231 ~]<span class="comment"># /usr/bin/ceph --connect-timeout=25 --cluster=ceph --name mon. --keyring=/var/lib/ceph/mon/ceph-ceph-231/keyring auth get client.bootstrap-rgw</span></div><div class="line">exported keyring <span class="keyword">for</span> client.bootstrap-rgw</div><div class="line">[client.bootstrap-rgw]</div><div class="line">        key = AQBlzklZT3BEIRAA9w+/G+Sp6zJ+aTh+VQwTUQ==</div><div class="line">        caps mon = <span class="string">"allow profile bootstrap-rgw"</span></div></pre></td></tr></table></figure></p>
+<p>如果client.bootstrap-rgw在keyring中不存在，则创建<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@ceph-231 ~]<span class="comment"># /usr/bin/ceph --connect-timeout=25 --cluster=ceph --name mon. --keyring=/var/lib/ceph/mon/ceph-ceph-231/keyring auth get-or-create client.bootstrap-rgw mon "allow profile bootstrap-rgw"</span></div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Ceph/" rel="tag"># Ceph</a>
+          
+            <a href="/tags/ceph-deploy/" rel="tag"># ceph-deploy</a>
+          
+            <a href="/tags/mon-py/" rel="tag"># mon.py</a>
+          
+            <a href="/tags/mon管理/" rel="tag"># mon管理</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/19/ceph-deploy-new/" rel="next" title="ceph-deploy源码分析（二）——new模块">
+                <i class="fa fa-chevron-left"></i> ceph-deploy源码分析（二）——new模块
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/20/ceph-error-authentication/" rel="prev" title="执行ceph命令出错：librados: client.admin authentication error (1) Operation not permitted">
+                执行ceph命令出错：librados: client.admin authentication error (1) Operation not permitted <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8yNzg2Ny80NDQ0"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="hl10502" />
+          <p class="site-author-name" itemprop="name">hl10502</p>
+          <p class="site-description motion-element" itemprop="description">关注云计算/虚拟化/分布式存储等</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">67</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">127</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/hl10502" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#mon管理"><span class="nav-number">1.</span> <span class="nav-text">mon管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mon子命令"><span class="nav-number">2.</span> <span class="nav-text">mon子命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建mon"><span class="nav-number">2.1.</span> <span class="nav-text">创建mon</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加mon到集群"><span class="nav-number">2.2.</span> <span class="nav-text">添加mon到集群</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除mon"><span class="nav-number">2.3.</span> <span class="nav-text">删除mon</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建mon并初始化"><span class="nav-number">2.4.</span> <span class="nav-text">创建mon并初始化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#手工管理mon"><span class="nav-number">3.</span> <span class="nav-text">手工管理mon</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建mon-1"><span class="nav-number">3.1.</span> <span class="nav-text">创建mon</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#生成fsid"><span class="nav-number">3.1.1.</span> <span class="nav-text">生成fsid</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建ceph-conf"><span class="nav-number">3.1.2.</span> <span class="nav-text">创建ceph.conf</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建ceph-ceph-231-mon-keyring"><span class="nav-number">3.1.3.</span> <span class="nav-text">创建ceph-ceph-231.mon.keyring</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建mon-2"><span class="nav-number">3.1.4.</span> <span class="nav-text">创建mon</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建done文件"><span class="nav-number">3.1.5.</span> <span class="nav-text">创建done文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#启动mon"><span class="nav-number">3.1.6.</span> <span class="nav-text">启动mon</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查看mon状态"><span class="nav-number">3.1.7.</span> <span class="nav-text">查看mon状态</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加mon到集群-1"><span class="nav-number">3.2.</span> <span class="nav-text">添加mon到集群</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ceph-conf添加public-network"><span class="nav-number">3.2.1.</span> <span class="nav-text">ceph.conf添加public_network</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#copy配置与keyring"><span class="nav-number">3.2.2.</span> <span class="nav-text">copy配置与keyring</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建mon-3"><span class="nav-number">3.2.3.</span> <span class="nav-text">创建mon</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建done文件-1"><span class="nav-number">3.2.4.</span> <span class="nav-text">创建done文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#启动mon-1"><span class="nav-number">3.2.5.</span> <span class="nav-text">启动mon</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查看mon状态-1"><span class="nav-number">3.2.6.</span> <span class="nav-text">查看mon状态</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除mon-1"><span class="nav-number">3.3.</span> <span class="nav-text">删除mon</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建mon并初始化-1"><span class="nav-number">3.4.</span> <span class="nav-text">创建mon并初始化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#创建mon-4"><span class="nav-number">3.4.1.</span> <span class="nav-text">创建mon</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#初始化"><span class="nav-number">3.4.2.</span> <span class="nav-text">初始化</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">hl10502</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("LE6b1aXtXOedOvsqgG7uXyrn-gzGzoHsz", "WHQseHdLj7t7hyj5EXO7pveG");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

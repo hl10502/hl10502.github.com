@@ -1,0 +1,1051 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="2xIA6kyEisqneyrcTltYHTS8lapHWNhDBX_qkWzL2FY" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Ceph,ceph-deploy,cli," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="ceph-deploy是部署Ceph集群的工具，可以通过SSH方式往远程主机上安装 Ceph 软件包、创建集群、增加监视器、收集（或销毁）密钥、增加 OSD 和元数据服务器、配置管理主机，甚至拆除集群。
+ceph-deploy使用Python开发，GitHub为 https://github.com/ceph/ceph-deploy。本次源码分析的ceph-deploy版本为1.5.37。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ceph-deploy源码分析（一）——源码结构与cli">
+<meta property="og:url" content="https://hl10502.github.io/2017/06/15/ceph-deploy-cli/index.html">
+<meta property="og:site_name" content="hl10502的博客">
+<meta property="og:description" content="ceph-deploy是部署Ceph集群的工具，可以通过SSH方式往远程主机上安装 Ceph 软件包、创建集群、增加监视器、收集（或销毁）密钥、增加 OSD 和元数据服务器、配置管理主机，甚至拆除集群。
+ceph-deploy使用Python开发，GitHub为 https://github.com/ceph/ceph-deploy。本次源码分析的ceph-deploy版本为1.5.37。">
+<meta property="og:updated_time" content="2017-06-20T07:19:58.692Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ceph-deploy源码分析（一）——源码结构与cli">
+<meta name="twitter:description" content="ceph-deploy是部署Ceph集群的工具，可以通过SSH方式往远程主机上安装 Ceph 软件包、创建集群、增加监视器、收集（或销毁）密钥、增加 OSD 和元数据服务器、配置管理主机，甚至拆除集群。
+ceph-deploy使用Python开发，GitHub为 https://github.com/ceph/ceph-deploy。本次源码分析的ceph-deploy版本为1.5.37。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://hl10502.github.io/2017/06/15/ceph-deploy-cli/"/>
+
+
+
+
+
+  <title> ceph-deploy源码分析（一）——源码结构与cli | hl10502的博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">hl10502的博客</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">IT技术人</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            所有文章
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于我
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="https://hl10502.github.io/2017/06/15/ceph-deploy-cli/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="hl10502">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="hl10502的博客">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="hl10502的博客" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                ceph-deploy源码分析（一）——源码结构与cli
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-06-15T19:01:40+08:00">
+                2017-06-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Ceph/" itemprop="url" rel="index">
+                    <span itemprop="name">Ceph</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Ceph/ceph-deploy/" itemprop="url" rel="index">
+                    <span itemprop="name">ceph-deploy</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/06/15/ceph-deploy-cli/" class="leancloud_visitors" data-flag-title="ceph-deploy源码分析（一）——源码结构与cli">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>ceph-deploy是部署Ceph集群的工具，可以通过SSH方式往远程主机上安装 Ceph 软件包、创建集群、增加监视器、收集（或销毁）密钥、增加 OSD 和元数据服务器、配置管理主机，甚至拆除集群。</p>
+<p>ceph-deploy使用Python开发，GitHub为 <a href="https://github.com/ceph/ceph-deploy" target="_blank" rel="external">https://github.com/ceph/ceph-deploy</a>。本次源码分析的ceph-deploy版本为1.5.37。</p>
+<a id="more"></a>
+<h2 id="源码结构"><a href="#源码结构" class="headerlink" title="源码结构"></a>源码结构</h2><p>ceph-deploy-1.5.37源码目录<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">├── ceph_deploy                <span class="comment"># ceph-deploy源码目录</span></div><div class="line">├── ceph_deploy.egg-info       <span class="comment"># egg-info目录</span></div><div class="line">├── CONTRIBUTING.rst           <span class="comment"># 贡献指南</span></div><div class="line">├── LICENSE                    <span class="comment"># MIT LICENSE</span></div><div class="line">├── MANIFEST.in                <span class="comment"># 打包规则</span></div><div class="line">├── PKG-INFO                   <span class="comment"># PKG-INFO文件</span></div><div class="line">├── README.rst                 <span class="comment"># ceph-deploy介绍</span></div><div class="line">├── scripts                    <span class="comment"># 启动脚本目录</span></div><div class="line">├── setup.cfg                  <span class="comment"># setup.py配置</span></div><div class="line">├── setup.py                   <span class="comment"># ceph-deploy安装脚本</span></div><div class="line">├── tox.ini                    <span class="comment"># 标准化测试</span></div><div class="line">└── vendor.py</div></pre></td></tr></table></figure></p>
+<p>ceph_deploy源码目录文件<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">├── admin.py                   <span class="comment"># 子命令admin模块，将ceph.conf和client.admin key push到远程主机</span></div><div class="line">├── calamari.py                <span class="comment"># 子命令calamari模块，连接calamari master</span></div><div class="line">├── cli.py                     <span class="comment"># CLI入口</span></div><div class="line">├── cliutil.py                 <span class="comment"># 为装饰器函数增加priority</span></div><div class="line">├── conf                       <span class="comment"># ceph.conf与cephdeploy.conf读取与写入相关操作目录  </span></div><div class="line">├── config.py                  <span class="comment"># 子命令config模块，push ceph.conf文件到远程主机；从远程主机 pull ceph.conf文件</span></div><div class="line">├── connection.py              <span class="comment"># 连接本地主机、远程主机</span></div><div class="line">├── exc.py                     <span class="comment"># 异常处理Error</span></div><div class="line">├── forgetkeys.py              <span class="comment"># 子命令forgetkeys模块，本地移除authentication keys</span></div><div class="line">├── gatherkeys.py              <span class="comment"># 子命令gatherkeys模块，从mon主机上拉取authentication keys</span></div><div class="line">├── hosts                      <span class="comment"># ceph-deploy在不同操作系统（centos、debian、fedora、rhel、suse）的操作</span></div><div class="line">├── __init__.py                <span class="comment"># 初始化版本号信息，当前版本1.5.37</span></div><div class="line">├── install.py                 <span class="comment"># 子命令install模块，安装、卸载ceph包，清除数据</span></div><div class="line">├── lib                        <span class="comment"># vendor类库</span></div><div class="line">├── mds.py                     <span class="comment"># 子命令mds模块，mds管理</span></div><div class="line">├── misc.py                    <span class="comment"># 其他工具类，比如：mon host组装tuples</span></div><div class="line">├── mon.py                     <span class="comment"># 子命令mon模块，mon管理</span></div><div class="line">├── new.py                     <span class="comment"># 子命令new模块，部署集群</span></div><div class="line">├── osd.py                     <span class="comment"># 子命令osd模块，osd管理</span></div><div class="line">├── pkg.py                     <span class="comment"># 子命令pkg模块，逗号分隔的包安装、卸载</span></div><div class="line">├── repo.py                    <span class="comment"># 子命令repo模块，添加 yum repo</span></div><div class="line">├── rgw.py                     <span class="comment"># 子命令rgw模块，rgw管理</span></div><div class="line">├── tests                      <span class="comment"># 测试文件目录</span></div><div class="line">├── util                       <span class="comment"># util目录</span></div><div class="line">└── validate.py                <span class="comment"># 参数校验函数</span></div></pre></td></tr></table></figure></p>
+<h2 id="源码入口"><a href="#源码入口" class="headerlink" title="源码入口"></a>源码入口</h2><p>script目录下的ceph-deploy文件是ceph-deploy的入口，安装之后是/usr/bin/ceph-deploy。</p>
+<p>ceph-deploy的__main__函数调用ceph_deploy.cli的main函数<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">...</div><div class="line">...</div><div class="line">from ceph_deploy.cli import main</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    sys.exit(main())</div></pre></td></tr></table></figure></p>
+<h2 id="cli模块"><a href="#cli模块" class="headerlink" title="cli模块"></a>cli模块</h2><p>cli.py是命令行操作模块。</p>
+<p>main函数调用_main函数<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">def main(args=None, namespace=None):</div><div class="line">    try:</div><div class="line">        _main(args=args, namespace=namespace)</div><div class="line">    finally:</div><div class="line">        <span class="comment"># This block is crucial to avoid having issues with</span></div><div class="line">        <span class="comment"># Python spitting non-sense thread exceptions. We have already</span></div><div class="line">        <span class="comment"># handled what we could, so close stderr and stdout.</span></div><div class="line">        <span class="keyword">if</span> not os.environ.get(<span class="string">'CEPH_DEPLOY_TEST'</span>):</div><div class="line">            try:</div><div class="line">                sys.stdout.close()</div><div class="line">            except:</div><div class="line">                pass</div><div class="line">            try:</div><div class="line">                sys.stderr.close()</div><div class="line">            except:</div><div class="line">                pass</div></pre></td></tr></table></figure></p>
+<h3 id="main函数"><a href="#main函数" class="headerlink" title="_main函数"></a>_main函数</h3><ul>
+<li>设置日志：Console Logger与File Logger添加到root_logger</li>
+<li>调用argparse模块，解析cli参数</li>
+<li>调用conf目录下的ceph-deploy模块set_overrides函数，从当前目录的cephdeploy.conf或~/.cephdeploy.conf文件获取ceph-deploy-global、ceph-deploy-[subcmd]配置项写入args</li>
+<li>调用执行subcmd相应的模块<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div></pre></td><td class="code"><pre><div class="line">@catches((KeyboardInterrupt, RuntimeError, exc.DeployError,), handle_all=True)</div><div class="line">def _main(args=None, namespace=None):</div><div class="line">    <span class="comment"># Set console logging first with some defaults, to prevent having exceptions</span></div><div class="line">    <span class="comment"># before hitting logging configuration. The defaults can/will get overridden</span></div><div class="line">    <span class="comment"># later.</span></div><div class="line"></div><div class="line">    <span class="comment"># Console Logger</span></div><div class="line">    <span class="comment"># 命令行控制台日志</span></div><div class="line">    sh = logging.StreamHandler()</div><div class="line">    <span class="comment"># 不同级别的日志，使用不同的颜色区别：DEBUG蓝色；WARNIN黄色；ERROR红色；INFO白色</span></div><div class="line">    sh.setFormatter(log.color_format())</div><div class="line">    <span class="comment"># 设置日志级别为WARNING</span></div><div class="line">    sh.setLevel(logging.WARNING)</div><div class="line"></div><div class="line">    <span class="comment"># because we're in a module already, __name__ is not the ancestor of</span></div><div class="line">    <span class="comment"># the rest of the package; use the root as the logger for everyone</span></div><div class="line">    <span class="comment"># root_logger日志</span></div><div class="line">    root_logger = logging.getLogger()</div><div class="line"></div><div class="line">    <span class="comment"># allow all levels at root_logger, handlers control individual levels</span></div><div class="line">    <span class="comment"># 设置root_logger日志级别为DEBUG</span></div><div class="line">    root_logger.setLevel(logging.DEBUG)</div><div class="line">    <span class="comment"># 将 sh添加到root_logger</span></div><div class="line">    root_logger.addHandler(sh)</div><div class="line"></div><div class="line">    <span class="comment"># 获取解析cli的argparse，调用argparse模块</span></div><div class="line">    parser = get_parser()</div><div class="line">    <span class="keyword">if</span> len(sys.argv) &lt; 2:</div><div class="line">        parser.print_help()</div><div class="line">        sys.exit()</div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        <span class="comment"># 解析获取sys.argv中的ceph-deploy子命令和参数</span></div><div class="line">        args = parser.parse_args(args=args, namespace=namespace)</div><div class="line"></div><div class="line">    <span class="comment"># 设置日志级别</span></div><div class="line">    console_loglevel = logging.DEBUG  <span class="comment"># start at DEBUG for now</span></div><div class="line">    <span class="keyword">if</span> args.quiet:</div><div class="line">        console_loglevel = logging.WARNING</div><div class="line">    <span class="keyword">if</span> args.verbose:</div><div class="line">        console_loglevel = logging.DEBUG</div><div class="line"></div><div class="line">    <span class="comment"># Console Logger</span></div><div class="line">    sh.setLevel(console_loglevel)</div><div class="line"></div><div class="line">    <span class="comment"># File Logger</span></div><div class="line">    <span class="comment"># 文件日志</span></div><div class="line">    fh = logging.FileHandler(<span class="string">'ceph-deploy-&#123;cluster&#125;.log'</span>.format(cluster=args.cluster))</div><div class="line">    fh.setLevel(logging.DEBUG)</div><div class="line">    fh.setFormatter(logging.Formatter(log.FILE_FORMAT))</div><div class="line">    <span class="comment"># 将 fh添加到root_logger</span></div><div class="line">    root_logger.addHandler(fh)</div><div class="line"></div><div class="line">    <span class="comment"># Reads from the config file and sets values for the global</span></div><div class="line">    <span class="comment"># flags and the given sub-command</span></div><div class="line">    <span class="comment"># the one flag that will never work regardless of the config settings is</span></div><div class="line">    <span class="comment"># logging because we cannot set it before hand since the logging config is</span></div><div class="line">    <span class="comment"># not ready yet. This is the earliest we can do.</span></div><div class="line"></div><div class="line">    <span class="comment"># 从当前目录的cephdeploy.conf或~/.cephdeploy.conf文件获取ceph-deploy配置覆盖命令行参数</span></div><div class="line">    args = ceph_deploy.conf.cephdeploy.set_overrides(args)</div><div class="line"></div><div class="line">    LOG.info(<span class="string">"Invoked (%s): %s"</span> % (</div><div class="line">        ceph_deploy.__version__,</div><div class="line">        <span class="string">' '</span>.join(sys.argv))</div><div class="line">    )</div><div class="line">    log_flags(args)</div><div class="line"></div><div class="line">    <span class="comment"># args.func为cli中的subcmd子命令，调用相应的模块</span></div><div class="line">    <span class="built_in">return</span> args.func(args)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="get-parser函数"><a href="#get-parser函数" class="headerlink" title="get_parser函数"></a>get_parser函数</h3><p>[ceph_deploy.cli]以以下方式配置：</p>
+<pre><code>模块名 = 模块包名:执行函数
+</code></pre><p>比如： new = ceph_deploy.new:make<br>new作为ceph-deploy的子命令，执行ceph-deploy new命令时，执行make函数</p>
+<p>其他的模块也类似：<br>mon = ceph_deploy.mon:make<br>osd = ceph_deploy.osd:make<br>rgw = ceph_deploy.rgw:make<br>mds = ceph_deploy.mds:make<br>config = ceph_deploy.config:make</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div></pre></td><td class="code"><pre><div class="line">def get_parser():</div><div class="line">    <span class="comment"># 调用argparse模块</span></div><div class="line">    parser = argparse.ArgumentParser(</div><div class="line">        prog=<span class="string">'ceph-deploy'</span>,</div><div class="line">        formatter_class=argparse.RawDescriptionHelpFormatter,</div><div class="line">        description=<span class="string">'Easy Ceph deployment\n\n%s'</span> % __header__,</div><div class="line">        )</div><div class="line">    verbosity = parser.add_mutually_exclusive_group(required=False)</div><div class="line">    verbosity.add_argument(</div><div class="line">        <span class="string">'-v'</span>, <span class="string">'--verbose'</span>,</div><div class="line">        action=<span class="string">'store_true'</span>, dest=<span class="string">'verbose'</span>, default=False,</div><div class="line">        <span class="built_in">help</span>=<span class="string">'be more verbose'</span>,</div><div class="line">        )</div><div class="line">    verbosity.add_argument(</div><div class="line">        <span class="string">'-q'</span>, <span class="string">'--quiet'</span>,</div><div class="line">        action=<span class="string">'store_true'</span>, dest=<span class="string">'quiet'</span>,</div><div class="line">        <span class="built_in">help</span>=<span class="string">'be less verbose'</span>,</div><div class="line">        )</div><div class="line">    parser.add_argument(</div><div class="line">        <span class="string">'--version'</span>,</div><div class="line">        action=<span class="string">'version'</span>,</div><div class="line">        version=<span class="string">'%s'</span> % ceph_deploy.__version__,</div><div class="line">        <span class="built_in">help</span>=<span class="string">'the current installed version of ceph-deploy'</span>,</div><div class="line">        )</div><div class="line">    parser.add_argument(</div><div class="line">        <span class="string">'--username'</span>,</div><div class="line">        <span class="built_in">help</span>=<span class="string">'the username to connect to the remote host'</span>,</div><div class="line">        )</div><div class="line">    parser.add_argument(</div><div class="line">        <span class="string">'--overwrite-conf'</span>,</div><div class="line">        action=<span class="string">'store_true'</span>,</div><div class="line">        <span class="built_in">help</span>=<span class="string">'overwrite an existing conf file on remote host (if present)'</span>,</div><div class="line">        )</div><div class="line">    parser.add_argument(</div><div class="line">        <span class="string">'--cluster'</span>,</div><div class="line">        metavar=<span class="string">'NAME'</span>,</div><div class="line">        <span class="built_in">help</span>=<span class="string">'name of the cluster'</span>,</div><div class="line">        <span class="built_in">type</span>=validate.alphanumeric,</div><div class="line">        )</div><div class="line">    parser.add_argument(</div><div class="line">        <span class="string">'--ceph-conf'</span>,</div><div class="line">        dest=<span class="string">'ceph_conf'</span>,</div><div class="line">        <span class="built_in">help</span>=<span class="string">'use (or reuse) a given ceph.conf file'</span>,</div><div class="line">    )</div><div class="line">    sub = parser.add_subparsers(</div><div class="line">        title=<span class="string">'commands'</span>,</div><div class="line">        metavar=<span class="string">'COMMAND'</span>,</div><div class="line">        <span class="built_in">help</span>=<span class="string">'description'</span>,</div><div class="line">        )</div><div class="line">    sub.required = True</div><div class="line">    <span class="comment"># 获取ceph_deploy.cli下的entry_points</span></div><div class="line">    entry_points = [</div><div class="line">        (ep.name, ep.load())</div><div class="line">        <span class="keyword">for</span> ep <span class="keyword">in</span> pkg_resources.iter_entry_points(<span class="string">'ceph_deploy.cli'</span>)</div><div class="line">        ]</div><div class="line">    <span class="comment"># 根据priority排序</span></div><div class="line">    entry_points.sort(</div><div class="line">        key=lambda name_fn: getattr(name_fn[1], <span class="string">'priority'</span>, 100),</div><div class="line">        )</div><div class="line">    <span class="comment"># 将模块加入到子命令</span></div><div class="line">    <span class="keyword">for</span> (name, fn) <span class="keyword">in</span> entry_points:</div><div class="line">        p = sub.add_parser(</div><div class="line">            name,</div><div class="line">            description=fn.__doc__,</div><div class="line">            <span class="built_in">help</span>=fn.__doc__,</div><div class="line">            )</div><div class="line">        <span class="keyword">if</span> not os.environ.get(<span class="string">'CEPH_DEPLOY_TEST'</span>):</div><div class="line">            p.set_defaults(cd_conf=ceph_deploy.conf.cephdeploy.load())</div><div class="line"></div><div class="line">        <span class="comment"># flag if the default release is being used</span></div><div class="line">        p.set_defaults(default_release=False)</div><div class="line">        fn(p)</div><div class="line">        p.required = True</div><div class="line">    parser.set_defaults(</div><div class="line">        cluster=<span class="string">'ceph'</span>,</div><div class="line">        )</div><div class="line"></div><div class="line">    <span class="built_in">return</span> parser</div></pre></td></tr></table></figure>
+<h3 id="argparse模块"><a href="#argparse模块" class="headerlink" title="argparse模块"></a>argparse模块</h3><p>cli命令的解析使用了argparse.py模块。argparse是Python标准库中命令行选项、参数和子命令的解析器，其是为替代已经过时的optparse模块，argparse在Python2.7中被引入。</p>
+<p>argparse模块请参考<br><a href="https://docs.python.org/2.7/library/argparse.html" target="_blank" rel="external">https://docs.python.org/2.7/library/argparse.html</a><br><a href="http://python.usyiyi.cn/translate/python_278/library/argparse.html" target="_blank" rel="external">http://python.usyiyi.cn/translate/python_278/library/argparse.html</a></p>
+<h3 id="set-overrides函数"><a href="#set-overrides函数" class="headerlink" title="set_overrides函数"></a>set_overrides函数</h3><p>conf目录下的ceph-deploy模块set_overrides函数</p>
+<ul>
+<li>调用load()函数</li>
+<li>判断ceph-deploy配置文件ceph-deploy-global、ceph-deploy-[subcommand]配置项，调用override_subcommand()函数写入args。<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">def set_overrides(args, _conf=None):</div><div class="line">    <span class="string">""</span><span class="string">"</span></div><div class="line">    Read the configuration file and look for ceph-deploy sections</div><div class="line">    to set flags/defaults from the values found. This will alter the</div><div class="line">    ``args`` object that is created by argparse.</div><div class="line">    "<span class="string">""</span></div><div class="line">    <span class="comment"># Get the subcommand name to avoid overwritting values from other</span></div><div class="line">    <span class="comment"># subcommands that are not going to be used</span></div><div class="line">    subcommand = args.func.__name__</div><div class="line">    command_section = <span class="string">'ceph-deploy-%s'</span> % subcommand</div><div class="line">    <span class="comment"># 加载ceph-deploy配置</span></div><div class="line">    conf = _conf or load()</div><div class="line"></div><div class="line">    <span class="keyword">for</span> section_name <span class="keyword">in</span> conf.sections():</div><div class="line">        <span class="keyword">if</span> section_name <span class="keyword">in</span> [<span class="string">'ceph-deploy-global'</span>, command_section]:</div><div class="line">            <span class="comment"># ceph-deploy-global、ceph-deploy-[subcommand]配置项写入args</span></div><div class="line">            override_subcommand(</div><div class="line">                section_name,</div><div class="line">                conf.items(section_name),</div><div class="line">                args</div><div class="line">            )</div><div class="line">    <span class="built_in">return</span> args</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>load函数，调用location()函数<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">def load():</div><div class="line">    parser = Conf()</div><div class="line">    <span class="comment"># 读取解析ceph-deploy配置文件</span></div><div class="line">    parser.read(location())</div><div class="line">    <span class="built_in">return</span> parser</div></pre></td></tr></table></figure></p>
+<p>location函数，调用_locate_or_create()函数<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">def location():</div><div class="line">    <span class="string">""</span><span class="string">"</span></div><div class="line">    Find and return the location of the ceph-deploy configuration file. If this</div><div class="line">    file does not exist, create one in a default location.</div><div class="line">    "<span class="string">""</span></div><div class="line">    <span class="built_in">return</span> _locate_or_create()</div></pre></td></tr></table></figure></p>
+<p>_locate_or_create函数，判断当前目录的cephdeploy.conf或~/.cephdeploy.conf文件是否存在。</p>
+<ul>
+<li>如果都不存在则调用create_stub函数创建一个~/.cephdeploy.conf文件。这个文件是根据模板创建的，内容为空。</li>
+<li>如果存在（提前创建）cephdeploy.conf或~/.cephdeploy.conf文件，可以在文件中配置public_network、cluster_network、overwrite-conf等。<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">def _locate_or_create():</div><div class="line">    home_config = path.expanduser(<span class="string">'~/.cephdeploy.conf'</span>)</div><div class="line">    <span class="comment"># With order of importance</span></div><div class="line">    locations = [</div><div class="line">        path.join(os.getcwd(), <span class="string">'cephdeploy.conf'</span>),</div><div class="line">        home_config,</div><div class="line">    ]</div><div class="line"></div><div class="line">    <span class="keyword">for</span> location <span class="keyword">in</span> locations:</div><div class="line">        <span class="keyword">if</span> path.exists(location):</div><div class="line">            logger.debug(<span class="string">'found configuration file at: %s'</span> % location)</div><div class="line">            <span class="built_in">return</span> location</div><div class="line">    logger.info(<span class="string">'could not find configuration file, will create one in $HOME'</span>)</div><div class="line">    create_stub(home_config)</div><div class="line">    <span class="built_in">return</span> home_config</div></pre></td></tr></table></figure></li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Ceph/" rel="tag"># Ceph</a>
+          
+            <a href="/tags/ceph-deploy/" rel="tag"># ceph-deploy</a>
+          
+            <a href="/tags/cli/" rel="tag"># cli</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/12/centos-ntp-config/" rel="next" title="CentOS7.2配置NTP服务">
+                <i class="fa fa-chevron-left"></i> CentOS7.2配置NTP服务
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/19/ceph-deploy-new/" rel="prev" title="ceph-deploy源码分析（二）——new模块">
+                ceph-deploy源码分析（二）——new模块 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8yNzg2Ny80NDQ0"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="hl10502" />
+          <p class="site-author-name" itemprop="name">hl10502</p>
+          <p class="site-description motion-element" itemprop="description">关注云计算/虚拟化/分布式存储等</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">67</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">127</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/hl10502" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#源码结构"><span class="nav-number">1.</span> <span class="nav-text">源码结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码入口"><span class="nav-number">2.</span> <span class="nav-text">源码入口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cli模块"><span class="nav-number">3.</span> <span class="nav-text">cli模块</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#main函数"><span class="nav-number">3.1.</span> <span class="nav-text">_main函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#get-parser函数"><span class="nav-number">3.2.</span> <span class="nav-text">get_parser函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#argparse模块"><span class="nav-number">3.3.</span> <span class="nav-text">argparse模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#set-overrides函数"><span class="nav-number">3.4.</span> <span class="nav-text">set_overrides函数</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">hl10502</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("LE6b1aXtXOedOvsqgG7uXyrn-gzGzoHsz", "WHQseHdLj7t7hyj5EXO7pveG");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>
