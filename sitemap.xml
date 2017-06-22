@@ -2,16 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://hl10502.github.io/2017/06/19/ceph-deploy-mon/</loc>
+    <loc>https://hl10502.github.io/2017/06/21/ceph-deploy-osd/</loc>
     
-    <lastmod>2017-06-22T02:32:23.177Z</lastmod>
+    <lastmod>2017-06-22T02:43:40.506Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://hl10502.github.io/2017/06/21/ceph-deploy-osd/</loc>
+    <loc>https://hl10502.github.io/2017/06/19/ceph-deploy-mon/</loc>
     
-    <lastmod>2017-06-22T02:21:34.884Z</lastmod>
+    <lastmod>2017-06-22T02:32:23.177Z</lastmod>
     
   </url>
   
