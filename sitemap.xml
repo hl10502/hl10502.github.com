@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://hl10502.github.io/2017/06/23/ceph-disk-1/</loc>
+    
+    <lastmod>2017-06-23T09:44:34.248Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://hl10502.github.io/2017/06/21/ceph-deploy-osd/</loc>
     
     <lastmod>2017-06-22T02:43:40.506Z</lastmod>
