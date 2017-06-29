@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://hl10502.github.io/about/index.html</loc>
+    
+    <lastmod>2017-06-29T07:20:35.977Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://hl10502.github.io/2017/06/23/ceph-disk-1/</loc>
     
     <lastmod>2017-06-28T10:02:24.149Z</lastmod>
@@ -383,13 +390,6 @@
     <loc>https://hl10502.github.io/2017/03/10/xenserver-host-1/</loc>
     
     <lastmod>2017-03-10T06:14:30.483Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://hl10502.github.io/about/index.html</loc>
-    
-    <lastmod>2017-03-10T03:19:41.277Z</lastmod>
     
   </url>
   
