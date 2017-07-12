@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://hl10502.github.io/2017/06/20/ceph-error-authentication/</loc>
+    
+    <lastmod>2017-07-12T03:34:22.402Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://hl10502.github.io/about/index.html</loc>
     
     <lastmod>2017-06-29T07:20:35.977Z</lastmod>
@@ -26,13 +33,6 @@
     <loc>https://hl10502.github.io/2017/06/19/ceph-deploy-mon/</loc>
     
     <lastmod>2017-06-22T02:32:23.177Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://hl10502.github.io/2017/06/20/ceph-error-authentication/</loc>
-    
-    <lastmod>2017-06-20T10:11:33.896Z</lastmod>
     
   </url>
   
