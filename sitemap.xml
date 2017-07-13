@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://hl10502.github.io/2017/03/16/xenserver-vdi-1/</loc>
+    
+    <lastmod>2017-07-13T06:18:28.398Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://hl10502.github.io/2017/06/20/ceph-error-authentication/</loc>
     
     <lastmod>2017-07-12T03:34:22.402Z</lastmod>
@@ -313,13 +320,6 @@
     <loc>https://hl10502.github.io/2017/03/15/xenserver-sr-4/</loc>
     
     <lastmod>2017-03-16T03:17:08.337Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://hl10502.github.io/2017/03/16/xenserver-vdi-1/</loc>
-    
-    <lastmod>2017-03-16T03:14:43.699Z</lastmod>
     
   </url>
   
