@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://hl10502.github.io/2017/06/09/ceph-deploy-jewel/</loc>
+    
+    <lastmod>2017-07-20T02:02:03.516Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://hl10502.github.io/2017/03/16/xenserver-vdi-1/</loc>
     
     <lastmod>2017-07-13T06:18:28.398Z</lastmod>
@@ -61,13 +68,6 @@
     <loc>https://hl10502.github.io/2017/06/12/centos-ntp-config/</loc>
     
     <lastmod>2017-06-12T08:04:07.499Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://hl10502.github.io/2017/06/09/ceph-deploy-jewel/</loc>
-    
-    <lastmod>2017-06-12T06:55:45.765Z</lastmod>
     
   </url>
   
