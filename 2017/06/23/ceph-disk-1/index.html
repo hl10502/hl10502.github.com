@@ -99,7 +99,7 @@
 <meta property="og:image" content="https://hl10502.github.io/2017/06/23/ceph-disk-1/ceph-disk-class-2.png">
 <meta property="og:image" content="https://hl10502.github.io/2017/06/23/ceph-disk-1/ceph-disk-class-3.png">
 <meta property="og:image" content="https://hl10502.github.io/2017/06/23/ceph-disk-1/ceph-disk-class-4.png">
-<meta property="og:updated_time" content="2017-06-28T10:02:24.149Z">
+<meta property="og:updated_time" content="2017-07-20T03:31:27.550Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ceph-disk源码分析">
 <meta name="twitter:description" content="ceph-disk是一个用于部署osd数据及journal分区或目录的工具，基于Python开发。ceph-disk工具放在ceph-base包中，安装ceph-base rpm包将默认安装此工具，比如Jewel版ceph-10.2.7中的ceph-base-10.2.7-0.el7.x86_64.rpm。">
@@ -465,7 +465,7 @@
 </ul>
 <h2 id="源码结构"><a href="#源码结构" class="headerlink" title="源码结构"></a>源码结构</h2><p>ceph-disk就两个文件</p>
 <ul>
-<li><strong>init</strong>.py：空白初始化文件</li>
+<li>__init__.py：空白初始化文件</li>
 <li>main.py：所有的ceph-disk命令操作在这个文件中，代码超5000行</li>
 </ul>
 <h2 id="类图"><a href="#类图" class="headerlink" title="类图"></a>类图</h2><p>main.py所有类图：<a href="ceph-disk.png">ceph-disk.png</a></p>

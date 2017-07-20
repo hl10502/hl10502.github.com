@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://hl10502.github.io/2017/06/23/ceph-disk-1/</loc>
+    
+    <lastmod>2017-07-20T03:31:27.550Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://hl10502.github.io/2017/06/09/ceph-deploy-jewel/</loc>
     
     <lastmod>2017-07-20T02:02:03.516Z</lastmod>
@@ -26,13 +33,6 @@
     <loc>https://hl10502.github.io/about/index.html</loc>
     
     <lastmod>2017-06-29T07:30:40.386Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://hl10502.github.io/2017/06/23/ceph-disk-1/</loc>
-    
-    <lastmod>2017-06-28T10:02:24.149Z</lastmod>
     
   </url>
   
