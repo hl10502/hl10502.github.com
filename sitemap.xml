@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://hl10502.github.io/2017/08/01/ceph-jewel-build/</loc>
+    
+    <lastmod>2017-08-01T02:57:33.951Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://hl10502.github.io/2017/07/24/ceph-monstore-tool-1/</loc>
+    
+    <lastmod>2017-07-24T10:23:12.451Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://hl10502.github.io/2017/07/21/ceph-deploy-error-2/</loc>
     
     <lastmod>2017-07-21T03:50:41.696Z</lastmod>
