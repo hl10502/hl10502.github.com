@@ -95,7 +95,7 @@
 <meta property="og:url" content="https://hl10502.github.io/2017/08/01/ceph-jewel-build/index.html">
 <meta property="og:site_name" content="hl10502的博客">
 <meta property="og:description" content="在CentOS7.2下编译Jewel版ceph-10.2.7，通过解压ceph-10.2.7.tar.gz来编译ceph。">
-<meta property="og:updated_time" content="2017-08-01T02:57:33.951Z">
+<meta property="og:updated_time" content="2017-08-01T03:08:45.924Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CentOS7.2编译Jewel版ceph-10.2.7">
 <meta name="twitter:description" content="在CentOS7.2下编译Jewel版ceph-10.2.7，通过解压ceph-10.2.7.tar.gz来编译ceph。">
@@ -413,7 +413,7 @@
       
         <p>在CentOS7.2下编译Jewel版ceph-10.2.7，通过解压ceph-10.2.7.tar.gz来编译ceph。</p>
 <a id="more"></a>
-<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><p>CentOS7.2 Mini<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@node156 ~]<span class="comment"># cat /etc/redhat-release</span></div><div class="line">CentOS Linux release 7.2.1511 (Core)</div></pre></td></tr></table></figure></p>
+<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><p>CentOS Linux release 7.2.1511 (Core) Mini版</p>
 <h2 id="配置yum"><a href="#配置yum" class="headerlink" title="配置yum"></a>配置yum</h2><p>使用网易的源CentOS-Base.repo，并配置epel.repo</p>
 <h2 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h2><p>下载依赖的rpm到本地<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@node156 ~]<span class="comment"># yum install --downloadonly --downloaddir=/tmp/ceph-10.2.7 make automake autoconf  boost-devel fuse-devel gcc-c++ libtool libuuid-devel libblkid-devel keyutils-libs-devel cryptopp-devel fcgi-devel libcurl-devel expat-devel gperftools-devel libedit-devel libatomic_ops-devel snappy-devel leveldb-devel libaio-devel xfsprogs-devel libudev-devel btrfs-progs Cython python-devel openssl-devel openldap-devel python-pip python-virtualenv net-tools</span></div></pre></td></tr></table></figure></p>
 <p>本地安装依赖的rpm包<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@node156 ~]<span class="comment"># yum localinstall -C -y --disablerepo=* /tmp/ceph-10.2.7/*.rpm</span></div></pre></td></tr></table></figure></p>
