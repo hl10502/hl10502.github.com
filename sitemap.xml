@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://hl10502.github.io/2017/06/21/ceph-deploy-osd/</loc>
+    
+    <lastmod>2017-09-22T03:39:10.482Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://hl10502.github.io/2017/09/14/centos-build-nbd/</loc>
     
     <lastmod>2017-09-14T03:17:05.984Z</lastmod>
@@ -96,13 +103,6 @@
     <loc>https://hl10502.github.io/about/index.html</loc>
     
     <lastmod>2017-06-29T07:30:40.386Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://hl10502.github.io/2017/06/21/ceph-deploy-osd/</loc>
-    
-    <lastmod>2017-06-22T02:43:40.506Z</lastmod>
     
   </url>
   
