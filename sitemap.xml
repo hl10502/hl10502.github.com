@@ -2,16 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://hl10502.github.io/2017/06/21/ceph-deploy-osd/</loc>
+    <loc>https://hl10502.github.io/2017/09/26/centos-install-systemtap/</loc>
     
-    <lastmod>2017-09-22T03:39:10.482Z</lastmod>
+    <lastmod>2017-09-26T03:24:03.457Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://hl10502.github.io/2017/09/14/centos-build-nbd/</loc>
     
-    <lastmod>2017-09-14T03:17:05.984Z</lastmod>
+    <lastmod>2017-09-26T03:21:20.866Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://hl10502.github.io/2017/06/21/ceph-deploy-osd/</loc>
+    
+    <lastmod>2017-09-22T03:39:10.482Z</lastmod>
     
   </url>
   
