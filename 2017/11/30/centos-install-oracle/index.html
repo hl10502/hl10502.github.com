@@ -117,7 +117,7 @@ CentOS Linux release 7.2.1511 (Core) Mini版
 <meta property="og:image" content="https://hl10502.github.io/2017/11/30/centos-install-oracle/orc-10.png">
 <meta property="og:image" content="https://hl10502.github.io/2017/11/30/centos-install-oracle/orcl-web.png">
 <meta property="og:image" content="https://hl10502.github.io/2017/11/30/centos-install-oracle/orcl-web-2.png">
-<meta property="og:updated_time" content="2017-11-30T08:04:40.354Z">
+<meta property="og:updated_time" content="2017-11-30T08:10:45.654Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CentOS7.2安装Oracle 12c">
 <meta name="twitter:description" content="在CentOS7.2上安装Oracle数据库12c。
@@ -467,7 +467,7 @@ oracle hard nofile 65536
 <h3 id="图形化安装过程"><a href="#图形化安装过程" class="headerlink" title="图形化安装过程"></a>图形化安装过程</h3><p>上面执行runInstaller脚本之后，弹出Oracle图形化安装界面，点击“Next&gt;”<br><img src="/2017/11/30/centos-install-oracle/orc-1.png" alt="orc-1.png"></p>
 <p>在“Installation Option”中，选择“Create and configure a database”，然后点击“Next&gt;”<br><img src="/2017/11/30/centos-install-oracle/orc-2.png" alt="orc-2.png"></p>
 <p>在“System Class”中，选择“Desktop class”，然后点击“Next&gt;”<br><img src="/2017/11/30/centos-install-oracle/orc-3.png" alt="orc-3.png"></p>
-<p>在“Typical Installation”中，设置：<br>    Oracle base：/u01/app/oracle<br>    Software location： /u01/app/oracle/product/12.2.0/dbhome_1<br>    Database file location： /u02<br>    OSDBA group： dba<br>    Global database name：键入名称<br>    Password：输入密码<br>    Confirm password：再次键入<br>    取消选中“Create as Container database”</p>
+<p>在“Typical Installation”中，设置：<br>    Oracle base：/u01/app/oracle<br>    Software location： /u01/app/oracle/product/12.2.0/dbhome_1<br>    Database file location： /u02<br>    OSDBA group： dba<br>    Global database name：输入名称<br>    Password：输入密码<br>    Confirm password：再次输入<br>    取消选中“Create as Container database”</p>
 <p><img src="/2017/11/30/centos-install-oracle/orc-4.png" alt="orc-4.png"></p>
 <p>这里告警提示管理密码:[INS-30011]输入的 ADMIN 口令不符合 Oracle 建议的标准，可以直接忽略点击“Next&gt;”。<br>输入密码遵循“小写字母+数字+大写字母”的方式就可以消除告警，然后点击“Next&gt;”<br><img src="/2017/11/30/centos-install-oracle/orc-4-1.png" alt="orc-4-1.png"></p>
 <p>在“Create Inventory”中，设置：<br>    Inventory Directory： /u01/app/oraInventory<br>    oraInventory Group Name：使用’ oinstall ‘组</p>
