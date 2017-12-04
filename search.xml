@@ -5,7 +5,7 @@
     <entry>
       <title><![CDATA[CentOS7.2安装“X Window System”之后，启动进不了系统]]></title>
       <url>%2F2017%2F12%2F04%2Fcentos-install-xwindow-error%2F</url>
-      <content type="text"><![CDATA[CentOS7.2安装“X Window System”之后，启动进不了系统，出现以下提示信息：1234Initial setup of CentOS Linux 7 (Core)1) [!] License information (License not accepted)Please make your choice from [ '1' to enter the License information spoke | 'q' to quit | 'c' to continue | 'r' to refresh]: 解决方法其实解决方法比较显然，根据提示一步步操作即可： 输入1，回车显示License信息 根据提示信息，输入2，接受授权 键入q，离开设置; 输入yes，保存信息即可进入CentOS7.2的登录界面。 参考http://www.hawkers.cc/2015/12/CentOS-initial-setup.html]]></content>
+      <content type="text"><![CDATA[CentOS7.2安装“X Window System”之后，启动进不了系统，出现以下提示信息：1234Initial setup of CentOS Linux 7 (Core)1) [!] License information 2) [ ] User creation (License not accepted) (no user will be created)Please make your choice from above ['q' to quit | 'c' to continue | 'r' to refresh]: 解决方法其实解决方法比较显然，根据提示一步步操作即可： 输入1，回车显示License信息 根据提示信息，输入2，接受授权 键入q，离开设置; 输入yes，保存信息即可进入CentOS7.2的登录界面。 参考http://www.hawkers.cc/2015/12/CentOS-initial-setup.html]]></content>
     </entry>
 
     
